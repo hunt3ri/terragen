@@ -1,0 +1,9 @@
+# Pycharm
+.idea
+
+# Hydra
+outputs
+
+# Local
+tfvars
+venv

@@ -1,0 +1,18 @@
+defaults:
+  - ec2_base
+
+# Overrides of ec2_base config
+terraform_config:
+  tfvars_file:
+    filename: "servicetier.tfvars"
+  s3_backend_key : "middleware/ec2/servicetier/terraform.tfstate"
+
+
+tfvars_config:
+  instance_name: "servicetier_${build.environment}"
+  tags:
+    tag_name: "servicetier"
+
+  security_group:
+    sg_name: "servicetier_sg"
+    sg_description: "SG for ServiceTier"

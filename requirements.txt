@@ -1,0 +1,7 @@
+antlr4-python3-runtime==4.8
+hydra-core==1.1.1
+importlib-resources==5.2.2
+omegaconf==2.1.1
+PyYAML==5.4.1
+toml==0.10.2
+zipp==3.5.0

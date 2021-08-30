@@ -1,0 +1,17 @@
+# Order is important py-tfvars will create infra in specified order specified in defaults object
+defaults:
+  - vpc: vpc_base
+  - ec2@servicetier: instance_definitions/servicetier
+  - ec2@enginetier: instance_definitions/enginetier
+  - ec2@microtier: instance_definitions/microtier
+  - connectivity: connectivity_base
+
+build:
+  # Deployment environment must be one of dev|test|prod
+  environment: "test"
+
+  # If set to True terraform will apply the tfvars file generated
+  run_terraform: False
+
+  # Terraform mode must be one of create|destroy
+  terraform_mode: "create"

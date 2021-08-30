@@ -1,0 +1,4 @@
+servicetier_to_enginetier:
+  source     : "${servicetier.config.instance_name}"
+  destination: "${enginetier.config.instance_name}"
+  port       : "1025, 31530-31540"
