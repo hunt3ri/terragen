@@ -9,7 +9,7 @@ terraform_config:
 
 
 tfvars_config:
-  instance_name: "microtier{build.environment}"
+  instance_name: "microtier_${build.environment}"
   tags:
     tag_name: "microtier"
 
