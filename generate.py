@@ -2,6 +2,7 @@ import hydra
 import os
 import subprocess
 import toml
+from connectivity import add_rules
 from omegaconf import DictConfig
 
 
@@ -88,4 +89,5 @@ def apply_vars_files(cfg: DictConfig) -> None:
 
 
 if __name__ == "__main__":
-    apply_vars_files()
+    #apply_vars_files()
+    add_rules()

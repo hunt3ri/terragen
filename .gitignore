@@ -5,5 +5,7 @@
 outputs
 
 # Local
+.env
 tfvars
 venv
+__pycache__
