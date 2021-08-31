@@ -2,6 +2,7 @@ import boto3
 import os
 from dotenv import load_dotenv
 from botocore.exceptions import ClientError
+from warnings import warn
 
 ec2 = object  # Global reference to boto3 ec2 reference instantiated by get_aws_session
 
@@ -12,7 +13,7 @@ def create_sg_rules(use_local_aws_creds: bool, connectivity_config: dict):
     get_aws_session(use_local_aws_creds)
     for rule in connectivity_config:
         print(f"Applying connectivity rule {rule}")
-        apply_sg_rules(connectivity_config[rule])
+        apply_sg_rules(connectivity_config[rule], rule)
 
 
 def get_aws_session(use_local_aws_creds: bool = True):
@@ -67,7 +68,7 @@ def get_security_group_id(group_name: str):
     return security_group["SecurityGroups"][0]["GroupId"]
 
 
-def apply_sg_rules(rule_config: dict):
+def apply_sg_rules(rule_config: dict, rule_name: str):
     """ Apply rule config to target security group """
     private_ips = get_target_ip(rule_config["destination_identifier"])
     source_security_group_id = get_security_group_id(rule_config["source_security_group"])
@@ -92,4 +93,5 @@ def apply_sg_rules(rule_config: dict):
             )
         except ClientError as e:
             if "InvalidPermission.Duplicate" in str(e):
+                warn(f"Rule defined in {rule_name} already exists, so has been skipped")
                 pass  # If rule already exists ignore the exception
