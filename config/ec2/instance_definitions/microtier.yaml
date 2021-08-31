@@ -11,7 +11,7 @@ terraform_config:
 tfvars_config:
   instance_name: "microtier_${build.environment}"
   tags:
-    tag_name: "microtier"
+    tag_identifier: "microtier"
 
   security_group:
     sg_name: "microtier"

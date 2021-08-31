@@ -1,4 +1,13 @@
 servicetier_to_enginetier:
-  source     : "${servicetier.config.instance_name}"
-  destination: "${enginetier.config.instance_name}"
-  port       : "1025, 31530-31540"
+  source_security_group  : "${servicetier.tfvars_config.security_group.sg_name}"
+  destination_identifier : "${enginetier.tfvars_config.tags.tag_identifier}"
+  from_port              : 123
+  to_port                : 256
+  rule_description       : "Allow connection to engine tier"
+
+enginetier_to_servicetier:
+  source_security_group  : "${enginetier.tfvars_config.security_group.sg_name}"
+  destination_identifier : "${servicetier.tfvars_config.tags.tag_identifier}"
+  from_port              : 512
+  to_port                : 1024
+  rule_description       : "Allow connection to service tier"

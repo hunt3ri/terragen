@@ -11,7 +11,7 @@ terraform_config:
 tfvars_config:
   instance_name: "servicetier_${build.environment}"
   tags:
-    tag_name: "servicetier"
+    tag_identifier: "servicetier"
 
   security_group:
     sg_name: "servicetier_sg"

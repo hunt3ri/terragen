@@ -20,7 +20,7 @@ tfvars_config:
   instance_name: "enginetier_${build.environment}"
   instance_type: "${enginetier.environments.${build.environment}.instance_type}"
   tags:
-    tag_name: "enginetier"
+    tag_identifier: "enginetier"
 
   security_group:
     sg_name: "enginetier_sg"
