@@ -1,5 +1,7 @@
-# py-tfvars
-This project generates and applies terraform tfvars file.  Config is specified in the config directory.  [Config is controlled by the hydra framework, check the docs for examples](https://hydra.cc/docs/intro/)
+# terravarmer
+This project generates and applies terraform tfvars files to enable you to configure and control sophisticated AWS architectures.
+
+Config is read from the local ```config``` directory.  [Config is controlled by the hydra framework, check the docs for examples](https://hydra.cc/docs/intro/)
 
 
 ## Running
