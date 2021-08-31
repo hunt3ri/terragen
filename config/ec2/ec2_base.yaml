@@ -18,6 +18,7 @@ tfvars_config:
     tag_business_owner            : "iain@test.com"
     tag_business_service_category : "C"
     tag_data_classification       : "Internal"
+    tag_identifier                : ???
 
   security_group:
     sg_name                     : ???

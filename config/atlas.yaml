@@ -15,3 +15,9 @@ build:
 
   # Terraform mode must be one of create|destroy
   terraform_mode: "create"
+
+  # Create SG rules as defined in connectivity block
+  apply_connectivity_rules: True
+
+  # Set to true if you want to use AWS creds from local environment rather than os level
+  use_local_aws_creds: True
