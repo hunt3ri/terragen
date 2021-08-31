@@ -47,6 +47,8 @@ def get_target_ip(target_server: str):
     private_ips = []
     for reservations in target_instances["Reservations"]:
         for instance in reservations["Instances"]:
+            if instance["State"]["Name"] == "terminated":
+                continue
             private_ips.append(instance["PrivateIpAddress"])
 
     return private_ips
