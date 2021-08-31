@@ -11,6 +11,7 @@ def create_sg_rules(use_local_aws_creds: bool, connectivity_config: dict):
     print("Creating additional Security Group rules defined in Connectivity Config")
     get_aws_session(use_local_aws_creds)
     for rule in connectivity_config:
+        print(f"Applying connectivity rule {rule}")
         apply_sg_rules(connectivity_config[rule])
 
 
