@@ -1,7 +1,7 @@
 terraform_config:
   s3_backend_key : "common/vpc/terraform.tfstate"
   tfvars_file:
-    path: "C:/dev/python/py-tfvars/tfvars"
+    path: "C:/dev/python/terravarmer/tfvars"
     filename: "vars_simple_vpc.tfvars"
 
 # Variable definitions to write to tfvars file

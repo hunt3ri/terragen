@@ -2,7 +2,7 @@
 terraform_config:
   tfvars_file:
     # Location where tfvars and config.tf file will be written to
-    path: "C:/dev/python/py-tfvars/tfvars"
+    path: "C:/dev/python/terravarmer/tfvars"
     filename: ???
   s3_backend_key : "common/vpc/terraform.tfstate"
 

@@ -1,23 +1,7 @@
-import hydra
 import os
 import subprocess
 import toml
-from connectivity import create_sg_rules
 from omegaconf import DictConfig
-
-
-@hydra.main(config_path="./config", config_name="atlas")
-def apply_vars_files(cfg: DictConfig) -> None:
-    """ Parse config and create or destroy AWS infrastructure """
-    terraform_mode = cfg.build.terraform_mode
-    assert terraform_mode in ["create", "destroy"]
-
-    if terraform_mode == "create":
-        create_infrastructure(cfg)
-        if cfg.build.apply_connectivity_rules:
-            create_sg_rules(cfg.build.use_local_aws_creds, cfg.connectivity)  # Applies additional SG rules to infra
-    elif terraform_mode == "destroy":
-        destroy_infrastructure(cfg)
 
 
 def write_tfvars_file(tfvars_file, config: DictConfig) -> None:
@@ -34,7 +18,8 @@ def write_tfvars_file(tfvars_file, config: DictConfig) -> None:
 def generate_terraform_config(path: str, s3_backend_key: str) -> None:
     """ Create new terraform config files to enable app to apply multiple configs from one terraform module """
     replacements = {'BACKEND_S3_KEY': s3_backend_key}
-    with open('../../../terraform_config.tf') as infile, open(f'{path}/config.tf', 'w') as outfile:
+    with open('../../../terraform/terraform_config.tf') as infile, open(f'{path}/config.tf', 'w') as outfile:
+        # Script working dir is the hydra output dir, hence need to navigate up dirs
         for line in infile:
             for src, target in replacements.items():
                 line = line.replace(src, target)
@@ -93,7 +78,3 @@ def run_terraform(terraform_mode: str, infrastructure: str, path: str, filename:
     apply_cmd = f"terraform {terraform_mode} -var-file={filename} -auto-approve"
     subprocess.run(apply_cmd.split(" "), check=True)
     os.chdir(working_dir)  # Revert to original working dir, to ensure script not confused
-
-
-if __name__ == "__main__":
-    apply_vars_files()
