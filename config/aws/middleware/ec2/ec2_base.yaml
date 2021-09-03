@@ -1,0 +1,39 @@
+# Environment specific config that is injected at resolution time
+environments:
+  dev:
+    instance_type: t3a.micro
+    # Company wide SGs that can be attached to instances as needed
+    security_groups:
+      shared_services_connectivity: "sg-0bf7e2be1d8622af0"
+      shared_services_ad_connectivity: "sg-0bf7e2be1d8622af0"
+      shared_services_internet_egress: "sg-0bf7e2be1d8622af0"
+  test:
+    instance_type: t3a.micro
+  prod:
+    instance_type: t3a.large
+
+
+config:
+  default_instance:
+    instance_count              : 1
+    instance_type               : "t3a.micro"
+    instance_name               : ???
+    associate_public_ip_address : true
+    ami_id                      : "ami-06310010cdfb6a743"
+    tags:
+      tag_business_owner        : "Hunter-Labs"
+
+
+providers:
+  # Set the provider that will create the infrastructure
+  default_provider: "${build.default_provider}"
+
+  # TODO Atlas specific config here
+  atlas:
+
+  terraform:
+      # Keys should be overriden in sub-classed configs
+      s3_backend_key: "common/vpc/terraform.tfstate"
+      tfvars_file:
+        path: "C:/dev/python/terravarmer/tfvars"
+        filename: "ec2_base.tfvars"

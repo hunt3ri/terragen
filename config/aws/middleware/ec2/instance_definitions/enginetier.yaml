@@ -1,14 +1,7 @@
 defaults:
   - ec2_base
 
-# Environment specific config that is injected at resolution time
-environments:
-  dev:
-    instance_type: t3a.micro
-  test:
-    instance_type: t3a.micro
-  prod:
-    instance_type: t3a.large
+
 
 # Overrides of ec2_base config
 terraform_config:

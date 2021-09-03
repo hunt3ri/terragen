@@ -1,12 +1,25 @@
 # Order is important py-tfvars will create infra in specified order specified in defaults object
 defaults:
-  - vpc: vpc_base
-  - ec2@servicetier: instance_definitions/servicetier
-  - ec2@enginetier: instance_definitions/enginetier
-  - ec2@microtier: instance_definitions/microtier
-  - connectivity: connectivity_base
+  - aws/common@common.vpc: vpc/vpc_base
+  - aws/common@common.key_pairs: key_pairs/key_pair_base
+  - aws/common@common.security_groups: security_groups/sg_definitions/igc_sg_definitions
+  - aws/middleware/ec2@middleware.ec2.instances: instance_definitions/igc_instances
+#  - aws/middleware/ec2@middleware.ec2.servicetier: instance_definitions/servicetier
+#  - aws/middleware/ec2@middleware.ec2.enginetier: instance_definitions/enginetier
+#  - connectivity: connectivity_base
+
+# Provider overrides
+common:
+  vpc:
+    providers:
+      default_provider: "terraform"
+
 
 build:
+
+  # The provider that will be used to create all infrastructure unless overidden in Provider Overrides above
+  default_provider: "atlas"
+
   # Deployment environment must be one of dev|test|prod
   environment: "test"
 
