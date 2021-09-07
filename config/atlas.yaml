@@ -1,9 +1,9 @@
 # Order is important py-tfvars will create infra in specified order specified in defaults object
 defaults:
-  - aws/common@common.vpc: vpc/vpc_base
-  - aws/common@common.key_pairs: key_pairs/key_pair_base
-  - aws/common@common.security_groups: security_groups/sg_definitions/igc_sg_definitions
-  - aws/middleware/ec2@middleware.ec2.instances: instance_definitions/igc_instances
+  - aws/shared@shared.vpc: vpc/vpc_base
+  - aws/shared@shared.key_pairs: key_pairs/key_pair_base
+  - aws/shared@shared.security_groups: security_groups/sg_definitions/igc_sg_definitions
+  - aws/middleware/ec2@application.ec2.instances: instance_definitions/igc_instances
 #  - aws/middleware/ec2@middleware.ec2.servicetier: instance_definitions/servicetier
 #  - aws/middleware/ec2@middleware.ec2.enginetier: instance_definitions/enginetier
 #  - connectivity: connectivity_base
