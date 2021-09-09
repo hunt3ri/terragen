@@ -1,13 +1,14 @@
-# Variable definitions to write to tfvars file
-config:
-  vpc_name             : "hunter-labs-vpc"
-  cidr                 : "10.0.0.0/16"
-  azs                  : ["us-east-1a", "us-east-1b"]
-  public_subnets       : ["10.0.100.0/24", "10.0.200.0/24"]
-  enable_dns_hostnames : true
+# Define multiple configurations in the configs section, as long as they match the default pattern
+configs:
+  default_vpc:
+    vpc_name             : "hunter-labs-vpc"
+    cidr                 : "10.0.0.0/16"
+    azs                  : ["us-east-1a", "us-east-1b"]
+    public_subnets       : ["10.0.100.0/24", "10.0.200.0/24"]
+    enable_dns_hostnames : true
 
-  tags:
-    tag_environment : ${build.environment}
+    tags:
+      tag_environment : ${build.environment}
 
 # provider specific config can be added here
 providers:
@@ -17,8 +18,18 @@ providers:
   # Atlas does not support creation of VPCs
   atlas:
 
-  terraform:
-      s3_backend_key: "common/vpc/terraform.tfstate"
-      tfvars_file:
-        path: "C:/dev/python/terravarmer/tfvars"
-        filename: "vars_simple_vpc.tfvars"
+  TerraGen:
+      # Path where TerraGen will output all .tf files for the module
+      module_path: "C:/dev/python/terravarmer/tfvars"
+
+      # Module metadata
+      module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"
+      module_source: "terraform-aws-modules/vpc/aws"
+      module_version: "~> 3.0"
+
+      # The root value for the S3 backend key, eg for default_vpc path will become shared/vpc/default_vpc/terraform.tfstate
+      s3_backend_root: "shared/vpc"
+
+      # Variables you want to add to outputs.tf file should be specified here
+      outputs:
+

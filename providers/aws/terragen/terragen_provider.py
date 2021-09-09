@@ -1,11 +1,17 @@
 from omegaconf import DictConfig
 
 from providers.cloud_provider import CloudProvider
+from providers.aws.terragen.app.build_templates import build_templates
 
 
-class AWSTerraformProvider(CloudProvider):
+class TerraGen(CloudProvider):
 
-    def create_shared_infra(self, cfg: DictConfig):
+    def create_shared_infra(self, shared_infra: DictConfig):
+
+        for infra_key in shared_infra:
+            abi = infra_key
+            build_templates(shared_infra[infra_key], self.name)
+
         raise NotImplementedError()
 
     def destroy_shared_infra(self, cfg: DictConfig):

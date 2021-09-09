@@ -1,16 +1,15 @@
 defaults:
   - security_groups/sg_base
 
-config:
-  security_groups:
-    default_sg:
-      sg_name: "EngineTierSG"
-      sg_description: "Engine Tier SG"
-      tags:
-        Name: "EngineTierSG"
+configs:
+  default_sg:
+    sg_name: "EngineTierSG"
+    sg_description: "Engine Tier SG"
+    tags:
+      Name: "EngineTierSG"
 
-    servicetier_sg:
-      sg_name: "ServiceTierSG"
-      sg_description: "Engine Tier SG"
-      tags:
-        Name: "ServiceTierSG"
+  servicetier_sg:
+    sg_name: "ServiceTierSG"
+    sg_description: "Engine Tier SG"
+    tags:
+      Name: "ServiceTierSG"

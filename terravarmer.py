@@ -3,15 +3,14 @@ import hydra
 from app.connectivity import create_sg_rules
 from app.terraform import create_infrastructure, destroy_infrastructure
 from omegaconf import DictConfig
-
 from providers.cloud_provider import CloudProvider
 
 
 @hydra.main(config_path="./config", config_name="atlas")
 def terravarmer(cfg: DictConfig) -> None:
     """ Parse config and create or destroy AWS infrastructure """
-    cloud_provider = CloudProvider().build_provider("AWSTerraformProvider")
-    cloud_provider.create_shared_infra(cfg)
+    cloud_provider = CloudProvider().build_provider("TerraGen")
+    cloud_provider.create_shared_infra(cfg.aws.shared)
 
 
     #

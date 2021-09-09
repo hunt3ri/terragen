@@ -6,7 +6,7 @@ import importlib
 class CloudProvider:
     # Extend functionality by registering new providers in format ClassName: module.path
     registered_providers = {
-        "AWSTerraformProvider": "providers.aws.terraform.terraform_provider"
+        "TerraGen": "providers.aws.terragen.terragen_provider"
     }
     name = "CloudProviderName"
     module = "CloudProviderModuleLocation"
@@ -20,7 +20,10 @@ class CloudProvider:
             raise ValueError(f"Provider {provider_name} not registered")
 
         my_module = importlib.import_module(self.module)
+
         provider = getattr(my_module, self.name)
+        provider.name = provider_name
+        provider.module = self.module
         return provider()
 
     @abstractmethod
