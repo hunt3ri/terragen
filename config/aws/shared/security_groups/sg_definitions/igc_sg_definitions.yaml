@@ -1,7 +1,7 @@
 defaults:
-  - security_groups/sg_base
+  - sg_base
 
-configs:
+config:
   default_sg:
     sg_name: "EngineTierSG"
     sg_description: "Engine Tier SG"

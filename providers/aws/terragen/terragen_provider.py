@@ -12,8 +12,6 @@ class TerraGen(CloudProvider):
             abi = infra_key
             build_templates(shared_infra[infra_key], self.name)
 
-        raise NotImplementedError()
-
     def destroy_shared_infra(self, cfg: DictConfig):
         raise NotImplementedError()
 
