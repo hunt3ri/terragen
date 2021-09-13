@@ -17,7 +17,6 @@ providers:
   atlas:
 
   TerraGen:
-      s3_backend_key: "common/security_groups/terraform.tfstate"
-      tfvars_file:
-        path: "C:/dev/python/terravarmer/tfvars"
-        filename: "sg_definitions.tfvars"
+    module_path: "C:/dev/python/terravarmer/providers/aws/terragen/outputs"
+    s3_backend_key: "common/security_groups/terraform.tfstate"
+

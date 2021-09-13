@@ -19,7 +19,7 @@ providers:
 
   TerraGen:
       # Path where TerraGen will output all .tf files for the module
-      module_path: "C:/dev/python/terravarmer/tfvars"
+      module_path: "C:/dev/python/terravarmer/providers/aws/terragen/outputs"
 
       # Module metadata
       module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"

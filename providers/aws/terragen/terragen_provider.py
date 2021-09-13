@@ -12,12 +12,12 @@ class TerraGen(CloudProvider):
     def create_shared_infra(self, shared_infra: DictConfig):
 
         for infra_key in shared_infra:
-            log.info(f"Parsing shared infrastructure config for:  {infra_key}")
+            log.info(f"Parsing shared infrastructure config for: {infra_key}")
             shared_modules = shared_infra[infra_key]
 
             for module in shared_modules:
-                log.info(f"Building module {module}")
-                build_templates(self.name, shared_modules[module])
+                log.info(f"Generating module: {module}")
+                build_templates(module, self.name, shared_modules[module])
 
     def destroy_shared_infra(self, cfg: DictConfig):
         raise NotImplementedError()
