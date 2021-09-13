@@ -1,6 +1,9 @@
 from abc import abstractmethod
 from omegaconf import DictConfig
 import importlib
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class CloudProvider:
@@ -14,10 +17,13 @@ class CloudProvider:
     def build_provider(self, provider_name: str):
         """ Instantiate new instance of requested provider """
         try:
+            log.info(f"Instantiating new provisioner: {provider_name}")
             self.name = provider_name
             self.module = self.registered_providers[provider_name]
         except KeyError:
-            raise ValueError(f"Provider {provider_name} not registered")
+            error = f"Provider {provider_name} not registered"
+            log.critical(error)
+            raise ValueError(error)
 
         my_module = importlib.import_module(self.module)
 

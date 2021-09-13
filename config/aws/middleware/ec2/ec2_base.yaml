@@ -14,14 +14,13 @@ environments:
 
 
 config:
-  default_instance:
-    instance_count              : 1
-    instance_type               : "t3a.micro"
-    instance_name               : ???
-    associate_public_ip_address : true
-    ami_id                      : "ami-06310010cdfb6a743"
-    tags:
-      tag_business_owner        : "Hunter-Labs"
+  instance_count              : 1
+  instance_type               : "t3a.micro"
+  instance_name               : ???
+  associate_public_ip_address : false
+  ami_id                      : "ami-06310010cdfb6a743"
+  tags:
+    tag_business_owner        : "Hunter-Labs"
 
 
 providers:
@@ -31,9 +30,9 @@ providers:
   # TODO Atlas specific config here
   atlas:
 
-  terraform:
-      # Keys should be overriden in sub-classed configs
-      s3_backend_key: "common/vpc/terraform.tfstate"
-      tfvars_file:
-        path: "C:/dev/python/terravarmer/tfvars"
-        filename: "ec2_base.tfvars"
+  TerraGen:
+    # Path where TerraGen will output all .tf files for the module
+    module_path: "C:/dev/python/terravarmer/tfvars"
+
+    # The root value for the S3 backend key, eg for default_vpc path will become shared/vpc/default_vpc/terraform.tfstate
+    s3_backend_root: "middleware/ec2"
