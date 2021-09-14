@@ -7,7 +7,7 @@ config:
   enable_dns_hostnames : false
 
   tags:
-    tag_environment : ${build.environment}
+    environment : ${build.environment}
 
 # provider specific config can be added here
 providers:
@@ -19,14 +19,14 @@ providers:
 
   TerraGen:
       # Path where TerraGen will output all .tf files for the module
-      module_path: "C:/dev/python/terravarmer/providers/aws/terragen/outputs"
+      module_path: "C:/dev/python/terravarmer/providers/aws/terragen/outputs/vpcs"
 
       # Module metadata
       module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"
       module_source: "terraform-aws-modules/vpc/aws"
       module_version: "~> 3.0"
 
-      # The root value for the S3 backend key, eg for default_vpc path will become shared/vpc/default_vpc/terraform.tfstate
+      # The root value for the S3 backend key, eg for moduleX path will become shared/vpc/moduleX/terraform.tfstate
       s3_backend_root: "shared/vpc"
 
       # Variables you want to add to outputs.tf file should be specified here

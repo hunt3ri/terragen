@@ -11,6 +11,6 @@ providers:
   atlas:
 
   TerraGen:
-      module_path: "C:/dev/python/terravarmer/providers/aws/terragen/outputs"
+      module_path: "C:/dev/python/terravarmer/providers/aws/terragen/outputs/key_pairs"
       s3_backend_key: "common/key_pairs/terraform.tfstate"
 
