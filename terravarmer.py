@@ -16,8 +16,25 @@ def terravarmer(cfg: DictConfig) -> None:
     """ Parse config and create or destroy AWS infrastructure """
     log.info("TerraVarmer starting up")
 
-    cloud_provider = CloudProvider().build_provider("TerraGen")
-    cloud_provider.create_shared_infra(cfg.aws.shared)
+    shared_config = cfg.shared
+
+    for key, infra in shared_config.items():
+        log.info(f"TerraVarmer instantiating {infra.providers.default_provider} provider to construct {key}")
+        cloud_provider = CloudProvider().build_provider(infra.providers.default_provider)
+        cloud_provider.create_shared_infra(key, infra)
+
+
+
+
+    # TODO parse config and create appropriate provider for each element
+    # TODO handle provider specific config
+    # TODO handle build config, eg debug mode
+
+    # TODO debug mode is a special case so can be an attribute on the base class
+    # TODO provider specific config should go on base class too
+
+    # cloud_provider = CloudProvider().build_provider("TerraGen")
+    # cloud_provider.create_shared_infra(cfg.aws.shared)
 
 
     #

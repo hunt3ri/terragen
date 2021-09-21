@@ -11,6 +11,20 @@ env = Environment(
     autoescape=select_autoescape()
 )
 
+tf_module_template = env.get_template("module.tf")
+
+
+def generate_terraform_outputs(module_dir: str, module_name: str, provider_config: DictConfig):
+    outputs = provider_config.outputs
+    tf_outputs_template = env.get_template("outputs.tf")
+    tf_outputs_file_path = f"{module_dir}/outputs.tf"
+    log.info(f"Generating terraform template: {tf_outputs_file_path}")
+
+    with open(tf_outputs_file_path, 'w') as tf_outputs_file:
+        tf_outputs_file.write(tf_outputs_template.render(module_name=module_name,
+                                                         outputs=outputs))
+
+
 
 def build_templates(module_name: str, provider_name: str, infra: DictConfig):
 
@@ -25,13 +39,14 @@ def build_templates(module_name: str, provider_name: str, infra: DictConfig):
 
     generate_terraform_config_file(module_dir, module_name, provider_config)
     generate_terraform_module(module_dir, module_name, infra_config.copy(), provider_config)
+    generate_terraform_outputs(module_dir, module_name, provider_config)
+
 
 
 def generate_terraform_module(module_dir: str, module_name: str, module_config: DictConfig, provider_config: DictConfig):
     tags = module_config.tags
-    del module_config.tags
+    del module_config.tags  # Remove tags from dictionary so template doesn't render them incorrectly
 
-    tf_module_template = env.get_template("module.tf")
     tf_module_file_path = f"{module_dir}/{module_name}.tf"
     log.info(f"Generating terraform template: {tf_module_file_path}")
 

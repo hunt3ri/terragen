@@ -31,4 +31,5 @@ providers:
 
       # Variables you want to add to outputs.tf file should be specified here
       outputs:
-
+        vpc_id:
+          description: "The VPC ID"

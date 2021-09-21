@@ -1,15 +1,14 @@
-# Order is important py-tfvars will create infra in specified order specified in defaults object
+# Order is important terravarmer will create infra in specified order specified in defaults object
 defaults:
   # Shared Infrastructure
-  - aws/shared/vpc@aws.shared.vpc.simple_vpc: vpc_definitions/simple_vpc
-#  - aws/shared/key_pairs@aws.shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
+  - aws/shared/vpcs@shared.vpc: vpc_definitions/simple_vpc
+#  - aws/shared/key_pairs@shared.hunter_labs_key: key_pair_definitions/hunter_labs_key
 #  - aws/shared/security_groups@aws.shared.security_groups.enginetier: data_governance/dgv_enginetier
 
   # Application/Project specific Infrastructure
 #  - aws/middleware/ec2@aws.application.ec2.instances.enginetier: data_governance/enginetier
 #  - aws/middleware/ec2@middleware.ec2.servicetier: instance_definitions/servicetier
 #  - aws/middleware/ec2@middleware.ec2.enginetier: instance_definitions/enginetier
-#  - connectivity: connectivity_base
 
 
 # Provider overrides
@@ -19,24 +18,22 @@ defaults:
 #      providers:
 #        default_provider: "terraform"
 
-
-
 build:
+  # Set to True to enable verbose debugging
+  debug: True
 
   # The provider that will be used to create all infrastructure unless overidden in Provider Overrides above
-  default_provider: "atlas"
+  default_provider: "TerraGen"
 
-  # Deployment environment must be one of dev|test|prod
+  # Deployment environment must be one of dev|test|ppe|prod
   environment: "test"
 
-  # If set to True terraform will apply the tfvars file generated
-  run_terraform: False
 
-  # Terraform mode must be one of create|destroy
-  terraform_mode: "create"
+provider_config:
+  # This section allows for each provider to be configured, with specific values
+  TerraGen:
+    # If set to True terraform will apply the generated modules
+    run_terraform: False
 
-  # Create SG rules as defined in connectivity block
-  apply_connectivity_rules: False
-
-  # Set to true if you want to use AWS creds from local environment rather than os level
-  use_local_aws_creds: True
+    # Terraform mode must be one of create|destroy
+    terraform_mode: "create"

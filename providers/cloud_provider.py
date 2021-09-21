@@ -33,7 +33,7 @@ class CloudProvider:
         return provider()
 
     @abstractmethod
-    def create_shared_infra(self, cfg: DictConfig):
+    def create_shared_infra(self, infra_name: str, cfg: DictConfig):
         """ Providers can implement a method to create infra that is shared with multiple apps or infrastructure """
         raise NotImplementedError()
 

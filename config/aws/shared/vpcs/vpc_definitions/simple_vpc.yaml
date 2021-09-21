@@ -1,0 +1,12 @@
+defaults:
+  - vpc_base
+
+config:
+  vpc_name: "hunter-labs-vpc"
+  enable_dns_hostnames : true
+
+providers:
+  TerraGen:
+    outputs:
+      public_subnets:
+        description: "Public subnet ids"
