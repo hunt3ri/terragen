@@ -5,7 +5,6 @@ import os
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
-
 log = logging.getLogger(__name__)
 
 
@@ -53,6 +52,7 @@ class TerraformFactory:
 
         self.generate_terraform_config_file()
         self.generate_terraform_module()
+        self.generate_terraform_outputs()
 
     def generate_terraform_config_file(self):
         tf_config_template = self._env.get_template("terraform_config.tf")
@@ -78,3 +78,13 @@ class TerraformFactory:
                                                            module_source=self.provider_config.module_source,
                                                            module_version=self.provider_config.module_version,
                                                            tags=tags))
+
+    def generate_terraform_outputs(self):
+        outputs = self.provider_config.outputs
+        tf_outputs_template = self._env.get_template("outputs.tf")
+        tf_outputs_file_path = f"{self.module_path}/outputs.tf"
+        log.info(f"Generating outputs.tf")
+
+        with open(tf_outputs_file_path, 'w') as tf_outputs_file:
+            tf_outputs_file.write(tf_outputs_template.render(module_name=self.module_name,
+                                                             outputs=outputs))
