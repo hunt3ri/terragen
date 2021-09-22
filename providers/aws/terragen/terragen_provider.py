@@ -18,7 +18,7 @@ class TerraGen(CloudProvider):
                                                          shared_module=shared_infra,
                                                          debug_mode=self.debug_mode,
                                                          environment=self.environment)
-        tf_factory.generate_terraform_module()
+        tf_factory.generate_terraform_templates()
         iain = 1
 
         # for infra_key in shared_infra:
