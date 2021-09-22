@@ -16,6 +16,7 @@ class TerraformFactory:
     module_config: DictConfig = attr.ib()
     provider_name: str = attr.ib()
     provider_config: DictConfig = attr.ib()
+    debug_mode: bool = attr.ib(default=False)
 
     _env = Environment(
         loader=PackageLoader("providers.aws.terragen"),
@@ -23,14 +24,20 @@ class TerraformFactory:
     )
 
     @classmethod
-    def from_shared_config(cls, module_name: str, provider_name: str, shared_module: DictConfig):
+    def from_shared_config(cls, module_name: str, provider_name: str, shared_module: DictConfig, debug_mode: bool):
         """ Construct TerraformFactory from Hydra Shared Config"""
         log.info(f"Instantiating TerraformFactory for: {module_name}")
         module_config = shared_module.config
         provider_config = shared_module.providers[provider_name]
-        module_path = f"{provider_config.module_path}/{module_name}"
+
+        # If debug on, write out files to hydra output dir
+        if debug_mode:
+            module_path = f"{os.getcwd()}/{provider_name}/{module_name}"
+        else:
+            module_path = f"{provider_config.module_path}/{module_name}"
+
         return cls(module_name=module_name, module_path=module_path, module_config=module_config,
-                   provider_name=provider_name, provider_config=provider_config)
+                   provider_name=provider_name, provider_config=provider_config, debug_mode=debug_mode)
 
     def generate_terraform_module(self):
         log.info(f"Generating Terraform Module for: {self.module_name}")

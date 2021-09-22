@@ -1,36 +1,32 @@
 from abc import abstractmethod
 from omegaconf import DictConfig
+import attr
 import importlib
 import logging
 
 log = logging.getLogger(__name__)
 
 
+@attr.s
 class CloudProvider:
-    # Extend functionality by registering new providers in format ClassName: module.path
-    registered_providers = {
-        "TerraGen": "providers.aws.terragen.terragen_provider"
-    }
-    name = "CloudProviderName"
-    module = "CloudProviderModuleLocation"
 
-    def build_provider(self, provider_name: str):
-        """ Instantiate new instance of requested provider """
-        try:
-            log.info(f"Instantiating new provisioner: {provider_name}")
-            self.name = provider_name
-            self.module = self.registered_providers[provider_name]
-        except KeyError:
-            error = f"Provider {provider_name} not registered"
-            log.critical(error)
-            raise ValueError(error)
+    debug_mode: bool = attr.ib()
+    environment: str = attr.ib()
+    provider_name: str = attr.ib()
+    provider_properties: dict = attr.ib()
 
-        my_module = importlib.import_module(self.module)
+    @staticmethod
+    def from_build_config(provider_name: str, build_config: DictConfig):
+        log.info(f"Instantiating Cloud Provider: {provider_name}")
+        provider_config = build_config.registered_providers[provider_name]
 
-        provider = getattr(my_module, self.name)
-        provider.name = provider_name
-        provider.module = self.module
-        return provider()
+        # Dynamically load the CloudProvider module by name
+        cloud_provider = getattr(importlib.import_module(provider_config.module_location), provider_name)
+
+        return cloud_provider(provider_name=provider_name,
+                              environment=build_config.environment,
+                              provider_properties=provider_config.properties,
+                              debug_mode=build_config.debug)
 
     @abstractmethod
     def create_shared_infra(self, infra_name: str, cfg: DictConfig):

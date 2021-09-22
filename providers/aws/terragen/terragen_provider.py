@@ -13,8 +13,9 @@ class TerraGen(CloudProvider):
 
     def create_shared_infra(self, infra_name: str, shared_infra: DictConfig):
         tf_factory = TerraformFactory.from_shared_config(module_name=infra_name,
-                                                         provider_name=self.name,
-                                                         shared_module=shared_infra)
+                                                         provider_name=self.provider_name,
+                                                         shared_module=shared_infra,
+                                                         debug_mode=self.debug_mode)
         tf_factory.generate_terraform_module()
         iain = 1
 

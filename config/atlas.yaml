@@ -1,7 +1,7 @@
 # Order is important terravarmer will create infra in specified order specified in defaults object
 defaults:
   # Shared Infrastructure
-  - aws/shared/vpcs@shared.vpc: vpc_definitions/simple_vpc
+  - aws/shared/vpcs@shared.simple_vpc: vpc_definitions/simple_vpc
 #  - aws/shared/key_pairs@shared.hunter_labs_key: key_pair_definitions/hunter_labs_key
 #  - aws/shared/security_groups@aws.shared.security_groups.enginetier: data_governance/dgv_enginetier
 
@@ -19,21 +19,15 @@ defaults:
 #        default_provider: "terraform"
 
 build:
-  # Set to True to enable verbose debugging
-  debug: True
+  debug: True                   # Set to True to enable verbose debugging
+  default_provider: "TerraGen"  # Provider used to create all infra unless overridden
+  environment: "test"           # Deployment environment must be one of dev|test|ppe|prod
 
-  # The provider that will be used to create all infrastructure unless overidden in Provider Overrides above
-  default_provider: "TerraGen"
-
-  # Deployment environment must be one of dev|test|ppe|prod
-  environment: "test"
-
-
-provider_config:
-  # This section allows for each provider to be configured, with specific values
-  TerraGen:
-    # If set to True terraform will apply the generated modules
-    run_terraform: False
-
-    # Terraform mode must be one of create|destroy
-    terraform_mode: "create"
+  # Register providers here, required provider_name, and provider_location further provider specific
+  # config can be added as needed
+  registered_providers:
+    TerraGen:
+      module_location: "providers.aws.terragen.terragen_provider"
+      properties:
+        run_terraform: False      # Set to true for Terraform to apply created modules
+        terraform_mode: "create"  # Must be one of create|destroy

@@ -16,11 +16,11 @@ def terravarmer(cfg: DictConfig) -> None:
     """ Parse config and create or destroy AWS infrastructure """
     log.info("TerraVarmer starting up")
 
+    build_config = cfg.build
     shared_config = cfg.shared
 
     for key, infra in shared_config.items():
-        log.info(f"TerraVarmer instantiating {infra.providers.default_provider} provider to construct {key}")
-        cloud_provider = CloudProvider().build_provider(infra.providers.default_provider)
+        cloud_provider = CloudProvider.from_build_config(infra.providers.default_provider, build_config)
         cloud_provider.create_shared_infra(key, infra)
 
 
