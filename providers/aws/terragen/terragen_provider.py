@@ -4,6 +4,7 @@ import logging
 from providers.aws.terragen.app.terraform_factory import TerraformFactory
 
 from providers.cloud_provider import CloudProvider
+
 from providers.aws.terragen.app.build_templates import build_templates
 
 log = logging.getLogger(__name__)
@@ -15,7 +16,8 @@ class TerraGen(CloudProvider):
         tf_factory = TerraformFactory.from_shared_config(module_name=infra_name,
                                                          provider_name=self.provider_name,
                                                          shared_module=shared_infra,
-                                                         debug_mode=self.debug_mode)
+                                                         debug_mode=self.debug_mode,
+                                                         environment=self.environment)
         tf_factory.generate_terraform_module()
         iain = 1
 

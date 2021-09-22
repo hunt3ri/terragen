@@ -5,12 +5,14 @@ import os
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
+
 log = logging.getLogger(__name__)
 
 
 @attr.s
 class TerraformFactory:
 
+    environment: str = attr.ib()
     module_name: str = attr.ib()
     module_path: str = attr.ib()
     module_config: DictConfig = attr.ib()
@@ -18,26 +20,31 @@ class TerraformFactory:
     provider_config: DictConfig = attr.ib()
     debug_mode: bool = attr.ib(default=False)
 
+    # Init Jinja to load templates
     _env = Environment(
         loader=PackageLoader("providers.aws.terragen"),
         autoescape=select_autoescape()
     )
 
     @classmethod
-    def from_shared_config(cls, module_name: str, provider_name: str, shared_module: DictConfig, debug_mode: bool):
+    def from_shared_config(cls, module_name: str, provider_name: str, shared_module: DictConfig, debug_mode: bool,
+                           environment: str):
         """ Construct TerraformFactory from Hydra Shared Config"""
         log.info(f"Instantiating TerraformFactory for: {module_name}")
         module_config = shared_module.config
         provider_config = shared_module.providers[provider_name]
 
-        # If debug on, write out files to hydra output dir
+        # If debug on, write TF files to hydra output dir
         if debug_mode:
-            module_path = f"{os.getcwd()}/{provider_name}/{module_name}"
+            module_root = os.getcwd()
         else:
-            module_path = f"{provider_config.module_path}/{module_name}"
+            module_root = provider_config.module_path
+
+        module_path = f"{module_root}/{provider_name}/{environment}/{module_name}"
 
         return cls(module_name=module_name, module_path=module_path, module_config=module_config,
-                   provider_name=provider_name, provider_config=provider_config, debug_mode=debug_mode)
+                   provider_name=provider_name, provider_config=provider_config, debug_mode=debug_mode,
+                   environment=environment)
 
     def generate_terraform_module(self):
         log.info(f"Generating Terraform Module for: {self.module_name}")
