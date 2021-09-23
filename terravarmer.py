@@ -1,8 +1,6 @@
 import hydra
 import logging
 
-
-
 # from app.connectivity import create_sg_rules
 # from app.terraform import create_infrastructure, destroy_infrastructure
 from omegaconf import DictConfig
@@ -19,42 +17,11 @@ def terravarmer(cfg: DictConfig) -> None:
     build_config = cfg.build
     shared_config = cfg.shared
 
-    for key, infra in shared_config.items():
-        cloud_provider = CloudProvider.from_build_config(infra.providers.default_provider, build_config)
-        cloud_provider.create_shared_infra(key, infra)
-
-
-
-
-    # TODO parse config and create appropriate provider for each element
-    # TODO handle provider specific config
-    # TODO handle build config, eg debug mode
-
-    # TODO debug mode is a special case so can be an attribute on the base class
-    # TODO provider specific config should go on base class too
-
-    # cloud_provider = CloudProvider().build_provider("TerraGen")
-    # cloud_provider.create_shared_infra(cfg.aws.shared)
-
-
-    #
-    # if terraform_mode == "ccreate":
-    #     create_infrastructure(cfg)
-    #     if cfg.build.apply_connectivity_rules:
-    #         create_sg_rules(cfg.build.use_local_aws_creds, cfg.connectivity)  # Applies additional SG rules to infra
-    # elif terraform_mode == "destroy":
-    #     destroy_infrastructure(cfg)
-
-
-def iain_test():
-    # logger = logging.getLogger(__name__)
-    # FORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() ] %(message)s"
-    # logging.basicConfig(format=FORMAT)
-    # logger.setLevel(logging.DEBUG)
-    log.debug("Test")
+    for service, service_configs in shared_config.items():
+        for infra_name, infra_config in service_configs.items():
+            cloud_provider = CloudProvider.from_build_config(infra_config.providers.default_provider, build_config)
+            cloud_provider.create_shared_infra(service, infra_name, infra_config)
 
 
 if __name__ == "__main__":
     terravarmer()
-    #iain_test()
-    #Utils().init_logging()

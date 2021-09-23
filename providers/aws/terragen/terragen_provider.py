@@ -12,12 +12,13 @@ log = logging.getLogger(__name__)
 
 class TerraGen(CloudProvider):
 
-    def create_shared_infra(self, infra_name: str, shared_infra: DictConfig):
+    def create_shared_infra(self, service_name: str, infra_name: str, shared_infra: DictConfig):
         tf_factory = TerraformFactory.from_shared_config(module_name=infra_name,
                                                          provider_name=self.provider_name,
                                                          shared_module=shared_infra,
                                                          debug_mode=self.debug_mode,
-                                                         environment=self.environment)
+                                                         environment=self.environment,
+                                                         service_name=service_name)
         tf_factory.generate_terraform_templates()
         iain = 1
 

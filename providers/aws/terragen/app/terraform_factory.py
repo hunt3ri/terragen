@@ -17,6 +17,7 @@ class TerraformFactory:
     module_config: DictConfig = attr.ib()
     provider_name: str = attr.ib()
     provider_config: DictConfig = attr.ib()
+    service_name: str = attr.ib()
     debug_mode: bool = attr.ib(default=False)
 
     # Init Jinja to load templates
@@ -26,10 +27,10 @@ class TerraformFactory:
     )
 
     @classmethod
-    def from_shared_config(cls, module_name: str, provider_name: str, shared_module: DictConfig, debug_mode: bool,
-                           environment: str):
+    def from_shared_config(cls, service_name: str, module_name: str, provider_name: str, shared_module: DictConfig,
+                           debug_mode: bool, environment: str):
         """ Construct TerraformFactory from Hydra Shared Config"""
-        log.info(f"Instantiating TerraformFactory for: {module_name}")
+        log.info(f"Instantiating TerraformFactory for: {service_name}/{module_name}")
         module_config = shared_module.config
         provider_config = shared_module.providers[provider_name]
 
@@ -39,11 +40,11 @@ class TerraformFactory:
         else:
             module_root = provider_config.module_path
 
-        module_path = f"{module_root}/{provider_name}/{environment}/{module_name}"
+        module_path = f"{module_root}/{provider_name}/{environment}/{service_name}/{module_name}"
 
         return cls(module_name=module_name, module_path=module_path, module_config=module_config,
                    provider_name=provider_name, provider_config=provider_config, debug_mode=debug_mode,
-                   environment=environment)
+                   environment=environment, service_name=service_name)
 
     def generate_terraform_templates(self):
         log.info(f"Generating Terraform templates for: {self.module_name}")
@@ -69,7 +70,7 @@ class TerraformFactory:
 
         tf_module_file_path = f"{self.module_path}/{self.module_name}.tf"
         tf_module_template = self._env.get_template("module.tf")
-        log.info(f"Generating: {self.module_name}.tf")
+        log.info(f"Generating {self.module_name}.tf")
 
         with open(tf_module_file_path, 'w') as tf_module_file:
             tf_module_file.write(tf_module_template.render(module_name=self.module_name,
