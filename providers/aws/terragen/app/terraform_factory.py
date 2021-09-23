@@ -10,7 +10,6 @@ log = logging.getLogger(__name__)
 
 @attr.s
 class TerraformFactory:
-
     environment: str = attr.ib()
     module_name: str = attr.ib()
     module_path: str = attr.ib()
@@ -52,8 +51,12 @@ class TerraformFactory:
         os.makedirs(self.module_path, exist_ok=True)
 
         self.generate_terraform_config_file()
-        self.generate_terraform_module()
         self.generate_terraform_outputs()
+
+        if "module_source" in self.provider_config:
+            self.generate_terraform_module()
+        else:
+            self.generate_terraform_resource()
 
     def generate_terraform_config_file(self):
         tf_config_template = self._env.get_template("terraform_config.tf")
@@ -70,7 +73,7 @@ class TerraformFactory:
 
         tf_module_file_path = f"{self.module_path}/{self.module_name}.tf"
         tf_module_template = self._env.get_template("module.tf")
-        log.info(f"Generating {self.module_name}.tf")
+        log.info(f"Generating module {self.module_name}.tf")
 
         with open(tf_module_file_path, 'w') as tf_module_file:
             tf_module_file.write(tf_module_template.render(module_name=self.module_name,
@@ -81,6 +84,9 @@ class TerraformFactory:
                                                            tags=tags))
 
     def generate_terraform_outputs(self):
+        if "outputs" not in self.provider_config:
+            return  # No outputs to generate
+
         outputs = self.provider_config.outputs
         tf_outputs_template = self._env.get_template("outputs.tf")
         tf_outputs_file_path = f"{self.module_path}/outputs.tf"
@@ -89,3 +95,12 @@ class TerraformFactory:
         with open(tf_outputs_file_path, 'w') as tf_outputs_file:
             tf_outputs_file.write(tf_outputs_template.render(module_name=self.module_name,
                                                              outputs=outputs))
+
+    def generate_terraform_resource(self):
+        tf_resource_file_path = f"{self.module_path}/{self.module_name}.tf"
+        tf_resource_template = self._env.get_template("resource.tf")
+        log.info(f"Generating resource {self.module_name}.tf")
+
+        with open(tf_resource_file_path, 'w') as tf_resource_file:
+            tf_resource_file.write(tf_resource_template.render(resource_type=self.provider_config.resource_type,
+                                                               module_config=self.module_config))
