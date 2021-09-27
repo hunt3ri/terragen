@@ -2,10 +2,11 @@ from omegaconf import DictConfig
 import logging
 
 from providers.aws.terragen.app.terraform_factory import TerraformFactory
+from providers.aws.terragen.app.terraform_runner import TerraformRunner
 
 from providers.cloud_provider import CloudProvider
 
-from providers.aws.terragen.app.build_templates import build_templates
+
 
 log = logging.getLogger(__name__)
 
@@ -20,7 +21,8 @@ class TerraGen(CloudProvider):
                                                          environment=self.environment,
                                                          service_name=service_name)
         tf_factory.generate_terraform_templates()
-        iain = 1
+
+        TerraformRunner.from_config(provider_properties=self.provider_properties)
 
         # for infra_key in shared_infra:
         #     log.info(f"Generating shared {infra_key}")

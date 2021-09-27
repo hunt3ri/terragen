@@ -52,11 +52,8 @@ class TerraformFactory:
 
         self.generate_terraform_config_file()
         self.generate_terraform_outputs()
-
-        if "module_source" in self.provider_config:
-            self.generate_terraform_module()
-        else:
-            self.generate_terraform_resource()
+        self.generate_terraform_module()
+        self.generate_terraform_resource()
 
     def generate_terraform_config_file(self):
         tf_config_template = self._env.get_template("terraform_config.tf")
@@ -68,6 +65,9 @@ class TerraformFactory:
             tf_config_file.write(tf_config_template.render(s3_backend_key=s3_backend_key))
 
     def generate_terraform_module(self):
+        if "module_source" not in self.provider_config:
+            return
+
         tags = self.module_config.tags
         del self.module_config.tags  # Remove tags from dictionary so template doesn't render them incorrectly
 
@@ -97,6 +97,9 @@ class TerraformFactory:
                                                              outputs=outputs))
 
     def generate_terraform_resource(self):
+        if "resource_type" not in self.provider_config:
+            return
+
         tf_resource_file_path = f"{self.module_path}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.tf")
         log.info(f"Generating resource {self.module_name}.tf")
