@@ -11,7 +11,7 @@ providers:
   atlas:
 
   TerraGen:
-      module_path: "C:/dev/python/terravarmer/providers/aws/terragen/outputs/key_pairs"
+      module_path: "/tools/terraform/modules"
       s3_backend_root: "shared/key_pairs"
       resource_type: "aws_key_pair"
 
