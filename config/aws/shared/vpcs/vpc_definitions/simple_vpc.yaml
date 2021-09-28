@@ -2,7 +2,7 @@ defaults:
   - vpc_base
 
 config:
-  vpc_name: "hunter-labs-vpc"
+  name: "hunter-labs-vpc"
   enable_dns_hostnames : true
 
 providers:
