@@ -5,3 +5,4 @@ Jinja2==3.0.1
 MarkupSafe==2.0.1
 omegaconf==2.1.1
 PyYAML==5.4.1
+toml==0.10.2
