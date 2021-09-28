@@ -37,7 +37,7 @@ class TerraformFactory:
         if debug_mode:
             module_root = os.getcwd()
         else:
-            module_root = provider_config.module_dir
+            module_root = provider_config.module_path
 
         module_dir = f"{module_root}/{provider_name}/{environment}/{service_name}/{module_name}"
 
