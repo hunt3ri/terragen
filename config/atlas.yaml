@@ -21,7 +21,7 @@ defaults:
 build:
   debug: True                   # Set to True to enable verbose debugging
   default_provider: "TerraGen"  # Provider used to create all infra unless overridden
-  environment: "test"           # Deployment environment must be one of dev|test|ppe|prod
+  environment: "prod"           # Deployment environment must be one of dev|test|ppe|prod
 
   # Register providers here, required provider_name, and provider_location further provider specific
   # config can be added as needed
@@ -30,4 +30,5 @@ build:
       module_location: "providers.aws.terragen.terragen_provider"
       properties:
         run_terraform: False      # Set to true for Terraform to apply created modules
-        terraform_mode: "create"  # Must be one of create|destroy
+        terraform_mode: "plan"  # Must be one of create|destroy|plan
+        terraform_init_cmd: "terraform init --backend-config=/tools/terraform/config/backend_${build.environment}.config"

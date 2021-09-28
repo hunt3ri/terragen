@@ -3,9 +3,7 @@ import logging
 
 from providers.aws.terragen.app.terraform_factory import TerraformFactory
 from providers.aws.terragen.app.terraform_runner import TerraformRunner
-
 from providers.cloud_provider import CloudProvider
-
 
 
 log = logging.getLogger(__name__)
@@ -22,27 +20,10 @@ class TerraGen(CloudProvider):
                                                          service_name=service_name)
         tf_factory.generate_terraform_templates()
 
-        TerraformRunner.from_config(provider_properties=self.provider_properties)
+        tf_runner = TerraformRunner.from_config(provider_properties=self.provider_properties,
+                                                module_dir=tf_factory.module_dir)
+        tf_runner.create_infrastructure()
 
-        # for infra_key in shared_infra:
-        #     log.info(f"Generating shared {infra_key}")
-        #     shared_modules = shared_infra[infra_key]
-        #
-        #     for module_name in shared_modules:
-        #         tf_factory = TerraformFactory.from_shared_config(module_name=module_name,
-        #                                                          provider_name=self.name,
-        #                                                          shared_module=shared_modules[module_name])
-        #         tf_factory.generate_terraform_module()
-
-            # TODO create factory for every shared module
-
-            # for module_name in shared_modules:
-            #     log.info(f"Generating module: {module_name}")
-                #build_templates(module, self.name, shared_modules[module])
-        #         tf_factory = TerraformFactory(module_name=module_name,
-        #                                       provider_name=self.name,
-        #                                       module_definition=shared_modules[module_name])
-        #         iain = tf_factory
 
     def destroy_shared_infra(self, cfg: DictConfig):
         raise NotImplementedError()

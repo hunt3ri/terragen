@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 class TerraformFactory:
     environment: str = attr.ib()
     module_name: str = attr.ib()
-    module_path: str = attr.ib()
+    module_dir: str = attr.ib()
     module_config: DictConfig = attr.ib()
     provider_name: str = attr.ib()
     provider_config: DictConfig = attr.ib()
@@ -37,18 +37,18 @@ class TerraformFactory:
         if debug_mode:
             module_root = os.getcwd()
         else:
-            module_root = provider_config.module_path
+            module_root = provider_config.module_dir
 
-        module_path = f"{module_root}/{provider_name}/{environment}/{service_name}/{module_name}"
+        module_dir = f"{module_root}/{provider_name}/{environment}/{service_name}/{module_name}"
 
-        return cls(module_name=module_name, module_path=module_path, module_config=module_config,
+        return cls(module_name=module_name, module_dir=module_dir, module_config=module_config,
                    provider_name=provider_name, provider_config=provider_config, debug_mode=debug_mode,
                    environment=environment, service_name=service_name)
 
     def generate_terraform_templates(self):
         log.info(f"Generating Terraform templates for: {self.module_name}")
-        log.info(f"Template files will be written to: {self.module_path}")
-        os.makedirs(self.module_path, exist_ok=True)
+        log.info(f"Template files will be written to: {self.module_dir}")
+        os.makedirs(self.module_dir, exist_ok=True)
 
         self.generate_terraform_config_file()
         self.generate_terraform_outputs()
@@ -57,7 +57,7 @@ class TerraformFactory:
 
     def generate_terraform_config_file(self):
         tf_config_template = self._env.get_template("terraform_config.tf")
-        tf_config_path = f"{self.module_path}/terraform_config.tf"
+        tf_config_path = f"{self.module_dir}/terraform_config.tf"
         log.info(f"Generating terraform_config.tf")
 
         s3_backend_key = f"{self.provider_config.s3_backend_root}/{self.module_name}"
@@ -71,7 +71,7 @@ class TerraformFactory:
         tags = self.module_config.tags
         del self.module_config.tags  # Remove tags from dictionary so template doesn't render them incorrectly
 
-        tf_module_file_path = f"{self.module_path}/{self.module_name}.tf"
+        tf_module_file_path = f"{self.module_dir}/{self.module_name}.tf"
         tf_module_template = self._env.get_template("module.tf")
         log.info(f"Generating module {self.module_name}.tf")
 
@@ -89,7 +89,7 @@ class TerraformFactory:
 
         outputs = self.provider_config.outputs
         tf_outputs_template = self._env.get_template("outputs.tf")
-        tf_outputs_file_path = f"{self.module_path}/outputs.tf"
+        tf_outputs_file_path = f"{self.module_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
 
         with open(tf_outputs_file_path, 'w') as tf_outputs_file:
@@ -100,7 +100,7 @@ class TerraformFactory:
         if "resource_type" not in self.provider_config:
             return
 
-        tf_resource_file_path = f"{self.module_path}/{self.module_name}.tf"
+        tf_resource_file_path = f"{self.module_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.tf")
         log.info(f"Generating resource {self.module_name}.tf")
 

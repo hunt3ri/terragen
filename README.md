@@ -25,3 +25,7 @@ Alternatively you can print to screen, file using following
 ```python
 print(OmegaConf.to_yaml(cfg, resolve=True))
 ```
+
+You can enable verbose debug logging by passing the following:
+
+python .\terravarmer.py hydra.verbose=true
