@@ -28,7 +28,17 @@ build:
   registered_providers:
     TerraGen:
       module_location: "providers.aws.terragen.terragen_provider"
+
       properties:
         run_terraform: False      # Set to true for Terraform to apply created modules
-        terraform_mode: "plan"  # Must be one of create|destroy|plan
-        terraform_init_cmd: "terraform init --backend-config=/tools/terraform/config/backend_${build.environment}.config"
+        terraform_mode: "plan"    # Must be one of create|destroy|plan
+
+        aws_provider_config:
+          region: "us-east-1"             # The region we will deploy infrastructure to
+          profile: "hunter-ops-tfstate"   # The AWS profile used to deploy the infrastructure
+
+        # Partial config for Terraform Backend see https://www.terraform.io/docs/language/settings/backends/configuration.html#partial-configuration
+        aws_backend_config:
+          region: "us-east-1"
+          profile: "hunter_ops_prod"
+          bucket: "hunter-ops-tfstate"
