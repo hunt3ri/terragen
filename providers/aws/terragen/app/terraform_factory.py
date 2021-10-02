@@ -6,19 +6,20 @@ import toml
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
+from providers.aws.terragen.models.terragen_models import TerragenProperties
+
 log = logging.getLogger(__name__)
 
 
 @attr.s
 class TerraformFactory:
-    environment: str = attr.ib()
+
+    properties: TerragenProperties = attr.ib()
     module_name: str = attr.ib()
     module_dir: str = attr.ib()
     module_config: DictConfig = attr.ib()
-    provider_name: str = attr.ib()
     provider_config: DictConfig = attr.ib()
     service_name: str = attr.ib()
-    debug_mode: bool = attr.ib(default=False)
 
     # Init Jinja to load templates
     _env = Environment(
@@ -27,24 +28,24 @@ class TerraformFactory:
     )
 
     @classmethod
-    def from_shared_config(cls, service_name: str, module_name: str, provider_name: str, shared_module: DictConfig,
-                           debug_mode: bool, environment: str):
+    def from_shared_config(cls, service_name: str, module_name: str, shared_module: DictConfig,
+                           properties: TerragenProperties):
         """ Construct TerraformFactory from Hydra Shared Config"""
+
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_name}")
         module_config = shared_module.config
-        provider_config = shared_module.providers[provider_name]
+        provider_config = shared_module.providers[properties.provider_name]
 
         # If debug on, write TF files to hydra output dir
-        if debug_mode:
+        if properties.debug_mode:
             module_root = os.getcwd()
         else:
             module_root = provider_config.module_path
 
-        module_dir = f"{module_root}/{provider_name}/{environment}/{service_name}/{module_name}"
+        module_dir = f"{module_root}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
 
         return cls(module_name=module_name, module_dir=module_dir, module_config=module_config,
-                   provider_name=provider_name, provider_config=provider_config, debug_mode=debug_mode,
-                   environment=environment, service_name=service_name)
+                   provider_config=provider_config, service_name=service_name, properties=properties)
 
     def generate_terraform_templates(self):
         log.info(f"Generating Terraform templates for: {self.module_name}")
@@ -61,9 +62,12 @@ class TerraformFactory:
         tf_config_path = f"{self.module_dir}/terraform_config.tf"
         log.info(f"Generating terraform_config.tf")
 
-        s3_backend_key = f"{self.provider_config.s3_backend_root}/{self.module_name}"
+        self.properties.backend.key = f"{self.module_name}.terraform.tfstate"
+
+        #s3_backend_key = f"{self.provider_config.s3_backend_root}/{self.module_name}"
         with open(tf_config_path, 'w') as tf_config_file:
-            tf_config_file.write(tf_config_template.render(s3_backend_key=s3_backend_key))
+            tf_config_file.write(tf_config_template.render(backend=str(self.properties.backend),
+                                                           provider=str(self.properties.provider)))
 
     def generate_terraform_module(self):
         if "module_source" not in self.provider_config:
@@ -116,3 +120,5 @@ class TerraformFactory:
         with open(tf_resource_file_path, 'w') as tf_resource_file:
             tf_resource_file.write(tf_resource_template.render(resource_type=self.provider_config.resource_type,
                                                                module_config=self.module_config))
+
+

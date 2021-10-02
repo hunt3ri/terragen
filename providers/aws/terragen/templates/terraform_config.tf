@@ -5,12 +5,7 @@ terraform {
       source  = "hashicorp/aws"
     }
   }
-  backend "s3" {
-    key     = "{{ s3_backend_key }}/terraform.tfstate"
-  }
+  {{ backend }}
 }
 
-provider "aws" {
-  profile                 = var.profile  # Read from environment var TF_VAR_profile
-  region                  = var.region   # Read from environment var TF_VAR_region
-}
+{{ provider }}

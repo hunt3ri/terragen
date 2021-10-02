@@ -7,7 +7,8 @@ def test_terraform_s3_backend():
                                     profile="hunter-labs",
                                     key="/shared/test")
 
-    print(s3_backend)
+    iain = str(s3_backend)
+    ab = iain
 
 
 def test_terraform_aws_provider():

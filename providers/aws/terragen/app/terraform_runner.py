@@ -3,6 +3,7 @@ import logging
 import os
 import subprocess
 
+from omegaconf import DictConfig
 from providers.aws.terragen.models.terragen_models import TerragenProperties
 
 log = logging.getLogger(__name__)
@@ -16,7 +17,7 @@ class TerraformRunner:
     working_dir: str = attr.ib()
 
     @classmethod
-    def from_config(cls, provider_properties: dict, module_dir: str):
+    def from_config(cls, provider_properties: DictConfig, module_dir: str):
 
         return cls(terragen_properties=TerragenProperties.from_properties_bag(provider_properties),
                    module_dir=module_dir,

@@ -13,7 +13,7 @@ class CloudProvider:
     debug_mode: bool = attr.ib()
     environment: str = attr.ib()
     provider_name: str = attr.ib()
-    provider_properties: dict = attr.ib()
+    provider_properties: DictConfig = attr.ib()
 
     @staticmethod
     def from_build_config(provider_name: str, build_config: DictConfig):
