@@ -35,8 +35,8 @@ build:
 
         provider_config:
           terraform_provider: "AWS"
-          region: "us-east-1"             # The region we will deploy infrastructure to
-          profile: "hunter-ops-tfstate"   # The AWS profile used to deploy the infrastructure
+          region: "us-east-1"          # The region we will deploy infrastructure to
+          profile: "hunter_ops_prod"   # The AWS profile used to deploy the infrastructure
 
         # Partial config for Terraform Backend see https://www.terraform.io/docs/language/settings/backends/configuration.html#partial-configuration
         backend_config:

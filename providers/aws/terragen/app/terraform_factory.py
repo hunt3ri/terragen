@@ -62,9 +62,9 @@ class TerraformFactory:
         tf_config_path = f"{self.module_dir}/terraform_config.tf"
         log.info(f"Generating terraform_config.tf")
 
-        self.properties.backend.key = f"{self.module_name}.terraform.tfstate"
+        # TODO this assumes S3 backend
+        self.properties.backend.key = f"{self.provider_config.s3_backend_root}/{self.module_name}/terraform.tfstate"
 
-        #s3_backend_key = f"{self.provider_config.s3_backend_root}/{self.module_name}"
         with open(tf_config_path, 'w') as tf_config_file:
             tf_config_file.write(tf_config_template.render(backend=str(self.properties.backend),
                                                            provider=str(self.properties.provider)))

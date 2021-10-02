@@ -24,10 +24,8 @@ class TerraGen(CloudProvider):
                                                          properties=properties)
         tf_factory.generate_terraform_templates()
 
-        # # TODO properties need to go to factory
-        # tf_runner = TerraformRunner.from_config(provider_properties=self.provider_properties,
-        #                                         module_dir=tf_factory.module_dir)
-        # tf_runner.create_infrastructure()
+        tf_runner = TerraformRunner.from_config(properties=properties, module_dir=tf_factory.module_dir)
+        tf_runner.create_infrastructure()
 
 
     def destroy_shared_infra(self, cfg: DictConfig):

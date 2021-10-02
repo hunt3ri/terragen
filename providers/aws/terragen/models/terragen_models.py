@@ -36,15 +36,16 @@ class TerraformS3Backend:
                    profile=backend_config.profile)
 
     def __str__(self):
-        return textwrap.dedent(f"""
+        """ Remove all whitespace before adding a 2 space indent, to render nicely in config file """
+        backend = textwrap.dedent(f"""
             backend "s3" {{
                 profile = "{self.profile}"
                 region  = "{self.region}"
                 bucket  = "{self.bucket}" 
                 key     = "{self.key}"
             }}
-            """
-        )
+            """)
+        return textwrap.indent(backend, "  ")
 
 
 @attr.s
