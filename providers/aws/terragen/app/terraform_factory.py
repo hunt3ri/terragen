@@ -114,4 +114,5 @@ class TerraformFactory:
 
         with open(tf_resource_file_path, 'w') as tf_resource_file:
             tf_resource_file.write(tf_resource_template.render(resource_type=self.provider_config.resource_type,
-                                                               module_config=self.module_config))
+                                                               module_config=self.module_config,
+                                                               module_name=self.module_name))

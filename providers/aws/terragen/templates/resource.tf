@@ -1,6 +1,6 @@
-resource "{{ resource_type }}" "keypair" {
-  # Generate Key to allow ssh access
+resource "{{ resource_type }}" "{{ module_name }}" {
+
 {% for key, value in module_config.items() %}
-  {{ key }} = {{ value }}
+  {{ to_toml(key, value) }}
 {%- endfor %}
 }
