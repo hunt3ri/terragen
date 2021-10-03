@@ -1,11 +1,11 @@
 import attr
 import logging
 import os
-import toml
 
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
+from providers.aws.terragen.app.utils import to_toml
 from providers.aws.terragen.models.terragen_models import TerragenProperties
 
 log = logging.getLogger(__name__)
@@ -26,6 +26,9 @@ class TerraformFactory:
         loader=PackageLoader("providers.aws.terragen"),
         autoescape=select_autoescape()
     )
+
+    # Register helper functions
+    _env.globals["to_toml"] = to_toml
 
     @classmethod
     def from_shared_config(cls, service_name: str, module_name: str, shared_module: DictConfig,
@@ -80,20 +83,12 @@ class TerraformFactory:
         tf_module_template = self._env.get_template("module.tf")
         log.info(f"Generating module {self.module_name}.tf")
 
-        for key, value in tags.items():
-
-            iain = toml.dumps({key: value})
-
-            abi = iain
-
-
         with open(tf_module_file_path, 'w') as tf_module_file:
             tf_module_file.write(tf_module_template.render(module_name=self.module_name,
                                                            module_config=self.module_config,
                                                            module_url=self.provider_config.module_url,
                                                            module_source=self.provider_config.module_source,
                                                            module_version=self.provider_config.module_version,
-                                                           toml=toml,
                                                            tags=tags))
 
     def generate_terraform_outputs(self):
@@ -120,5 +115,3 @@ class TerraformFactory:
         with open(tf_resource_file_path, 'w') as tf_resource_file:
             tf_resource_file.write(tf_resource_template.render(resource_type=self.provider_config.resource_type,
                                                                module_config=self.module_config))
-
-

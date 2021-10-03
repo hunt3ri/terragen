@@ -4,12 +4,12 @@ module "{{ module_name }}" {
   version = "{{ module_version }}"
 
 {% for key, value in module_config.items() %}
-  {{ toml.dumps({key: value}) }}
+  {{ to_toml(key, value) }}
 {%- endfor %}
 
   tags = {
     {% for key, value in tags.items() -%}
-    {{ toml.dumps({key: value}) }}
+    {{ to_toml(key, value) }}
     {%- endfor %}
   }
 }
