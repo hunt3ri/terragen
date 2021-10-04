@@ -34,7 +34,7 @@ class CloudProvider:
         raise NotImplementedError()
 
     @abstractmethod
-    def destroy_shared_infra(self, cfg: DictConfig):
+    def destroy_shared_infra(self, service_name: str, infra_name: str, shared_infra: DictConfig):
         """ Providers can implement a method to create infra that is shared with multiple apps or infrastructure """
         raise NotImplementedError()
 

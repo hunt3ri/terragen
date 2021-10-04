@@ -39,7 +39,16 @@ class TerraformRunner:
         create_cmd = "terraform apply -auto-approve"
         subprocess.run(create_cmd.split(" "), check=True)
 
-        os.chdir(self.working_dir)  # Revert to original working dir, to ensure script hydra ouputs to correct loc
+        os.chdir(self.working_dir)  # Revert to original working dir, to ensure script hydra outputs to correct loc
 
     def destroy_infrastructure(self):
-        pass
+        if not self.properties.run_terraform:
+            log.info("Skipping Destroy Infrastructure run_terraform set to False")
+            return
+
+        os.chdir(self.module_dir)
+        logging.info(f"Terraform destroying infrastructure for module {self.module_dir}")
+        destroy_cmd = "terraform destroy -auto-approve"
+        subprocess.run(destroy_cmd.split(" "), check=True)
+
+        os.chdir(self.working_dir)  # Revert to original working dir, to ensure script hydra outputs to correct loc

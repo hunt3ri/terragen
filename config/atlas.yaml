@@ -22,6 +22,7 @@ build:
   debug: True                   # Set to True to enable verbose debugging
   default_provider: "TerraGen"  # Provider used to create all infra unless overridden
   environment: "prod"           # Deployment environment must be one of dev|test|ppe|prod
+  shared_infra: "destroy"         # Must be one of create|destroy
 
   # Register providers here, required provider_name, and provider_location further provider specific
   # config can be added as needed
