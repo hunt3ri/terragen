@@ -40,13 +40,6 @@ class TerraformFactory:
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_name}")
         module_config = shared_module.config
         provider_config = shared_module.providers[properties.provider_name]
-
-        # If debug on, write TF files to hydra output dir
-        # if properties.debug_mode:
-        #     module_root = os.getcwd()
-        # else:
-        #     module_root = provider_config.module_path
-
         hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
         module_dir = f"{provider_config.module_path}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
 
@@ -88,7 +81,7 @@ class TerraformFactory:
             return
 
         tags = self.module_config.tags
-        del self.module_config.tags  # Remove tags from dictionary so template doesn't render them incorrectly
+        #del self.module_config.tags  # Remove tags from dictionary so template doesn't render them incorrectly
 
         tf_module_file_path = f"{directory}/{self.module_name}.tf"
         tf_module_template = self._env.get_template("module.tf")
