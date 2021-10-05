@@ -33,11 +33,14 @@ class TerraformRunner:
         logging.info(f"Initialising Terraform for module {self.module_dir}")
         subprocess.run("terraform init".split(" "), check=True)
 
-        # TODO add a plan step here
-        # Create infra
-        logging.info(f"Terraform creating infrastructure for module {self.module_dir}")
-        create_cmd = "terraform apply -auto-approve"
-        subprocess.run(create_cmd.split(" "), check=True)
+        if self.properties.terraform_plan:
+            logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.module_dir}")
+            subprocess.run("terraform plan".split(" "), check=True)
+        else:
+            # Create infra
+            logging.info(f"Terraform creating infrastructure for module {self.module_dir}")
+            create_cmd = "terraform apply -auto-approve"
+            subprocess.run(create_cmd.split(" "), check=True)
 
         os.chdir(self.working_dir)  # Revert to original working dir, to ensure script hydra outputs to correct loc
 

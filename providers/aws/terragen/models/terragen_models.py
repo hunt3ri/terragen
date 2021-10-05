@@ -53,14 +53,12 @@ class TerragenProperties:
     debug_mode: bool = attr.ib()
     environment: str = attr.ib()
     run_terraform: bool = attr.ib()
-    terraform_mode: str = attr.ib()
+    terraform_plan: bool = attr.ib()
     provider = attr.ib()
     backend = attr.ib()
     provider_name: str = attr.ib()
 
-    @terraform_mode.validator
-    def validate_terraform_mode(self, attribute, value):
-        assert value in ["create", "destroy", "plan"]
+
 
     @classmethod
     def from_properties(cls, debug_mode: bool, environment: str, provider_name: str, provider_properties: DictConfig):
@@ -80,7 +78,7 @@ class TerragenProperties:
         return cls(debug_mode=debug_mode,
                    environment=environment,
                    run_terraform=provider_properties.run_terraform,
-                   terraform_mode=provider_properties.terraform_mode,
+                   terraform_plan=provider_properties.terraform_plan,
                    backend=backend,
                    provider=provider,
                    provider_name=provider_name)
