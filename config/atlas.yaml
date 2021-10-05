@@ -19,7 +19,7 @@ defaults:
 #        default_provider: "terraform"
 
 build:
-  debug: True                   # Set to True to enable verbose debugging
+  debug: False                   # Set to True to enable verbose debugging
   default_provider: "TerraGen"  # Provider used to create all infra unless overridden
   environment: "prod"           # Deployment environment must be one of dev|test|ppe|prod
   shared_infra: "create"         # Must be one of create|destroy
