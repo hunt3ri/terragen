@@ -18,7 +18,7 @@ class TerraformFactory:
     module_name: str = attr.ib()
     module_dir: str = attr.ib()     # The directory terraform files will be written and executed from
     hydra_dir: str = attr.ib()      # The Hydra output dir, so we can have a history of changes
-    output_dirs: list[str] = attr.ib()
+    output_dirs: [] = attr.ib()
     module_config: DictConfig = attr.ib()
     provider_config: DictConfig = attr.ib()
     service_name: str = attr.ib()
