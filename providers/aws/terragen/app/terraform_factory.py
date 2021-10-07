@@ -16,9 +16,7 @@ class TerraformFactory:
 
     properties: TerragenProperties = attr.ib()
     module_name: str = attr.ib()
-    module_dir: str = attr.ib()     # The directory terraform files will be written and executed from
-    hydra_dir: str = attr.ib()      # The Hydra output dir, so we can have a history of changes
-    output_dirs: [] = attr.ib()
+    hydra_dir: str = attr.ib()      # The Hydra output dir
     module_config: DictConfig = attr.ib()
     provider_config: DictConfig = attr.ib()
     service_name: str = attr.ib()
@@ -41,32 +39,23 @@ class TerraformFactory:
         module_config = shared_module.config
         provider_config = shared_module.providers[properties.provider_name]
         hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
-        module_dir = f"{provider_config.module_path}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
 
-        # If running in debug only generate output_dir
-        if properties.debug_mode:
-            output_dirs = [hydra_dir]
-        else:
-            output_dirs = [hydra_dir, module_dir]
-
-        return cls(module_name=module_name, module_dir=module_dir, module_config=module_config,
-                   provider_config=provider_config, service_name=service_name, properties=properties,
-                   hydra_dir=hydra_dir, output_dirs=output_dirs)
+        return cls(module_name=module_name, module_config=module_config, provider_config=provider_config,
+                   service_name=service_name, properties=properties, hydra_dir=hydra_dir)
 
     def generate_terraform_templates(self):
         log.info(f"Generating Terraform templates for: {self.module_name}")
-        log.info(f"Template files will be written to: {self.module_dir}")
+        log.info(f"Template files will be written to: {self.hydra_dir}")
 
-        for directory in self.output_dirs:
-            os.makedirs(directory, exist_ok=True)
-            self.generate_terraform_config_file(directory)
-            self.generate_terraform_outputs(directory)
-            self.generate_terraform_module(directory)
-            self.generate_terraform_resource(directory)
+        os.makedirs(self.hydra_dir, exist_ok=True)
+        self.generate_terraform_config_file()
+        self.generate_terraform_outputs()
+        self.generate_terraform_module()
+        self.generate_terraform_resource()
 
-    def generate_terraform_config_file(self, directory: str):
+    def generate_terraform_config_file(self):
         tf_config_template = self._env.get_template("terraform_config.tf")
-        tf_config_path = f"{directory}/terraform_config.tf"
+        tf_config_path = f"{self.hydra_dir}/terraform_config.tf"
         log.info(f"Generating terraform_config.tf")
 
         # TODO this assumes S3 backend
@@ -76,14 +65,12 @@ class TerraformFactory:
             tf_config_file.write(tf_config_template.render(backend=str(self.properties.backend),
                                                            provider=str(self.properties.provider)))
 
-    def generate_terraform_module(self, directory: str):
+    def generate_terraform_module(self):
         if "module_source" not in self.provider_config:
             return
 
         tags = self.module_config.tags
-        #del self.module_config.tags  # Remove tags from dictionary so template doesn't render them incorrectly
-
-        tf_module_file_path = f"{directory}/{self.module_name}.tf"
+        tf_module_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_module_template = self._env.get_template("module.tf")
         log.info(f"Generating module {self.module_name}.tf")
 
@@ -95,24 +82,24 @@ class TerraformFactory:
                                                            module_version=self.provider_config.module_version,
                                                            tags=tags))
 
-    def generate_terraform_outputs(self, directory: str):
+    def generate_terraform_outputs(self):
         if "outputs" not in self.provider_config:
             return  # No outputs to generate
 
         outputs = self.provider_config.outputs
         tf_outputs_template = self._env.get_template("outputs.tf")
-        tf_outputs_file_path = f"{directory}/outputs.tf"
+        tf_outputs_file_path = f"{self.hydra_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
 
         with open(tf_outputs_file_path, 'w') as tf_outputs_file:
             tf_outputs_file.write(tf_outputs_template.render(module_name=self.module_name,
                                                              outputs=outputs))
 
-    def generate_terraform_resource(self, directory: str):
+    def generate_terraform_resource(self):
         if "resource_type" not in self.provider_config:
             return
 
-        tf_resource_file_path = f"{directory}/{self.module_name}.tf"
+        tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.tf")
         log.info(f"Generating resource {self.module_name}.tf")
 

@@ -25,7 +25,6 @@ class TerraGen(CloudProvider):
         tf_factory.generate_terraform_templates()
 
         tf_runner = TerraformRunner.from_config(properties=properties,
-                                                module_dir=tf_factory.module_dir,
                                                 hydra_dir=tf_factory.hydra_dir)
         tf_runner.create_infrastructure()
 
@@ -41,7 +40,6 @@ class TerraGen(CloudProvider):
                                                          properties=properties)
 
         tf_runner = TerraformRunner.from_config(properties=properties,
-                                                module_dir=tf_factory.module_dir,
                                                 hydra_dir=tf_factory.hydra_dir)
         tf_runner.destroy_infrastructure()
 

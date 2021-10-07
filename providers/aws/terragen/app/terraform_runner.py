@@ -13,14 +13,12 @@ class TerraformRunner:
 
     properties: TerragenProperties = attr.ib()
     hydra_dir: str = attr.ib()
-    module_dir: str = attr.ib()
     working_dir: str = attr.ib()
 
     @classmethod
-    def from_config(cls, properties: TerragenProperties, module_dir: str, hydra_dir: str):
+    def from_config(cls, properties: TerragenProperties, hydra_dir: str):
 
         return cls(properties=properties,
-                   module_dir=module_dir,
                    hydra_dir=hydra_dir,
                    working_dir=os.getcwd())
 
@@ -29,19 +27,19 @@ class TerraformRunner:
             logging.info(f"Debug mode is On.  Skipping create infrastructure")
             return
 
-        os.chdir(self.module_dir)
+        os.chdir(self.hydra_dir)
 
         # Initialise Terraform
-        logging.info(f"Initialising Terraform for module {self.module_dir}")
+        logging.info(f"Initialising Terraform for module {self.hydra_dir}")
         subprocess.run("terraform init".split(" "), check=True)
 
         if self.properties.terraform_plan:
-            logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.module_dir}")
+            logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
             subprocess.run("terraform plan -out ./tfplan".split(" "), check=True)
-            subprocess.run(f"terraform show tfplan -no-color > {self.hydra_dir}/tfplan", check=True, shell=True)
+            subprocess.run(f"terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:
             # Create infra
-            logging.info(f"Terraform creating infrastructure for module {self.module_dir}")
+            logging.info(f"Terraform creating infrastructure for module {self.hydra_dir}")
             create_cmd = "terraform apply -auto-approve"
             subprocess.run(create_cmd.split(" "), check=True)
 
@@ -52,13 +50,13 @@ class TerraformRunner:
             logging.info(f"Debug mode is On. Skipping destroy infrastructure")
             return
 
-        os.chdir(self.module_dir)
+        os.chdir(self.hydra_dir)
 
         if self.properties.terraform_plan:
-            logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.module_dir}")
+            logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
             pass
         else:
-            logging.info(f"Terraform destroying infrastructure for module {self.module_dir}")
+            logging.info(f"Terraform destroying infrastructure for module {self.hydra_dir}")
             destroy_cmd = "terraform destroy -auto-approve"
             subprocess.run(destroy_cmd.split(" "), check=True)
 
