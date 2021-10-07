@@ -52,8 +52,12 @@ class TerraformRunner:
 
         os.chdir(self.hydra_dir)
 
+        # Initialise Terraform
+        logging.info(f"Initialising Terraform for module {self.hydra_dir}")
+        subprocess.run("terraform init".split(" "), check=True)
+
         if self.properties.terraform_plan:
-            logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
+            logging.info(f"Generate Terraform Plan for destroying infrastructure for module {self.hydra_dir}")
             subprocess.run("terraform plan -destroy -out ./tfplan".split(" "), check=True)
             subprocess.run(f"terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:

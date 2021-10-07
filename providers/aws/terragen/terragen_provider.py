@@ -39,6 +39,7 @@ class TerraGen(CloudProvider):
                                                          service_name=service_name,
                                                          properties=properties)
 
+        tf_factory.generate_terraform_templates()
         tf_runner = TerraformRunner.from_config(properties=properties,
                                                 hydra_dir=tf_factory.hydra_dir)
         tf_runner.destroy_infrastructure()
