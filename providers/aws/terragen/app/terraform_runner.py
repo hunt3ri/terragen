@@ -54,7 +54,8 @@ class TerraformRunner:
 
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
-            pass
+            subprocess.run("terraform plan -destroy -out ./tfplan".split(" "), check=True)
+            subprocess.run(f"terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:
             logging.info(f"Terraform destroying infrastructure for module {self.hydra_dir}")
             destroy_cmd = "terraform destroy -auto-approve"

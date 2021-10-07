@@ -18,9 +18,6 @@ providers:
   atlas:
 
   TerraGen:
-      # Path where TerraGen will output all .tf files for the module
-      module_path: "/tools/terraform/modules"
-
       # Module metadata
       module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"
       module_source: "terraform-aws-modules/vpc/aws"
