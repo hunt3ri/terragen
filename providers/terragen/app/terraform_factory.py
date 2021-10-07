@@ -5,8 +5,8 @@ import os
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
-from providers.aws.terragen.app.utils import to_toml
-from providers.aws.terragen.models.terragen_models import TerragenProperties
+from providers.terragen.app.utils import to_toml
+from providers.terragen.models.terragen_models import TerragenProperties
 
 log = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class TerraformFactory:
 
     # Init Jinja to load templates
     _env = Environment(
-        loader=PackageLoader("providers.aws.terragen"),
+        loader=PackageLoader("providers.terragen"),
         autoescape=select_autoescape()
     )
 

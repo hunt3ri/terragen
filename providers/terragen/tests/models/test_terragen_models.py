@@ -1,4 +1,4 @@
-from providers.aws.terragen.models.terragen_models import TerraformS3Backend, TerraformAWSProvider
+from providers.terragen.models.terragen_models import TerraformS3Backend, TerraformAWSProvider
 
 
 def test_terraform_s3_backend():

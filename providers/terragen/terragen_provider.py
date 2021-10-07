@@ -1,9 +1,9 @@
 from omegaconf import DictConfig
 import logging
 
-from providers.aws.terragen.app.terraform_factory import TerraformFactory
-from providers.aws.terragen.app.terraform_runner import TerraformRunner
-from providers.aws.terragen.models.terragen_models import TerragenProperties
+from providers.terragen.app.terraform_factory import TerraformFactory
+from providers.terragen.app.terraform_runner import TerraformRunner
+from providers.terragen.models.terragen_models import TerragenProperties
 from providers.cloud_provider import CloudProvider
 
 

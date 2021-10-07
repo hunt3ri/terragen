@@ -28,7 +28,7 @@ build:
   # config can be added as needed
   registered_providers:
     TerraGen:
-      module_location: "providers.aws.terragen.terragen_provider"
+      module_location: "providers.terragen.terragen_provider"
 
       properties:
         terraform_mode: "plan"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
