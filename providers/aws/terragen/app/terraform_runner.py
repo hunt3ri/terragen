@@ -38,7 +38,7 @@ class TerraformRunner:
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.module_dir}")
             subprocess.run("terraform plan -out ./tfplan".split(" "), check=True)
-            subprocess.run(f"terraform show tfplan -no-color > {self.hydra_dir}/tfplan")
+            subprocess.run(f"terraform show tfplan -no-color > {self.hydra_dir}/tfplan", check=True, shell=True)
         else:
             # Create infra
             logging.info(f"Terraform creating infrastructure for module {self.module_dir}")
