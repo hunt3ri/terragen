@@ -36,6 +36,7 @@ class TerraformRunner:
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
             subprocess.run("terraform plan -out ./tfplan".split(" "), check=True)
+            logging.info(f"Generating human readable tfplan.txt for {self.hydra_dir}")
             subprocess.run(f"terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:
             # Create infra
@@ -59,6 +60,7 @@ class TerraformRunner:
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for destroying infrastructure for module {self.hydra_dir}")
             subprocess.run("terraform plan -destroy -out ./tfplan".split(" "), check=True)
+            logging.info(f"Generating human readable tfplan.txt for {self.hydra_dir}")
             subprocess.run(f"terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:
             logging.info(f"Terraform destroying infrastructure for module {self.hydra_dir}")
