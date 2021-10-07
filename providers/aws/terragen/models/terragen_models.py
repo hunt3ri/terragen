@@ -52,7 +52,6 @@ class TerraformS3Backend:
 class TerragenProperties:
     debug_mode: bool = attr.ib()
     environment: str = attr.ib()
-    run_terraform: bool = attr.ib()
     terraform_plan: bool = attr.ib()
     provider = attr.ib()
     backend = attr.ib()
@@ -75,10 +74,16 @@ class TerragenProperties:
         else:
             raise ValueError(f"{provider_config.terraform_provider} provider currently unsupported")
 
+        if provider_properties.terraform_mode.lower() == 'plan':
+            terraform_plan = True
+        elif provider_properties.terraform_mode.lower() == 'apply':
+            terraform_plan = False
+        else:
+            raise ValueError(f"Unexpected terraform_mode value {provider_properties.terraform_mode.lower()} must be either plan or apply")
+
         return cls(debug_mode=debug_mode,
                    environment=environment,
-                   run_terraform=provider_properties.run_terraform,
-                   terraform_plan=provider_properties.terraform_plan,
+                   terraform_plan=terraform_plan,
                    backend=backend,
                    provider=provider,
                    provider_name=provider_name)

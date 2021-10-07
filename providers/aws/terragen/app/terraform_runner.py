@@ -23,10 +23,6 @@ class TerraformRunner:
                    working_dir=os.getcwd())
 
     def create_infrastructure(self):
-        if not self.properties.run_terraform:
-            log.info("Skipping Create Infrastructure run_terraform set to False")
-            return
-
         os.chdir(self.module_dir)
 
         # Initialise Terraform
@@ -35,7 +31,7 @@ class TerraformRunner:
 
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.module_dir}")
-            subprocess.run("terraform plan".split(" "), check=True)
+            #subprocess.run("terraform plan".split(" "), check=True)
         else:
             # Create infra
             logging.info(f"Terraform creating infrastructure for module {self.module_dir}")
@@ -45,13 +41,14 @@ class TerraformRunner:
         os.chdir(self.working_dir)  # Revert to original working dir, to ensure script hydra outputs to correct loc
 
     def destroy_infrastructure(self):
-        if not self.properties.run_terraform:
-            log.info("Skipping Destroy Infrastructure run_terraform set to False")
-            return
-
         os.chdir(self.module_dir)
-        logging.info(f"Terraform destroying infrastructure for module {self.module_dir}")
-        destroy_cmd = "terraform destroy -auto-approve"
-        subprocess.run(destroy_cmd.split(" "), check=True)
+
+        if self.properties.terraform_plan:
+            logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.module_dir}")
+            pass
+        else:
+            logging.info(f"Terraform destroying infrastructure for module {self.module_dir}")
+            destroy_cmd = "terraform destroy -auto-approve"
+            subprocess.run(destroy_cmd.split(" "), check=True)
 
         os.chdir(self.working_dir)  # Revert to original working dir, to ensure script hydra outputs to correct loc
