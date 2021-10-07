@@ -57,8 +57,6 @@ class TerragenProperties:
     backend = attr.ib()
     provider_name: str = attr.ib()
 
-
-
     @classmethod
     def from_properties(cls, debug_mode: bool, environment: str, provider_name: str, provider_properties: DictConfig):
         backend_config = provider_properties.backend_config

@@ -23,6 +23,10 @@ class TerraformRunner:
                    working_dir=os.getcwd())
 
     def create_infrastructure(self):
+        if self.properties.debug_mode:
+            logging.info(f"Debug mode is On.  Skipping create infrastructure")
+            return
+
         os.chdir(self.module_dir)
 
         # Initialise Terraform
@@ -41,6 +45,10 @@ class TerraformRunner:
         os.chdir(self.working_dir)  # Revert to original working dir, to ensure script hydra outputs to correct loc
 
     def destroy_infrastructure(self):
+        if self.properties.debug_mode:
+            logging.info(f"Debug mode is On. Skipping destroy infrastructure")
+            return
+
         os.chdir(self.module_dir)
 
         if self.properties.terraform_plan:

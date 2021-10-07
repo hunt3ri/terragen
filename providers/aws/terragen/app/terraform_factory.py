@@ -43,11 +43,11 @@ class TerraformFactory:
         hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
         module_dir = f"{provider_config.module_path}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
 
-        # If running terraform generate templates and a hydra copy, otherwise just the hydra copy
-        if properties.run_terraform:
-            output_dirs = [hydra_dir, module_dir]
-        else:
+        # If running in debug only generate output_dir
+        if properties.debug_mode:
             output_dirs = [hydra_dir]
+        else:
+            output_dirs = [hydra_dir, module_dir]
 
         return cls(module_name=module_name, module_dir=module_dir, module_config=module_config,
                    provider_config=provider_config, service_name=service_name, properties=properties,

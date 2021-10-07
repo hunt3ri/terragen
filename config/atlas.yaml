@@ -19,7 +19,7 @@ defaults:
 #        default_provider: "terraform"
 
 build:
-  debug: False                   # Set to True to enable verbose debugging
+  debug: True                   # Set to True to enable verbose debugging
   default_provider: "TerraGen"  # Provider used to create all infra unless overridden
   environment: "prod"           # Deployment environment must be one of dev|test|ppe|prod
   shared_infra: "create"         # Must be one of create|destroy
@@ -32,9 +32,6 @@ build:
 
       properties:
         terraform_mode: "plan"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
-
-        run_terraform: False      # Set to true for Terraform to apply created modules
-        terraform_plan: True    # Set to true to see plan output rather than create or destroy infra
 
         provider_config:
           terraform_provider: "AWS"
