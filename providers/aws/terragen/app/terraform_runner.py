@@ -12,14 +12,16 @@ log = logging.getLogger(__name__)
 class TerraformRunner:
 
     properties: TerragenProperties = attr.ib()
+    hydra_dir: str = attr.ib()
     module_dir: str = attr.ib()
     working_dir: str = attr.ib()
 
     @classmethod
-    def from_config(cls, properties: TerragenProperties, module_dir: str):
+    def from_config(cls, properties: TerragenProperties, module_dir: str, hydra_dir: str):
 
         return cls(properties=properties,
                    module_dir=module_dir,
+                   hydra_dir=hydra_dir,
                    working_dir=os.getcwd())
 
     def create_infrastructure(self):
@@ -35,7 +37,7 @@ class TerraformRunner:
 
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.module_dir}")
-            #subprocess.run("terraform plan".split(" "), check=True)
+            subprocess.run(f"terraform plan -out {self.hydra_dir}/tfplan".split(" "), check=True)
         else:
             # Create infra
             logging.info(f"Terraform creating infrastructure for module {self.module_dir}")

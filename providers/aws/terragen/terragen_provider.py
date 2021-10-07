@@ -24,7 +24,9 @@ class TerraGen(CloudProvider):
                                                          properties=properties)
         tf_factory.generate_terraform_templates()
 
-        tf_runner = TerraformRunner.from_config(properties=properties, module_dir=tf_factory.module_dir)
+        tf_runner = TerraformRunner.from_config(properties=properties,
+                                                module_dir=tf_factory.module_dir,
+                                                hydra_dir=tf_factory.hydra_dir)
         tf_runner.create_infrastructure()
 
     def destroy_shared_infra(self, service_name: str, infra_name: str, shared_infra: DictConfig):
@@ -38,7 +40,9 @@ class TerraGen(CloudProvider):
                                                          service_name=service_name,
                                                          properties=properties)
 
-        tf_runner = TerraformRunner.from_config(properties=properties, module_dir=tf_factory.module_dir)
+        tf_runner = TerraformRunner.from_config(properties=properties,
+                                                module_dir=tf_factory.module_dir,
+                                                hydra_dir=tf_factory.hydra_dir)
         tf_runner.destroy_infrastructure()
 
     def create_app_infra(self, cfg: DictConfig):
