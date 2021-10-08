@@ -1,0 +1,38 @@
+# Environment specific config that is injected at resolution time
+environments:
+  dev:
+    instance_type: t3a.micro
+    # Company wide SGs that can be attached to instances as needed
+    security_groups:
+      shared_services_connectivity: "sg-0bf7e2be1d8622af0"
+      shared_services_ad_connectivity: "sg-0bf7e2be1d8622af0"
+      shared_services_internet_egress: "sg-0bf7e2be1d8622af0"
+  test:
+    instance_type: t3a.micro
+  prod:
+    instance_type: t3a.large
+
+
+config:
+  instance_count              : 1
+  instance_type               : "t3a.micro"
+  instance_name               : ???
+  associate_public_ip_address : false
+  ami_id                      : "ami-06310010cdfb6a743"
+  tags:
+    tag_business_owner        : "Hunter-Labs"
+
+
+providers:
+  # Set the provider that will create the infrastructure
+  default_provider: "${build.default_provider}"
+
+  # TODO Atlas specific config here
+  atlas:
+
+  TerraGen:
+    # Path where TerraGen will output all .tf files for the module
+    module_path: "C:/dev/python/terravarmer/tfvars"
+
+    # The root value for the S3 backend key, eg for default_vpc path will become shared/vpc/default_vpc/terraform.tfstate
+    s3_backend_root: "middleware/ec2"

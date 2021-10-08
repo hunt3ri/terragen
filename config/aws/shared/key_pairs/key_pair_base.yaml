@@ -1,0 +1,16 @@
+config:
+    key_name: ???
+    public_key: ???
+
+# provider specific config can be added here
+providers:
+  # Set the provider that will create the infrastructure
+  default_provider: "${build.default_provider}"
+
+  # Atlas does not support creation of VPCs
+  atlas:
+
+  TerraGen:
+      s3_backend_root: "shared/key_pairs"
+      resource_type: "aws_key_pair"
+

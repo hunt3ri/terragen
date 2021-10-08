@@ -1,0 +1,8 @@
+defaults:
+  - sg_base
+
+config:
+    sg_name: "EngineTierSG"
+    sg_description: "Engine Tier SG"
+    tags:
+      Name: "EngineTierSG"

@@ -9,7 +9,8 @@ terraform_config:
 
 
 tfvars_config:
-  instance_name: "servicetier_${build.environment}"
+  #instance_name: "servicetier_${build.environment}"
+  instance_name: "test"
   tags:
     tag_identifier: "servicetier"
 

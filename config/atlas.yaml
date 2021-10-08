@@ -1,23 +1,46 @@
-# Order is important py-tfvars will create infra in specified order specified in defaults object
+# Order is important terravarmer will create infra in specified order specified in defaults object
 defaults:
-  - vpc: vpc_base
-  - ec2@servicetier: instance_definitions/servicetier
-  - ec2@enginetier: instance_definitions/enginetier
-  - ec2@microtier: instance_definitions/microtier
-  - connectivity: connectivity_base
+  # Shared Infrastructure
+  - aws/shared/vpcs@shared.vpc.simple_vpc: vpc_definitions/simple_vpc
+  - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
+#  - aws/shared/security_groups@aws.shared.security_groups.enginetier: data_governance/dgv_enginetier
+
+  # Application/Project specific Infrastructure
+#  - aws/middleware/ec2@aws.application.ec2.instances.enginetier: data_governance/enginetier
+#  - aws/middleware/ec2@middleware.ec2.servicetier: instance_definitions/servicetier
+#  - aws/middleware/ec2@middleware.ec2.enginetier: instance_definitions/enginetier
+
+
+# Provider overrides
+#aws:
+#  shared:
+#    vpc:
+#      providers:
+#        default_provider: "terraform"
 
 build:
-  # Deployment environment must be one of dev|test|prod
-  environment: "test"
+  debug: True                   # Set to True to enable verbose debugging
+  default_provider: "TerraGen"  # Provider used to create all infra unless overridden
+  environment: "prod"           # Deployment environment must be one of dev|test|ppe|prod
+  shared_infra: "create"         # Must be one of create|destroy
 
-  # If set to True terraform will apply the tfvars file generated
-  run_terraform: False
+  # Register providers here, required provider_name, and provider_location further provider specific
+  # config can be added as needed
+  registered_providers:
+    TerraGen:
+      module_location: "providers.terragen.terragen_provider"
 
-  # Terraform mode must be one of create|destroy
-  terraform_mode: "create"
+      properties:
+        terraform_mode: "plan"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
 
-  # Create SG rules as defined in connectivity block
-  apply_connectivity_rules: False
+        provider_config:
+          terraform_provider: "AWS"
+          region: "us-east-1"          # The region we will deploy infrastructure to
+          profile: "hunter_ops_prod"   # The AWS profile used to deploy the infrastructure
 
-  # Set to true if you want to use AWS creds from local environment rather than os level
-  use_local_aws_creds: True
+        # Partial config for Terraform Backend see https://www.terraform.io/docs/language/settings/backends/configuration.html#partial-configuration
+        backend_config:
+          terraform_backend: "S3"
+          region: "us-east-1"
+          profile: "hunter_ops_prod"
+          bucket: "hunter-ops-tfstate"

@@ -1,0 +1,22 @@
+config:
+  sg_name: ???
+  sg_description: ???
+  ingress_cidr_blocks: [ "109.152.3.140/32" ]
+  ingress_rules: [ "all-all" ]
+  egress_cidr_blocks: [ "0.0.0.0/0" ]
+  egress_rules: ["all-all" ]
+  tags:
+    Name: ???
+    Owner: "Hunter-Labs"
+
+providers:
+  # Set the provider that will create the infrastructure
+  default_provider: "${build.default_provider}"
+
+  # Atlas does not support direct creation of SGs
+  atlas:
+
+  TerraGen:
+    module_path: "C:/dev/python/terravarmer/providers/aws/terragen/outputs/security_groups"
+    s3_backend_key: "common/security_groups/terraform.tfstate"
+

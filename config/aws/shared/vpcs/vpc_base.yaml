@@ -1,0 +1,32 @@
+# Define multiple configurations in the configs section, as long as they match the default pattern
+config:
+  name                 : "hunter-labs-vpc"
+  cidr                 : "10.0.0.0/16"
+  azs                  : ["us-east-1a", "us-east-1b"]
+  public_subnets       : ["10.0.100.0/24", "10.0.200.0/24"]
+  enable_dns_hostnames : false
+
+  tags:
+    environment : ${build.environment}
+
+# provider specific config can be added here
+providers:
+  # Set the provider that will create the infrastructure
+  default_provider: "${build.default_provider}"
+
+  # Atlas does not support creation of VPCs
+  atlas:
+
+  TerraGen:
+      # Module metadata
+      module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"
+      module_source: "terraform-aws-modules/vpc/aws"
+      module_version: "~> 3.0"
+
+      # The root value for the S3 backend key, eg for moduleX path will become shared/vpc/moduleX/terraform.tfstate
+      s3_backend_root: "shared/vpc"
+
+      # Variables you want to add to outputs.tf file should be specified here
+      outputs:
+        vpc_id:
+          description: "The VPC ID"
