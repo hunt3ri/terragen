@@ -1,8 +1,6 @@
 import hydra
 import logging
 
-# from app.connectivity import create_sg_rules
-# from app.terraform import create_infrastructure, destroy_infrastructure
 from omegaconf import DictConfig
 from providers.cloud_provider import CloudProvider
 

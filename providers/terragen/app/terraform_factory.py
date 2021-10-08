@@ -54,7 +54,7 @@ class TerraformFactory:
         self.generate_terraform_resource()
 
     def generate_terraform_config_file(self):
-        tf_config_template = self._env.get_template("terraform_config.tf")
+        tf_config_template = self._env.get_template("terraform_config.jinja")
         tf_config_path = f"{self.hydra_dir}/terraform_config.tf"
         log.info(f"Generating terraform_config.tf")
 
@@ -71,7 +71,7 @@ class TerraformFactory:
 
         tags = self.module_config.tags
         tf_module_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
-        tf_module_template = self._env.get_template("module.tf")
+        tf_module_template = self._env.get_template("module.jinja")
         log.info(f"Generating module {self.module_name}.tf")
 
         with open(tf_module_file_path, 'w') as tf_module_file:
@@ -87,7 +87,7 @@ class TerraformFactory:
             return  # No outputs to generate
 
         outputs = self.provider_config.outputs
-        tf_outputs_template = self._env.get_template("outputs.tf")
+        tf_outputs_template = self._env.get_template("outputs.jinja")
         tf_outputs_file_path = f"{self.hydra_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
 
@@ -100,7 +100,7 @@ class TerraformFactory:
             return
 
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
-        tf_resource_template = self._env.get_template("resource.tf")
+        tf_resource_template = self._env.get_template("resource.jinja")
         log.info(f"Generating resource {self.module_name}.tf")
 
         with open(tf_resource_file_path, 'w') as tf_resource_file:
