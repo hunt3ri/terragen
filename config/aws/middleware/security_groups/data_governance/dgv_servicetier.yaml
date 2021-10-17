@@ -1,8 +1,0 @@
-defaults:
-  - sg_base
-
-config:
-    sg_name: "ServiceTierSG"
-    sg_description: "Service Tier SG"
-    tags:
-      Name: "ServiceTierSG"

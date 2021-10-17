@@ -18,6 +18,7 @@ class TerraformFactory:
     module_name: str = attr.ib()
     hydra_dir: str = attr.ib()      # The Hydra output dir
     module_config: DictConfig = attr.ib()
+    outputs: DictConfig = attr.ib()
     provider_config: DictConfig = attr.ib()
     service_name: str = attr.ib()
 
@@ -36,12 +37,11 @@ class TerraformFactory:
         """ Construct TerraformFactory from Hydra Shared Config"""
 
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_name}")
-        module_config = shared_module.config
         provider_config = shared_module.providers[properties.provider_name]
         hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
 
-        return cls(module_name=module_name, module_config=module_config, provider_config=provider_config,
-                   service_name=service_name, properties=properties, hydra_dir=hydra_dir)
+        return cls(module_name=module_name, module_config=shared_module.config, provider_config=provider_config,
+                   service_name=service_name, properties=properties, hydra_dir=hydra_dir, outputs=shared_module.outputs)
 
     def generate_terraform_templates(self):
         log.info(f"Generating Terraform templates for: {self.module_name}")
@@ -83,17 +83,18 @@ class TerraformFactory:
                                                            tags=tags))
 
     def generate_terraform_outputs(self):
-        if "outputs" not in self.provider_config:
+        if self.outputs is None:
+            log.info(f"Module {self.module_name} has no Outputs defined")
             return  # No outputs to generate
 
-        outputs = self.provider_config.outputs
+        #outputs = self.provider_config.outputs
         tf_outputs_template = self._env.get_template("outputs.jinja")
         tf_outputs_file_path = f"{self.hydra_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
 
         with open(tf_outputs_file_path, 'w') as tf_outputs_file:
             tf_outputs_file.write(tf_outputs_template.render(module_name=self.module_name,
-                                                             outputs=outputs))
+                                                             outputs=self.outputs))
 
     def generate_terraform_resource(self):
         if "resource_type" not in self.provider_config:

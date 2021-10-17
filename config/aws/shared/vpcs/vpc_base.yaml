@@ -9,6 +9,11 @@ config:
   tags:
     environment : ${build.environment}
 
+outputs:
+  vpc_id:
+    description: "The VPC ID"
+    data_block: "vpc.outputs.vpc_id"  # How the value is looked up in a data block
+
 # provider specific config can be added here
 providers:
   # Set the provider that will create the infrastructure
@@ -26,7 +31,7 @@ providers:
       # The root value for the S3 backend key, eg for moduleX path will become shared/vpc/moduleX/terraform.tfstate
       s3_backend_root: "shared/vpc"
 
-      # Variables you want to add to outputs.tf file should be specified here
-      outputs:
-        vpc_id:
-          description: "The VPC ID"
+#      # Variables you want to add to outputs.tf file should be specified here
+#      outputs:
+#        vpc_id:
+#          description: "The VPC ID"
