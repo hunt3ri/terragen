@@ -9,6 +9,8 @@ config:
     Name: ???
     Owner: "Hunter-Labs"
 
+outputs:
+
 providers:
   # Set the provider that will create the infrastructure
   default_provider: "${build.default_provider}"
@@ -21,5 +23,5 @@ providers:
     module_source: "terraform-aws-modules/security-group/aws"
     module_version: "~> 3.0"
 
-    s3_backend_key: "common/security_groups/terraform.tfstate"
+    s3_backend_root: "app/security_groups"
 

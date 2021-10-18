@@ -58,6 +58,7 @@ class TerraformFactory:
         log.info(f"Generating terraform_config.tf")
 
         # TODO this assumes S3 backend
+        # TODO do we really need s3_backend_root we could use a pattern?
         self.properties.backend.key = f"{self.provider_config.s3_backend_root}/{self.module_name}/terraform.tfstate"
 
         with open(tf_config_path, 'w') as tf_config_file:

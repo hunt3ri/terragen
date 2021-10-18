@@ -14,9 +14,13 @@ def terravarmer(cfg: DictConfig) -> None:
 
     build_config = cfg.build
 
+    iain = cfg.keys()
+
     if "shared" in cfg.keys():
-        process_infra(build_config, cfg.shared, build_config.shared_infra)
-    elif "app" in cfg.keys():
+        pass
+        # process_infra(build_config, cfg.shared, build_config.shared_infra)
+
+    if "app" in cfg.keys():
         process_infra(build_config, cfg.app, build_config.app_infra)
 
 
