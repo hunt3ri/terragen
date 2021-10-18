@@ -49,7 +49,6 @@ class TerraformFactory:
 
         os.makedirs(self.hydra_dir, exist_ok=True)
         self.generate_terraform_config_file()
-        self.generate_terraform_outputs()
         self.generate_terraform_module()
         self.generate_terraform_resource()
 
@@ -82,18 +81,20 @@ class TerraformFactory:
                                                            module_version=self.provider_config.module_version,
                                                            tags=tags))
 
-    def generate_terraform_outputs(self):
+        self.generate_terraform_outputs("module")
+
+    def generate_terraform_outputs(self, module_type: str):
         if self.outputs is None:
             log.info(f"Module {self.module_name} has no Outputs defined")
             return  # No outputs to generate
 
-        #outputs = self.provider_config.outputs
         tf_outputs_template = self._env.get_template("outputs.jinja")
         tf_outputs_file_path = f"{self.hydra_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
 
         with open(tf_outputs_file_path, 'w') as tf_outputs_file:
-            tf_outputs_file.write(tf_outputs_template.render(module_name=self.module_name,
+            tf_outputs_file.write(tf_outputs_template.render(module_type=module_type,
+                                                             module_name=self.module_name,
                                                              outputs=self.outputs))
 
     def generate_terraform_resource(self):
@@ -108,3 +109,5 @@ class TerraformFactory:
             tf_resource_file.write(tf_resource_template.render(resource_type=self.provider_config.resource_type,
                                                                module_config=self.module_config,
                                                                module_name=self.module_name))
+
+        self.generate_terraform_outputs(self.provider_config.resource_type)
