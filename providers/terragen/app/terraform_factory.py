@@ -25,10 +25,10 @@ class TerraformFactory:
     # Init Jinja to load templates
     _env = Environment(
         loader=PackageLoader("providers.terragen"),
-        autoescape=select_autoescape()
+        autoescape=select_autoescape(),
     )
 
-    # Register helper functions
+    # Register Jinja helper functions
     _env.globals["to_toml"] = to_toml
 
     @classmethod

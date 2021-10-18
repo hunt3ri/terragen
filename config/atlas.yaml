@@ -1,11 +1,11 @@
 # Order is important terravarmer will create infra in specified order specified in defaults object
 defaults:
   # Shared Infrastructure
-  - aws/shared/vpcs@shared.vpc.simple_vpc: vpc_definitions/simple_vpc
-  - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
+#  - aws/shared/vpcs@shared.vpc.simple_vpc: vpc_definitions/simple_vpc
+#  - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
 
   # Application specific Infrastructure
-#  - aws/app/security_groups@app.security_groups.local_access: sg_definitions/local_access
+  - aws/app/security_groups@app.security_groups.local_access: sg_definitions/local_access
 #  - aws/middleware/ec2@aws.application.ec2.instances.enginetier: data_governance/enginetier
 #  - aws/middleware/ec2@middleware.ec2.servicetier: instance_definitions/servicetier
 #  - aws/middleware/ec2@middleware.ec2.enginetier: instance_definitions/enginetier

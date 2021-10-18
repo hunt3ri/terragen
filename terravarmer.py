@@ -12,6 +12,12 @@ def terravarmer(cfg: DictConfig) -> None:
     """ Parse config and create or destroy AWS infrastructure """
     log.info("TerraVarmer starting up")
 
+    if "shared" in cfg.keys():
+        process_shared_infra(cfg)
+
+
+def process_shared_infra(cfg: DictConfig):
+    log.info("TerraVarmer processing shared infrastructure")
     build_config = cfg.build
     shared_config = cfg.shared
 
