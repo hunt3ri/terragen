@@ -1,11 +1,11 @@
 # Order is important terravarmer will create infra in specified order specified in defaults object
 defaults:
   # Shared Infrastructure
-#  - aws/shared/vpcs@shared.vpc.simple_vpc: vpc_definitions/simple_vpc
-#  - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
+  - aws/shared/vpcs@shared.vpc.simple_vpc: vpc_definitions/simple_vpc
+  - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
 
   # Application specific Infrastructure
-  - aws/app/security_groups@app.security_groups.local_access: sg_definitions/local_access
+#  - aws/app/security_groups@app.security_groups.local_access: sg_definitions/local_access
 #  - aws/middleware/ec2@aws.application.ec2.instances.enginetier: data_governance/enginetier
 #  - aws/middleware/ec2@middleware.ec2.servicetier: instance_definitions/servicetier
 #  - aws/middleware/ec2@middleware.ec2.enginetier: instance_definitions/enginetier
@@ -22,7 +22,8 @@ build:
   debug: True                   # Set to True to enable verbose debugging
   default_provider: "TerraGen"  # Provider used to create all infra unless overridden
   environment: "prod"           # Deployment environment must be one of dev|test|ppe|prod
-  shared_infra: "create"         # Must be one of create|destroy
+  shared_infra: "create"        # Process shared infra, Must be one of create|destroy
+  app_infra: "create"           # Process application infra, must be one of create|destroy
 
   # Register providers here, required provider_name, and provider_location further provider specific
   # config can be added as needed

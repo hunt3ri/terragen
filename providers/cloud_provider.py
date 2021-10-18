@@ -29,17 +29,17 @@ class CloudProvider:
                               debug_mode=build_config.debug)
 
     @abstractmethod
-    def create_shared_infra(self, service_name: str, infra_name: str, cfg: DictConfig):
+    def create_infra(self, service_name: str, infra_name: str, cfg: DictConfig):
         """ Providers can implement a method to create infra that is shared with multiple apps or infrastructure """
         raise NotImplementedError()
 
     @abstractmethod
-    def destroy_shared_infra(self, service_name: str, infra_name: str, shared_infra: DictConfig):
+    def destroy_infra(self, service_name: str, infra_name: str, shared_infra: DictConfig):
         """ Providers can implement a method to create infra that is shared with multiple apps or infrastructure """
         raise NotImplementedError()
 
     @abstractmethod
-    def create_app_infra(self, cfg: DictConfig):
+    def create_app_infra(self, service_name: str, infra_name: str, shared_infra: DictConfig):
         """ Providers can implement a method to create infra for their application """
         raise NotImplementedError()
 
