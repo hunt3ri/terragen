@@ -65,9 +65,28 @@ class TerraformFactory:
             tf_config_file.write(tf_config_template.render(backend=str(self.properties.backend),
                                                            provider=str(self.properties.provider)))
 
+    def handle_lookups(self):
+        lookups = []
+        for value in self.module_config.values():
+            if isinstance(value, bool):
+                continue  # Bools are not iterable so skip
+            if "lookup" in value:
+                lookups.append(value)
+                # TODO generate datablock and return datablock value to replace existing value
+
+        if len(lookups) == 0:
+            log.info(f"No lookups found in {self.module_name}.tf")
+            return
+
+        # TODO generate datablock
+        iain = 1
+
     def generate_terraform_module(self):
         if "module_source" not in self.provider_config:
             return
+
+        self.handle_lookups()
+        self.generate_terraform_outputs("module")
 
         tags = self.module_config.tags
         tf_module_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
@@ -81,8 +100,6 @@ class TerraformFactory:
                                                            module_source=self.provider_config.module_source,
                                                            module_version=self.provider_config.module_version,
                                                            tags=tags))
-
-        self.generate_terraform_outputs("module")
 
     def generate_terraform_outputs(self, module_type: str):
         if self.outputs is None:
@@ -102,6 +119,9 @@ class TerraformFactory:
         if "resource_type" not in self.provider_config:
             return
 
+        self.handle_lookups()
+        self.generate_terraform_outputs(self.provider_config.resource_type)
+
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.jinja")
         log.info(f"Generating resource {self.module_name}.tf")
@@ -111,4 +131,4 @@ class TerraformFactory:
                                                                module_config=self.module_config,
                                                                module_name=self.module_name))
 
-        self.generate_terraform_outputs(self.provider_config.resource_type)
+
