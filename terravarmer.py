@@ -14,8 +14,6 @@ def terravarmer(cfg: DictConfig) -> None:
 
     build_config = cfg.build
 
-    iain = cfg.keys()
-
     if "shared" in cfg.keys():
         pass
         # process_infra(build_config, cfg.shared, build_config.shared_infra)

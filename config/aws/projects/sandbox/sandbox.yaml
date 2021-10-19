@@ -1,7 +1,0 @@
-
-
-config:
-  resources:
-    aws_key_pair:
-      resource_name: "keypair"
-      key_name: labs-key
