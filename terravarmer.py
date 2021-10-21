@@ -15,7 +15,6 @@ def terravarmer(cfg: DictConfig) -> None:
     build_config = cfg.build
 
     if "shared" in cfg.keys():
-        #pass
         process_infra(build_config, cfg.shared, build_config.shared_infra)
 
     if "app" in cfg.keys():
@@ -24,6 +23,10 @@ def terravarmer(cfg: DictConfig) -> None:
 
 def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str):
     log.info(f"TerraVarmer processing infrastructure with mode: {mode}")
+
+    if mode == "pass":
+        log.info(f"Infrastructure mode is pass, so skipping updating infrastructure")
+        return
 
     config_items = infra_config.items()
     if mode == "destroy":

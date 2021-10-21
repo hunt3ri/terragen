@@ -1,12 +1,10 @@
 defaults:
   - vpc_base
 
+module:
+  name: "simple_vpc"
+
 config:
   name: "hunter-labs-vpc"
   enable_dns_hostnames : true
 
-#providers:
-#  TerraGen:
-#    outputs:
-#      public_subnets:
-#        description: "Public subnet ids"

@@ -1,4 +1,7 @@
-# Define multiple configurations in the configs section, as long as they match the default pattern
+module:
+  type: "vpc"
+  name: ???
+
 config:
   name                 : "hunter-labs-vpc"
   cidr                 : "10.0.0.0/16"
@@ -11,8 +14,8 @@ config:
 
 outputs:
   vpc_id:
+    name: "vpc_id"
     description: "The VPC ID"
-    data_block: "vpc.outputs.vpc_id"  # How the value is looked up in a data block
 
 # provider specific config can be added here
 providers:
@@ -27,8 +30,3 @@ providers:
       module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"
       module_source: "terraform-aws-modules/vpc/aws"
       module_version: "~> 3.0"
-
-#      # Variables you want to add to outputs.tf file should be specified here
-#      outputs:
-#        vpc_id:
-#          description: "The VPC ID"

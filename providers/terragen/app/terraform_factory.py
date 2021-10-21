@@ -64,27 +64,29 @@ class TerraformFactory:
             tf_config_file.write(tf_config_template.render(backend=str(self.properties.backend),
                                                            provider=str(self.properties.provider)))
 
-    def handle_lookups(self):
+    def lookup_handler(self):
         lookups = []
         for value in self.module_config.values():
             if isinstance(value, bool):
                 continue  # Bools are not iterable so skip
             if "lookup" in value:
                 lookups.append(value)
-                # TODO generate datablock and return datablock value to replace existing value
 
         if len(lookups) == 0:
             log.info(f"No lookups found in {self.module_name}.tf")
             return
 
-        # TODO generate datablock
-        iain = 1
+        # TODO generate datablock and return datablock value to replace existing value
+
+    def generate_terraform_data_block(self, lookups):
+        pass
+
 
     def generate_terraform_module(self):
         if "module_source" not in self.provider_config:
             return
 
-        self.handle_lookups()
+        self.lookup_handler()
         self.generate_terraform_outputs("module")
 
         tags = self.module_config.tags
@@ -105,6 +107,7 @@ class TerraformFactory:
             log.info(f"Module {self.module_name} has no Outputs defined")
             return  # No outputs to generate
 
+        # TODO rework outputs to be more lookup friendly
         tf_outputs_template = self._env.get_template("outputs.jinja")
         tf_outputs_file_path = f"{self.hydra_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
@@ -118,7 +121,7 @@ class TerraformFactory:
         if "resource_type" not in self.provider_config:
             return
 
-        self.handle_lookups()
+        self.lookup_handler()
         self.generate_terraform_outputs(self.provider_config.resource_type)
 
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"

@@ -1,9 +1,15 @@
 defaults:
   - /aws/base/security_groups@: sg_base
 
+lookups:
+  vpc:
+    name: "${shared.vpc.simple_vpc.module.name}"
+    outputs:
+      vpc_id: "${shared.vpc.simple_vpc.outputs.vpc_id.name}"
+
 config:
     name: "LocalAccessSG"
     description: "Access Instances from my local machine"
-    vpc_id: "lookup:${shared.vpc.simple_vpc.outputs.vpc_id.data_block}"
+    vpc_id: "lookup:${shared.vpc.simple_vpc.module.type}/${shared.vpc.simple_vpc.module.type}"
     tags:
       Name: "LocalAccessSG"
