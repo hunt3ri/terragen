@@ -28,9 +28,6 @@ providers:
       module_source: "terraform-aws-modules/vpc/aws"
       module_version: "~> 3.0"
 
-      # The root value for the S3 backend key, eg for moduleX path will become shared/vpc/moduleX/terraform.tfstate
-      s3_backend_root: "shared/vpc"
-
 #      # Variables you want to add to outputs.tf file should be specified here
 #      outputs:
 #        vpc_id:

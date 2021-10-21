@@ -22,6 +22,3 @@ providers:
     module_url: "https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest"
     module_source: "terraform-aws-modules/security-group/aws"
     module_version: "~> 3.0"
-
-    s3_backend_root: "app/security_groups"
-

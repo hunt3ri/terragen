@@ -16,7 +16,6 @@ providers:
   atlas:
 
   TerraGen:
-      s3_backend_root: "shared/key_pairs"
       resource_type: "aws_key_pair"
 
     # Variables you want to add to outputs.tf file should be specified here
