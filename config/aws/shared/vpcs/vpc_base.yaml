@@ -1,6 +1,6 @@
 module:
-  type: "vpc"
-  name: ???
+  name: "vpc"
+  lookup: "shared.vpc"
 
 config:
   name                 : "hunter-labs-vpc"
@@ -14,7 +14,7 @@ config:
 
 outputs:
   vpc_id:
-    name: "vpc_id"
+    lookup: "${...module.lookup}.outputs.vpc_id"
     description: "The VPC ID"
 
 # provider specific config can be added here

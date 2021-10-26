@@ -3,6 +3,7 @@ defaults:
 
 module:
   name: "simple_vpc"
+  lookup: "shared.vpc.simple_vpc"
 
 config:
   name: "hunter-labs-vpc"
