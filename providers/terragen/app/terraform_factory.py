@@ -18,6 +18,7 @@ class TerraformFactory:
     module_name: str = attr.ib()
     hydra_dir: str = attr.ib()      # The Hydra output dir
     module_config: DictConfig = attr.ib()
+    module_metadata: DictConfig = attr.ib()
     outputs: DictConfig = attr.ib()
     provider_config: DictConfig = attr.ib()
     service_name: str = attr.ib()
@@ -32,16 +33,18 @@ class TerraformFactory:
     _env.globals["to_toml"] = to_toml
 
     @classmethod
-    def from_shared_config(cls, service_name: str, module_name: str, shared_module: DictConfig,
-                           properties: TerragenProperties):
+    def from_shared_config(cls, service_name: str, shared_module: DictConfig, properties: TerragenProperties):
         """ Construct TerraformFactory from Hydra Shared Config"""
+        module_metadata = shared_module.module_metadata
+        module_name = module_metadata.name
 
-        log.info(f"Instantiating TerraformFactory for: {service_name}/{module_name}")
+        log.info(f"Instantiating TerraformFactory for: {service_name}/{module_metadata.name}")
         provider_config = shared_module.providers[properties.provider_name]
         hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
 
         return cls(module_name=module_name, module_config=shared_module.config, provider_config=provider_config,
-                   service_name=service_name, properties=properties, hydra_dir=hydra_dir, outputs=shared_module.outputs)
+                   service_name=service_name, properties=properties, hydra_dir=hydra_dir, outputs=shared_module.outputs,
+                   module_metadata=module_metadata)
 
     def generate_terraform_templates(self):
         log.info(f"Generating Terraform templates for: {self.module_name}")
@@ -58,7 +61,8 @@ class TerraformFactory:
         log.info(f"Generating terraform_config.tf")
 
         # TODO this assumes S3 backend
-        self.properties.backend.key = f"{self.service_name}/{self.module_name}/terraform.tfstate"
+        backend_key = str(self.module_metadata.lookup).replace(".", "/")
+        self.properties.backend.key = f"{backend_key}/terraform.tfstate"
 
         with open(tf_config_path, 'w') as tf_config_file:
             tf_config_file.write(tf_config_template.render(backend=str(self.properties.backend),

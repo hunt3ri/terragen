@@ -1,7 +1,7 @@
 defaults:
   - vpc_base
 
-module:
+module_metadata:
   name: "simple_vpc"
   lookup: "shared.vpc.simple_vpc"
 
