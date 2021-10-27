@@ -33,10 +33,11 @@ class TerraformFactory:
     _env.globals["to_toml"] = to_toml
 
     @classmethod
-    def from_shared_config(cls, service_name: str, shared_module: DictConfig, properties: TerragenProperties):
+    def from_shared_config(cls, shared_module: DictConfig, properties: TerragenProperties):
         """ Construct TerraformFactory from Hydra Shared Config"""
         module_metadata = shared_module.module_metadata
         module_name = module_metadata.name
+        service_name = module_metadata.aws_service
 
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_metadata.name}")
         provider_config = shared_module.providers[properties.provider_name]

@@ -38,9 +38,9 @@ def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str)
             cloud_provider = CloudProvider.from_build_config(infra_config.providers.default_provider, build_config)
 
             if mode == "create":
-                cloud_provider.create_infra(service, infra_config)
+                cloud_provider.create_infra(infra_config)
             elif mode == "destroy":
-                cloud_provider.destroy_infra(service, infra_config)
+                cloud_provider.destroy_infra(infra_config)
 
 
 if __name__ == "__main__":
