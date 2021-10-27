@@ -2,6 +2,9 @@ module_metadata:
   aws_service: "vpc"
   name: "vpc"
   lookup: "shared.vpc"
+  module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"
+  module_source: "terraform-aws-modules/vpc/aws"
+  module_version: "~> 3.0"
 
 config:
   name                 : "hunter-labs-vpc"
@@ -28,6 +31,4 @@ providers:
 
   TerraGen:
       # Module metadata
-      module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"
-      module_source: "terraform-aws-modules/vpc/aws"
-      module_version: "~> 3.0"
+

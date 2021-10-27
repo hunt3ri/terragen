@@ -2,6 +2,7 @@ module_metadata:
   aws_service: "key_pairs"
   name: "key_pair"
   lookup: "shared.key_pairs"
+  resource_type: "aws_key_pair"
 
 config:
   key_name: ???
@@ -21,7 +22,7 @@ providers:
   atlas:
 
   TerraGen:
-      resource_type: "aws_key_pair"
+
 
     # Variables you want to add to outputs.tf file should be specified here
 

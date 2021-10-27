@@ -20,7 +20,6 @@ class TerraformFactory:
     module_config: DictConfig = attr.ib()
     module_metadata: DictConfig = attr.ib()
     outputs: DictConfig = attr.ib()
-    provider_config: DictConfig = attr.ib()
     service_name: str = attr.ib()
 
     # Init Jinja to load templates
@@ -40,11 +39,10 @@ class TerraformFactory:
         service_name = module_metadata.aws_service
 
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_metadata.name}")
-        provider_config = shared_module.providers[properties.provider_name]
         hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
 
-        return cls(module_name=module_name, module_config=shared_module.config, provider_config=provider_config,
-                   service_name=service_name, properties=properties, hydra_dir=hydra_dir, outputs=shared_module.outputs,
+        return cls(module_name=module_name, module_config=shared_module.config, service_name=service_name,
+                   properties=properties, hydra_dir=hydra_dir, outputs=shared_module.outputs,
                    module_metadata=module_metadata)
 
     def generate_terraform_templates(self):
@@ -86,9 +84,8 @@ class TerraformFactory:
     def generate_terraform_data_block(self, lookups):
         pass
 
-
     def generate_terraform_module(self):
-        if "module_source" not in self.provider_config:
+        if "module_source" not in self.module_metadata:
             return
 
         self.lookup_handler()
@@ -102,9 +99,9 @@ class TerraformFactory:
         with open(tf_module_file_path, 'w') as tf_module_file:
             tf_module_file.write(tf_module_template.render(module_name=self.module_name,
                                                            module_config=self.module_config,
-                                                           module_url=self.provider_config.module_url,
-                                                           module_source=self.provider_config.module_source,
-                                                           module_version=self.provider_config.module_version,
+                                                           module_url=self.module_metadata.module_url,
+                                                           module_source=self.module_metadata.module_source,
+                                                           module_version=self.module_metadata.module_version,
                                                            tags=tags))
 
     def generate_terraform_outputs(self, module_type: str):
@@ -123,18 +120,18 @@ class TerraformFactory:
                                                              outputs=self.outputs))
 
     def generate_terraform_resource(self):
-        if "resource_type" not in self.provider_config:
+        if "resource_type" not in self.module_metadata:
             return
 
         self.lookup_handler()
-        self.generate_terraform_outputs(self.provider_config.resource_type)
+        self.generate_terraform_outputs(self.module_metadata.resource_type)
 
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.jinja")
         log.info(f"Generating resource {self.module_name}.tf")
 
         with open(tf_resource_file_path, 'w') as tf_resource_file:
-            tf_resource_file.write(tf_resource_template.render(resource_type=self.provider_config.resource_type,
+            tf_resource_file.write(tf_resource_template.render(resource_type=self.module_metadata.resource_type,
                                                                module_config=self.module_config,
                                                                module_name=self.module_name))
 
