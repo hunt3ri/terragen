@@ -1,3 +1,8 @@
+module_metadata:
+  aws_service: "key_pairs"
+  name: "key_pair"
+  lookup: "shared.key_pairs"
+
 config:
   key_name: ???
   public_key: ???
@@ -5,7 +10,7 @@ config:
 outputs:
   key_name:
     description: "The name of the key"
-    data_block: "key_pair.outputs.key_name"  # How the value is looked up in a data block
+    lookup: "${...module_metadata.lookup}.outputs.vpc_id"
 
 # provider specific config can be added here
 providers:

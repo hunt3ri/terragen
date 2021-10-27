@@ -2,7 +2,7 @@
 defaults:
   # Shared Infrastructure
   - aws/shared/vpcs@shared.vpc.simple_vpc: vpc_definitions/simple_vpc
- # - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
+  - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
 
   # Application specific Infrastructure
   #- aws/apps/sandbox/security_groups@app.security_groups.local_access: local_access

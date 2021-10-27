@@ -15,7 +15,7 @@ config:
 
 outputs:
   vpc_id:
-    lookup: "${...module.lookup}.outputs.vpc_id"
+    lookup: "${...module_metadata.lookup}.outputs.vpc_id"
     description: "The VPC ID"
 
 # provider specific config can be added here
