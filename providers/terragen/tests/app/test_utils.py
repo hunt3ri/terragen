@@ -4,7 +4,7 @@ from providers.terragen.app.utils import get_lookup_values
 
 def test_get_lookup_values():
     datablock_key, datablock_lookup = get_lookup_values("lookup: shared.vpc.simple_vpc.outputs.vpc_id")
-    assert datablock_key == "shared.vpc.simple_vpc"
+    assert datablock_key == "shared/vpc/simple_vpc"
     assert datablock_lookup == "outputs.vpc_id"
 
 

@@ -69,22 +69,23 @@ class TerraformFactory:
 
     def lookup_handler(self):
         log.info(f"Handling lookups for service: {self.service_name} module: {self.module_name}")
-        lookups = []
-        for value in self.module_config.values():
+        lookups = {}
+        for key, value in self.module_config.items():
             if isinstance(value, bool):
                 continue  # Bools are not iterable so skip
             if "lookup" in value:
-                lookups.append(value)
+                lookups[key] = value
 
         if len(lookups) == 0:
             log.info(f"No lookups found in {self.module_name}.tf")
             return
 
         # TODO generate datablock and return datablock value to replace existing value
-        for lookup in lookups:
+        for key, lookup in lookups.items():
             log.info(f"Processing lookup: {lookup}")
             datablock_key, datablock_lookup = get_lookup_values(lookup)
             self.generate_terraform_data_block(datablock_key)
+            self.module_config[key] = f"data.terraform_remote_state.{self.module_name}.{datablock_lookup}"
 
     def generate_terraform_data_block(self, datablock_key: str):
         self.properties.backend.key = f"{datablock_key}/terraform.tfstate"
