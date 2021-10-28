@@ -1,9 +1,9 @@
 defaults:
   - /aws/base/security_groups@: sg_base
 
-#lookups:
-#  vpc_id: "${shared.vpc.simple_vpc.module.lookup}.${shared.vpc.simple_vpc.outputs.vpc_id.lookup}"
-
+module_metadata:
+  name: "local_access"
+  lookup: "app.security_group.local_access"
 
 config:
     name: "LocalAccessSG"

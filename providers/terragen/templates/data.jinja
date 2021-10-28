@@ -1,11 +1,3 @@
-data "terraform_remote_state" "vpc" {
-  # Get global VPC vars
-  backend = "s3"
-
-  config = {
-    bucket                  = var.bucket
-    key                     = "common/vpc/terraform.tfstate"
-    region                  = var.region
-    profile                 = var.profile
-  }
+data "terraform_remote_state" "{{ module_name }}" {
+  {{ backend }}
 }

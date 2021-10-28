@@ -5,7 +5,7 @@ import os
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
-from providers.terragen.app.utils import to_toml
+from providers.terragen.app.utils import to_toml, get_lookup_values
 from providers.terragen.models.terragen_models import TerragenProperties
 
 log = logging.getLogger(__name__)
@@ -68,6 +68,7 @@ class TerraformFactory:
                                                            provider=str(self.properties.provider)))
 
     def lookup_handler(self):
+        log.info(f"Handling lookups for service: {self.service_name} module: {self.module_name}")
         lookups = []
         for value in self.module_config.values():
             if isinstance(value, bool):
@@ -80,9 +81,20 @@ class TerraformFactory:
             return
 
         # TODO generate datablock and return datablock value to replace existing value
+        for lookup in lookups:
+            log.info(f"Processing lookup: {lookup}")
+            datablock_key, datablock_lookup = get_lookup_values(lookup)
+            self.generate_terraform_data_block(datablock_key)
 
-    def generate_terraform_data_block(self, lookups):
-        pass
+    def generate_terraform_data_block(self, datablock_key: str):
+        self.properties.backend.key = f"{datablock_key}/terraform.tfstate"
+
+        tf_module_file_path = f"{self.hydra_dir}/data.tf"
+        tf_datablock_template = self._env.get_template("data.jinja")
+
+        with open(tf_module_file_path, 'w') as tf_module_file:
+            tf_module_file.write(tf_datablock_template.render(module_name=self.module_name,
+                                                              backend=self.properties.backend.as_datablock()))
 
     def generate_terraform_module(self):
         if "module_source" not in self.module_metadata:

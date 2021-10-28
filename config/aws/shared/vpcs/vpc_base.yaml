@@ -1,7 +1,7 @@
 module_metadata:
   aws_service: "vpc"
-  name: "vpc"
-  lookup: "shared.vpc"
+  name: "base_vpc"
+  lookup: "shared.base_vpc"
   module_url: "https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest"
   module_source: "terraform-aws-modules/vpc/aws"
   module_version: "~> 3.0"

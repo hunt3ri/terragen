@@ -5,7 +5,7 @@ defaults:
   - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: key_pair_definitions/hunter_labs_key
 
   # Application specific Infrastructure
-  #- aws/apps/sandbox/security_groups@app.security_groups.local_access: local_access
+  - aws/apps/sandbox/security_groups@app.security_groups.local_access: local_access
 #  - aws/app/security_groups@app.security_groups.local_access: sg_definitions/local_access
 #  - aws/middleware/ec2@aws.application.ec2.instances.enginetier: data_governance/enginetier
 #  - aws/middleware/ec2@middleware.ec2.servicetier: instance_definitions/servicetier
@@ -23,7 +23,7 @@ build:
   debug: True                   # Set to True to enable verbose debugging
   default_provider: "TerraGen"  # Provider used to create all infra unless overridden
   environment: "prod"           # Deployment environment must be one of dev|test|ppe|prod
-  shared_infra: "create"        # Process shared infra, Must be one of create|destroy|pass
+  shared_infra: "pass"        # Process shared infra, Must be one of create|destroy|pass
   app_infra: "create"           # Process application infra, must be one of create|destroy|pass
 
   # Register providers here, required provider_name, and provider_location further provider specific

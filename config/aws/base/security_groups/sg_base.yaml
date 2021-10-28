@@ -1,3 +1,11 @@
+module_metadata:
+  aws_service: "security_groups"
+  name: "base_security_group"
+  lookup: "base.security_group"
+  module_url: "https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest"
+  module_source: "terraform-aws-modules/security-group/aws"
+  module_version: "~> 3.0"
+
 config:
   name: ???
   description: ???
@@ -19,6 +27,4 @@ providers:
   atlas:
 
   TerraGen:
-    module_url: "https://registry.terraform.io/modules/terraform-aws-modules/security-group/aws/latest"
-    module_source: "terraform-aws-modules/security-group/aws"
-    module_version: "~> 3.0"
+
