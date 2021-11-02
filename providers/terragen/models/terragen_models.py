@@ -38,7 +38,7 @@ class TerraformS3Backend:
     def as_datablock(self):
         backend = textwrap.dedent(f"""
             backend = "s3"
-            config {{
+            config = {{
                 profile = "{self.profile}"
                 region  = "{self.region}"
                 bucket  = "{self.bucket}" 
