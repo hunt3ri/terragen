@@ -80,7 +80,6 @@ class TerraformFactory:
             log.info(f"No lookups found in {self.module_name}.tf")
             return
 
-        # TODO generate datablock and return datablock value to replace existing value
         for key, lookup in lookups.items():
             log.info(f"Processing lookup: {lookup}")
             datablock_key, datablock_lookup = get_lookup_values(lookup)

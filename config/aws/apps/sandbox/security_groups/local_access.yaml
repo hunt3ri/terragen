@@ -8,6 +8,11 @@ module_metadata:
 config:
     name: "LocalAccessSG"
     description: "Access Instances from my local machine"
+
     vpc_id: "lookup: ${shared.vpc.simple_vpc.outputs.vpc_id.lookup}"
+
+    ingress_cidr_blocks: [ "109.152.173.98/32" ]
+    ingress_rules: [ "ssh-tcp", "http-80-tcp", "https-443-tcp" ]
+
     tags:
       Name: "LocalAccessSG"
