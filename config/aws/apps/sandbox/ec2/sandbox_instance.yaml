@@ -1,0 +1,15 @@
+defaults:
+  - /aws/base/ec2@: ec2_base
+
+module_metadata:
+  name: "sandbox"
+
+config:
+  subnet_id: "lookup: ${shared.vpc.simple_vpc.outputs.public_subnet_ids.lookup}[0]"
+  associate_public_ip_address: true
+  vpc_security_group_ids: "TODO"
+
+  key_name: "TODO"
+
+  tags:
+    Name: "sandbox"

@@ -6,7 +6,7 @@ defaults:
 
   # Application specific Infrastructure
   - aws/apps/sandbox/security_groups@app.security_groups.local_access: local_access
-#  - aws/app/security_groups@app.security_groups.local_access: sg_definitions/local_access
+  - aws/apps/sandbox/ec2/@app.ec2.sandbox_instance: sandbox_instance
 #  - aws/middleware/ec2@aws.application.ec2.instances.enginetier: data_governance/enginetier
 #  - aws/middleware/ec2@middleware.ec2.servicetier: instance_definitions/servicetier
 #  - aws/middleware/ec2@middleware.ec2.enginetier: instance_definitions/enginetier

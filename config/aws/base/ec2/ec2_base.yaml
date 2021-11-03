@@ -1,0 +1,30 @@
+module_metadata:
+  aws_service: "ec2"
+  name: "ec2"
+  lookup: "app.ec2"
+  resource_type: "aws_instance"
+
+config:
+  ami:                         "ami-06310010cdfb6a743"
+  instance_type:               "t3a.small"
+
+  subnet_id:                   ???
+  associate_public_ip_address: false
+  vpc_security_group_ids:      ???
+
+  key_name:                    ???
+
+  tags:
+    Name:  ???
+    Owner: "Hunter-Labs"
+
+outputs:
+
+providers:
+  # Set the provider that will create the infrastructure
+  default_provider: "${build.default_provider}"
+
+  # Atlas does not support creation of VPCs
+  atlas:
+
+  TerraGen:

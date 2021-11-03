@@ -24,6 +24,4 @@ providers:
   TerraGen:
 
 
-    # Variables you want to add to outputs.tf file should be specified here
-
 
