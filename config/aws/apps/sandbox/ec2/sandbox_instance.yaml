@@ -7,7 +7,7 @@ module_metadata:
 config:
   subnet_id: "lookup: ${shared.vpc.simple_vpc.outputs.public_subnet_ids.lookup}[0]"
   associate_public_ip_address: true
-  vpc_security_group_ids: "TODO"
+  vpc_security_group_ids: ["lookup: ${app.security_groups.local_access.outputs.security_group_id.lookup}"]
 
   key_name: "TODO"
 

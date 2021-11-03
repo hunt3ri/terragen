@@ -75,6 +75,7 @@ class TerraformFactory:
                 continue  # Bools are not iterable so skip
             if "lookup" in value:
                 lookups[key] = value
+                # TODO parse values in Lists
 
         if len(lookups) == 0:
             log.info(f"No lookups found in {self.module_name}.tf")
