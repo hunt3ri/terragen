@@ -3,7 +3,7 @@ import logging
 import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
-from omegaconf import DictConfig
+from omegaconf import DictConfig, ListConfig
 
 from providers.terragen.app.utils import to_toml, get_lookup_values
 from providers.terragen.models.terragen_models import TerragenProperties
@@ -73,7 +73,11 @@ class TerraformFactory:
         for key, value in self.module_config.items():
             if isinstance(value, bool):
                 continue  # Bools are not iterable so skip
-            if "lookup" in value:
+            elif isinstance(value, ListConfig):
+                # iain = value[0]
+                # abi = iain
+                continue
+            elif "lookup" in value:
                 lookups[key] = value
                 # TODO parse values in Lists
 

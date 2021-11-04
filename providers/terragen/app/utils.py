@@ -9,7 +9,6 @@ def to_toml(key: str, value):
         return toml.dumps({key: value}).strip()
 
 
-
 def get_lookup_values(lookup: str):
     clean_lookup = lookup.replace("lookup:", "").strip()
     lookup_array = clean_lookup.split('.outputs')

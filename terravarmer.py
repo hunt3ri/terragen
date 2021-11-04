@@ -14,6 +14,8 @@ def terravarmer(cfg: DictConfig) -> None:
 
     build_config = cfg.build
 
+    # TODO if destroy/destroy do shared last
+
     if "shared" in cfg.keys():
         process_infra(build_config, cfg.shared, build_config.shared_infra)
 
