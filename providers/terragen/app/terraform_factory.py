@@ -74,6 +74,8 @@ class TerraformFactory:
             if isinstance(value, bool):
                 continue  # Bools are not iterable so skip
             elif isinstance(value, ListConfig):
+                for lookup in value:
+                    iain = lookup
                 # iain = value[0]
                 # abi = iain
                 continue

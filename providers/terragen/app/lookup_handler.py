@@ -1,9 +1,16 @@
 import attr
 import logging
 
-from omegaconf import DictConfig, ListConfig
+from dataclasses import dataclass, field
+from omegaconf import DictConfig, ListConfig, OmegaConf
+from typing import List
 
 log = logging.getLogger(__name__)
+
+
+@dataclass
+class TempList:
+    lookups: List[str] = field(default_factory=lambda: [])
 
 
 @attr.s
@@ -11,26 +18,37 @@ class LookupHandler:
 
     module_name: str = attr.ib()
     module_config: DictConfig = attr.ib()
-    datablock_keys: []
+    datablock_keys: [] = attr.ib(default=[])
 
     @classmethod
     def from_module_config(cls, module_name: str, module_config: DictConfig):
         return cls(module_name=module_name, module_config=module_config)
 
-    def process_lookups(self, module_config):
-        # TODO co-ordinate lookups
+    def process_lookups(self):
         for key, value in self.module_config.items():
-            is_lookup, lookup_value = self.identify_lookup(value)
-            if is_lookup:
-                self.module_config[key] = f"data.terraform_remote_state.{self.module_name}.{lookup_value}"
+            self.set_lookup_values(key, value)
 
-    def identify_lookup(self, value):
-            if isinstance(value, bool):
-                return False, None, None
-            elif "lookup" in value:
-                get_lookup_values(lookup)
+    def set_lookup_values(self, key, value):
+        if isinstance(value, bool):
+            return  # Bools are not iterable so need special case
+        elif isinstance(value, ListConfig):
+            temp_list: TempList = OmegaConf.structured(TempList)
+            for lookup in value:
+                if "lookup" in lookup:
+                    datablock_key, datablock_lookup = self.get_lookup_values(lookup)
+                    temp_list.lookups.append(f"data.terraform_remote_state.{self.module_name}.{datablock_lookup}")
+                    self.datablock_keys.append(datablock_key)
+                else:
+                    temp_list.lookups.append(lookup)
+
+            self.module_config[key] = temp_list.lookups
+        elif "lookup" in value:
+            datablock_key, datablock_lookup = self.get_lookup_values(value)
+            self.module_config[key] = f"data.terraform_remote_state.{self.module_name}.{datablock_lookup}"
+            self.datablock_keys.append(datablock_key)
 
     def get_lookup_values(self, lookup: str):
+        """ Remove all Hydra lookup text to allow us to reinsert a Terraform compatible data block lookup """
         clean_lookup = lookup.replace("lookup:", "").strip()
         lookup_array = clean_lookup.split('.outputs')
 
@@ -41,30 +59,3 @@ class LookupHandler:
         datablock_lookup = f"outputs{lookup_array[1]}"
 
         return datablock_key, datablock_lookup
-
-    # def lookup_handler(self):
-    #     log.info(f"Handling lookups for service: {self.service_name} module: {self.module_name}")
-    #     lookups = {}
-    #     for key, value in self.module_config.items():
-    #         if isinstance(value, bool):
-    #             continue  # Bools are not iterable so skip
-    #         elif isinstance(value, ListConfig):
-    #             # iain = value[0]
-    #             # abi = iain
-    #             for lookup in value:
-    #                 if "lookup" in lookup:
-    #                     lookups[key] = value
-    #                     # List handling needs to happen inline for multiple replacements
-    #         elif "lookup" in value:
-    #             lookups[key] = value
-    #             # TODO parse values in Lists
-    #
-    #     if len(lookups) == 0:
-    #         log.info(f"No lookups found in {self.module_name}.tf")
-    #         return
-    #
-    #     for key, lookup in lookups.items():
-    #         log.info(f"Processing lookup: {lookup}")
-    #         datablock_key, datablock_lookup = get_lookup_values(lookup)
-    #         self.generate_terraform_data_block(datablock_key)
-    #         self.module_config[key] = f"data.terraform_remote_state.{self.module_name}.{datablock_lookup}"
