@@ -25,16 +25,11 @@ class TestLookupHandler:
     def lookup_handler(self, module_config):
         return LookupHandler.from_module_config("test_module", module_config)
 
-    def test_iain(self, lookup_handler):
-        iain = lookup_handler
+    def test_get_lookup_values(self, lookup_handler):
+        datablock_key, datablock_lookup = lookup_handler.get_lookup_values("lookup: shared.vpc.simple_vpc.outputs.vpc_id")
+        assert datablock_key == "shared/vpc/simple_vpc"
+        assert datablock_lookup == "outputs.vpc_id"
 
-    # def test_get_lookup_values():
-    #     test_handler = LookupHandler.from_module_config("test_module")
-    #
-    #     datablock_key, datablock_lookup = get_lookup_values("lookup: shared.vpc.simple_vpc.outputs.vpc_id")
-    #     assert datablock_key == "shared/vpc/simple_vpc"
-    #     assert datablock_lookup == "outputs.vpc_id"
-    #
-    # def test_get_lookup_values_raises_error_for_missing_outputs():
-    #     with pytest.raises(ValueError):
-    #         get_lookup_values("lookup: shared.vpc.simple_vpc")
+    def test_get_lookup_values_raises_error_for_missing_outputs(self, lookup_handler):
+        with pytest.raises(ValueError):
+            lookup_handler.get_lookup_values("lookup: shared.vpc.simple_vpc")
