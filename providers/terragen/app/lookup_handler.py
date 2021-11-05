@@ -18,11 +18,11 @@ class LookupHandler:
 
     module_name: str = attr.ib()
     module_config: DictConfig = attr.ib()
-    datablock_keys: [] = attr.ib(default=[])
+    datablock_keys: [] = attr.ib()
 
     @classmethod
     def from_module_config(cls, module_name: str, module_config: DictConfig):
-        return cls(module_name=module_name, module_config=module_config)
+        return cls(module_name=module_name, module_config=module_config, datablock_keys=[])
 
     def process_lookups(self):
         for key, value in self.module_config.items():

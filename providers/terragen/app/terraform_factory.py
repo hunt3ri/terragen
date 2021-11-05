@@ -3,10 +3,11 @@ import logging
 import os
 
 from jinja2 import Environment, PackageLoader, select_autoescape
-from omegaconf import DictConfig, ListConfig
+from omegaconf import DictConfig
 
-from providers.terragen.app.utils import to_toml, get_lookup_values
+from providers.terragen.app.utils import to_toml
 from providers.terragen.models.terragen_models import TerragenProperties
+from providers.terragen.app.lookup_handler import LookupHandler
 
 log = logging.getLogger(__name__)
 
@@ -69,29 +70,11 @@ class TerraformFactory:
 
     def lookup_handler(self):
         log.info(f"Handling lookups for service: {self.service_name} module: {self.module_name}")
-        lookups = {}
-        for key, value in self.module_config.items():
-            if isinstance(value, bool):
-                continue  # Bools are not iterable so skip
-            elif isinstance(value, ListConfig):
-                for lookup in value:
-                    iain = lookup
-                # iain = value[0]
-                # abi = iain
-                continue
-            elif "lookup" in value:
-                lookups[key] = value
-                # TODO parse values in Lists
-
-        if len(lookups) == 0:
-            log.info(f"No lookups found in {self.module_name}.tf")
-            return
-
-        for key, lookup in lookups.items():
-            log.info(f"Processing lookup: {lookup}")
-            datablock_key, datablock_lookup = get_lookup_values(lookup)
-            self.generate_terraform_data_block(datablock_key)
-            self.module_config[key] = f"data.terraform_remote_state.{self.module_name}.{datablock_lookup}"
+        lookup_handler = LookupHandler.from_module_config(self.module_name, self.module_config)
+        lookup_handler.process_lookups()
+        self.module_config = lookup_handler.module_config
+        for datablock in lookup_handler.datablock_keys:
+            self.generate_terraform_data_block(datablock)
 
     def generate_terraform_data_block(self, datablock_key: str):
         self.properties.backend.key = f"{datablock_key}/terraform.tfstate"
@@ -99,7 +82,7 @@ class TerraformFactory:
         tf_module_file_path = f"{self.hydra_dir}/data.tf"
         tf_datablock_template = self._env.get_template("data.jinja")
 
-        with open(tf_module_file_path, 'w') as tf_module_file:
+        with open(tf_module_file_path, 'a') as tf_module_file:
             tf_module_file.write(tf_datablock_template.render(module_name=self.module_name,
                                                               backend=self.properties.backend.as_datablock()))
 
