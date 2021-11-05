@@ -58,4 +58,7 @@ class LookupHandler:
         datablock_key = lookup_array[0].replace(".", "/")
         datablock_lookup = f"outputs{lookup_array[1]}"
 
+        # TODO create a datablock model, use this value to uniquely identify blocks
+        unique = datablock_key.rsplit('/', 1)[1]
+
         return datablock_key, datablock_lookup
