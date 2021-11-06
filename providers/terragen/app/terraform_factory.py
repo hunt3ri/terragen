@@ -6,7 +6,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
 from providers.terragen.app.utils import to_toml
-from providers.terragen.models.terragen_models import TerragenProperties
+from providers.terragen.models.terragen_models import TerragenProperties, TerraformDataSource
 from providers.terragen.app.lookup_handler import LookupHandler
 
 log = logging.getLogger(__name__)
@@ -73,18 +73,18 @@ class TerraformFactory:
         lookup_handler = LookupHandler.from_module_config(self.module_name, self.module_config)
         lookup_handler.process_lookups()
         self.module_config = lookup_handler.module_config
-        for datablock in lookup_handler.datablock_keys:
-            self.generate_terraform_data_block(datablock)
+        for data_source in lookup_handler.data_sources:
+            self.generate_terraform_data_block(data_source)
 
-    def generate_terraform_data_block(self, datablock_key: str):
-        self.properties.backend.key = f"{datablock_key}/terraform.tfstate"
+    def generate_terraform_data_block(self, data_source: TerraformDataSource):
+        self.properties.backend.key = f"{data_source.backend_key}/terraform.tfstate"
 
         tf_module_file_path = f"{self.hydra_dir}/data.tf"
         tf_datablock_template = self._env.get_template("data.jinja")
 
         with open(tf_module_file_path, 'a') as tf_module_file:
-            tf_module_file.write(tf_datablock_template.render(module_name=self.module_name,
-                                                              backend=self.properties.backend.as_datablock()))
+            tf_module_file.write(tf_datablock_template.render(data_source_name=data_source.name,
+                                                              backend=self.properties.backend.as_datasource()))
 
     def generate_terraform_module(self):
         if "module_source" not in self.module_metadata:
