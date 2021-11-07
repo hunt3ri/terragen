@@ -14,13 +14,20 @@ def terravarmer(cfg: DictConfig) -> None:
 
     build_config = cfg.build
 
-    # TODO if destroy/destroy do shared last
-
-    if "shared" in cfg.keys():
-        process_infra(build_config, cfg.shared, build_config.shared_infra)
-
-    if "app" in cfg.keys():
+    if build_config.shared_infra.lower() == "destroy" and build_config.app_infra.lower() == "destroy":
+        # If we're destroying the entire stack destroy app ahead of shared
         process_infra(build_config, cfg.app, build_config.app_infra)
+        process_infra(build_config, cfg.shared, build_config.shared_infra)
+    else:
+        # for all other scenarios we want to process shared ahead of app
+        process_infra(build_config, cfg.shared, build_config.shared_infra)
+        process_infra(build_config, cfg.app, build_config.app_infra)
+
+    # if "shared" in cfg.keys():
+    #     process_infra(build_config, cfg.shared, build_config.shared_infra)
+    #
+    # if "app" in cfg.keys():
+    #     process_infra(build_config, cfg.app, build_config.app_infra)
 
 
 def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str):
