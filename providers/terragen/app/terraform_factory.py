@@ -115,6 +115,11 @@ class TerraformFactory:
         tf_outputs_file_path = f"{self.hydra_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
 
+        # for key, value in self.outputs.items():
+        #     iain = value.lookup
+        #     bob = value.lookup.rsplit('.', 1)[1]
+        #     abi = bob
+
         with open(tf_outputs_file_path, 'w') as tf_outputs_file:
             tf_outputs_file.write(tf_outputs_template.render(module_type=module_type,
                                                              module_name=self.module_name,
