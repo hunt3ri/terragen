@@ -4,7 +4,7 @@ import logging
 from dataclasses import dataclass, field
 from omegaconf import DictConfig, ListConfig, OmegaConf
 from typing import List
-from providers.terragen.models.terragen_models import TerraformDataSource
+from providers.aws.models.terragen_models import TerraformDataSource
 
 log = logging.getLogger(__name__)
 

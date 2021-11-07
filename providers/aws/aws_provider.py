@@ -1,16 +1,16 @@
 from omegaconf import DictConfig
 import logging
 
-from providers.terragen.app.terraform_factory import TerraformFactory
-from providers.terragen.app.terraform_runner import TerraformRunner
-from providers.terragen.models.terragen_models import TerragenProperties
+from providers.aws.app.terraform_factory import TerraformFactory
+from providers.aws.app.terraform_runner import TerraformRunner
+from providers.aws.models.terragen_models import TerragenProperties
 from providers.cloud_provider import CloudProvider
 
 
 log = logging.getLogger(__name__)
 
 
-class TerraGen(CloudProvider):
+class AWSProvider(CloudProvider):
 
     def create_infra(self, shared_infra: DictConfig):
         tf_runner = self.get_terraform_runner(shared_infra)

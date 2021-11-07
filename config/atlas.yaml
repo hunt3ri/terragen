@@ -17,17 +17,17 @@ defaults:
 #        default_provider: "terraform"
 
 build:
-  debug: True                   # Set to True to enable verbose debugging
-  default_provider: "TerraGen"  # Provider used to create all infra unless overridden
-  environment: "prod"           # Deployment environment must be one of dev|test|ppe|prod
-  shared_infra: "create"        # Process shared infra, Must be one of create|destroy|pass
-  app_infra: "create"           # Process application infra, must be one of create|destroy|pass
+  debug: True                      # Set to True to enable verbose debugging
+  default_provider: "AWSProvider"  # Provider used to create all infra unless overridden
+  environment: "prod"              # Deployment environment must be one of dev|test|ppe|prod
+  shared_infra: "create"           # Process shared infra, Must be one of create|destroy|pass
+  app_infra: "create"              # Process application infra, must be one of create|destroy|pass
 
   # Register providers here, required provider_name, and provider_location further provider specific
   # config can be added as needed
   registered_providers:
-    TerraGen:
-      module_location: "providers.terragen.terragen_provider"
+    AWSProvider:
+      module_location: "providers.aws.aws_provider"
 
       properties:
         terraform_mode: "plan"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra

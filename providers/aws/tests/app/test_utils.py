@@ -1,10 +1,9 @@
 import pytest
 
-from providers.terragen.app.utils import to_toml
+from providers.aws.app.utils import to_toml
 
 from dataclasses import dataclass, field
 from omegaconf import OmegaConf
-from providers.terragen.app.lookup_handler import LookupHandler
 from typing import List
 
 

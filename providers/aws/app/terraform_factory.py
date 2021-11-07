@@ -5,9 +5,9 @@ import os
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
-from providers.terragen.app.utils import to_toml
-from providers.terragen.models.terragen_models import TerragenProperties, TerraformDataSource
-from providers.terragen.app.lookup_handler import LookupHandler
+from providers.aws.app.utils import to_toml
+from providers.aws.models.terragen_models import TerragenProperties, TerraformDataSource
+from providers.aws.app.lookup_handler import LookupHandler
 
 log = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ class TerraformFactory:
 
     # Init Jinja to load templates
     _env = Environment(
-        loader=PackageLoader("providers.terragen"),
+        loader=PackageLoader("providers.aws"),
         autoescape=select_autoescape(),
     )
 
@@ -115,11 +115,6 @@ class TerraformFactory:
         tf_outputs_file_path = f"{self.hydra_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
 
-        # for key, value in self.outputs.items():
-        #     iain = value.lookup
-        #     bob = value.lookup.rsplit('.', 1)[1]
-        #     abi = bob
-
         with open(tf_outputs_file_path, 'w') as tf_outputs_file:
             tf_outputs_file.write(tf_outputs_template.render(module_type=module_type,
                                                              module_name=self.module_name,
@@ -142,5 +137,3 @@ class TerraformFactory:
                                                                module_config=self.module_config,
                                                                module_name=self.module_name,
                                                                tags=tags))
-
-

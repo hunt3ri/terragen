@@ -2,7 +2,7 @@ import pytest
 
 from dataclasses import dataclass, field
 from omegaconf import OmegaConf
-from providers.terragen.app.lookup_handler import LookupHandler
+from providers.aws.app.lookup_handler import LookupHandler
 from typing import List
 
 
