@@ -20,7 +20,7 @@ outputs:
   vpc_id:
     lookup: "${...module_metadata.lookup}.outputs.vpc_id"
     description: "The VPC ID"
-  public_subnet_ids:
+  public_subnets:
     lookup: "${...module_metadata.lookup}.outputs.public_subnets"
     description: "Public subnet ids"
 
