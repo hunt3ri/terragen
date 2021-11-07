@@ -1,6 +1,19 @@
+module_metadata:
+  aws_service: "key_pairs"
+  name: "key_pair"
+  lookup: "shared.key_pairs"
+  resource_type: "aws_key_pair"
+
 config:
-    key_name: ???
-    public_key: ???
+  key_name: ???
+  public_key: ???
+  tags:
+    Owner: "Hunter-Labs"
+
+outputs:
+  key_name:
+    description: "The name of the key"
+    lookup: "${...module_metadata.lookup}.outputs.key_name"
 
 # provider specific config can be added here
 providers:
@@ -11,6 +24,6 @@ providers:
   atlas:
 
   TerraGen:
-      s3_backend_root: "shared/key_pairs"
-      resource_type: "aws_key_pair"
+
+
 

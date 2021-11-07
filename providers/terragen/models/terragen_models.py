@@ -35,6 +35,19 @@ class TerraformS3Backend:
                    region=backend_config.region,
                    profile=backend_config.profile)
 
+    def as_datasource(self):
+        """ Generates backend in format suitable for inserting into a Terraform Datasource"""
+        backend = textwrap.dedent(f"""
+            backend = "s3"
+            config = {{
+                profile = "{self.profile}"
+                region  = "{self.region}"
+                bucket  = "{self.bucket}" 
+                key     = "{self.key}"
+            }}
+            """)
+        return textwrap.indent(backend, "  ")
+
     def __str__(self):
         """ Remove all whitespace before adding a 2 space indent, to render nicely in config file """
         backend = textwrap.dedent(f"""
@@ -85,3 +98,24 @@ class TerragenProperties:
                    backend=backend,
                    provider=provider,
                    provider_name=provider_name)
+
+
+@attr.s
+class TerraformDataSource:
+    name: str = attr.ib()
+    backend_key: str = attr.ib()
+    reference: str = attr.ib()
+
+    @classmethod
+    def from_lookup(cls, lookup: str):
+        clean_lookup = lookup.replace("lookup:", "").strip()
+        lookup_array = clean_lookup.split('.outputs')
+
+        if len(lookup_array) != 2:
+            raise ValueError(f"Supplied lookup {lookup} does not contain .outputs")
+
+        datasource_key = lookup_array[0].replace(".", "/")
+        source_name = datasource_key.rsplit('/', 1)[1]
+        reference = f"data.terraform_remote_state.{source_name}.outputs{lookup_array[1]}"
+
+        return cls(name=source_name, backend_key=datasource_key, reference=reference)
