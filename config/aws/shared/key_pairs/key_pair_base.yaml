@@ -13,7 +13,7 @@ config:
 outputs:
   key_name:
     description: "The name of the key"
-    lookup: "${...module_metadata.lookup}.outputs.vpc_id"
+    lookup: "${...module_metadata.lookup}.outputs.key_name"
 
 # provider specific config can be added here
 providers:
