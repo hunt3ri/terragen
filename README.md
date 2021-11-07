@@ -1,4 +1,4 @@
-# terravgen
+# terragen
 This project is an opinionated framework for generating and managing terraform modules and resources for sophisticated Cloud Architectures
 
 Config is read from the local ```config``` directory.  [Config is controlled by the hydra framework, check the docs for examples](https://hydra.cc/docs/intro/)
@@ -27,5 +27,6 @@ print(OmegaConf.to_yaml(cfg, resolve=True))
 ```
 
 You can enable verbose debug logging by passing the following:
-
+```commandline
 python .\terragen.py hydra.verbose=true
+```
