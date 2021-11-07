@@ -1,6 +1,0 @@
-defaults:
-  - ec2_base
-
-config:
-  instance_name: "EngineTier"
-  associate_public_ip_address : true
