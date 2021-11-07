@@ -18,7 +18,7 @@ config:
     Owner: "Hunter-Labs"
 
 outputs:
-  security_group_id:
+  this_security_group_id:
     description: "The ID of the security group"
     lookup: "${...module_metadata.lookup}.outputs.this_security_group_id"
 
