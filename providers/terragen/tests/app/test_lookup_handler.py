@@ -27,27 +27,24 @@ class TestLookupHandler:
 
     def test_set_lookup_values_ignores_bools(self, lookup_handler):
         lookup_handler.set_lookup_values("associate_public_ip_address", MockEC2Config.associate_public_ip_address)
-        assert len(lookup_handler.datablock_keys) == 0
+        assert len(lookup_handler.data_sources) == 0
 
     def test_set_lookup_values_ignores_non_lookup_strings(self, lookup_handler):
         lookup_handler.set_lookup_values("instance_type", MockEC2Config.instance_type)
-        assert len(lookup_handler.datablock_keys) == 0
+        assert len(lookup_handler.data_sources) == 0
 
     def test_set_lookup_values_parses_lookup_string_correctly(self, lookup_handler):
         lookup_handler.set_lookup_values("subnet_id", MockEC2Config.subnet_id)
-        assert lookup_handler.datablock_keys[0] == 'shared/vpc/simple_vpc'
-        assert lookup_handler.module_config.subnet_id == 'data.terraform_remote_state.test_module.outputs.public_subnet_ids[0]'
+        assert lookup_handler.data_sources[0].backend_key == 'shared/vpc/simple_vpc'
+        assert lookup_handler.module_config.subnet_id == 'data.terraform_remote_state.simple_vpc.outputs.public_subnet_ids[0]'
 
     def test_set_lookup_values_parses_lookup_list(self, lookup_handler):
         # Arrange
         sg_ids = lookup_handler.module_config.vpc_security_group_ids
-        lookup_handler.datablock_keys = []
 
         # Act
         lookup_handler.set_lookup_values("vpc_security_group_ids", sg_ids)
-        assert lookup_handler.datablock_keys[0] == 'app/security_groups/local_access'
-        assert lookup_handler.module_config.vpc_security_group_ids[0] == 'data.terraform_remote_state.test_module.outputs.security_group_id'
+        assert lookup_handler.data_sources[0].backend_key == 'app/security_groups/local_access'
+        assert lookup_handler.module_config.vpc_security_group_ids[0] == 'data.terraform_remote_state.local_access.outputs.security_group_id'
 
-    def test_get_lookup_values_raises_error_for_missing_outputs(self, lookup_handler):
-        with pytest.raises(ValueError):
-            lookup_handler.get_lookup_values("lookup: shared.vpc.simple_vpc")
+

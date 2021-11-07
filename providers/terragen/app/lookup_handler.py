@@ -39,9 +39,6 @@ class LookupHandler:
                     tf_datasource = TerraformDataSource.from_lookup(lookup)
                     temp_list.lookups.append(tf_datasource.reference)
                     self.data_sources.append(tf_datasource)
-                    # datablock_key, datablock_lookup = self.get_lookup_values(lookup)
-                    # temp_list.lookups.append(f"data.terraform_remote_state.{self.module_name}.{datablock_lookup}")
-                    # self.datablock_keys.append(datablock_key)
                 else:
                     temp_list.lookups.append(lookup)
 
