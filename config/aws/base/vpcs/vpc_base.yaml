@@ -28,10 +28,3 @@ outputs:
 providers:
   # Set the provider that will create the infrastructure
   default_provider: "${build.default_provider}"
-
-  # Atlas does not support creation of VPCs
-  atlas:
-
-  TerraGen:
-      # Module metadata
-

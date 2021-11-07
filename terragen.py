@@ -8,9 +8,9 @@ log = logging.getLogger(__name__)
 
 
 @hydra.main(config_path="./config", config_name="atlas")
-def terravarmer(cfg: DictConfig) -> None:
-    """ Parse config and create or destroy AWS infrastructure """
-    log.info("TerraVarmer starting up")
+def terragen(cfg: DictConfig) -> None:
+    """ Parse config and create or destroy infrastructure """
+    log.info("Terragen starting up")
 
     build_config = cfg.build
 
@@ -23,15 +23,9 @@ def terravarmer(cfg: DictConfig) -> None:
         process_infra(build_config, cfg.shared, build_config.shared_infra)
         process_infra(build_config, cfg.app, build_config.app_infra)
 
-    # if "shared" in cfg.keys():
-    #     process_infra(build_config, cfg.shared, build_config.shared_infra)
-    #
-    # if "app" in cfg.keys():
-    #     process_infra(build_config, cfg.app, build_config.app_infra)
-
 
 def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str):
-    log.info(f"TerraVarmer processing infrastructure with mode: {mode}")
+    log.info(f"TerraGen processing infrastructure with mode: {mode}")
 
     if mode == "pass":
         log.info(f"Infrastructure mode is pass, so skipping updating infrastructure")
@@ -53,4 +47,4 @@ def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str)
 
 
 if __name__ == "__main__":
-    terravarmer()
+    terragen()

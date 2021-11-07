@@ -1,5 +1,5 @@
 import pytest
-from providers.terragen.models.terragen_models import TerraformS3Backend, TerraformAWSProvider, TerraformDataSource
+from providers.aws.models.terragen_models import TerraformS3Backend, TerraformAWSProvider, TerraformDataSource
 
 
 class TestTerragenModels:
