@@ -1,5 +1,5 @@
-# terravarmer
-This project generates and applies terraform tfvars files to enable you to configure and control sophisticated AWS architectures.
+# terravgen
+This project is an opinionated framework for generating and managing terraform modules and resources for sophisticated Cloud Architectures
 
 Config is read from the local ```config``` directory.  [Config is controlled by the hydra framework, check the docs for examples](https://hydra.cc/docs/intro/)
 
@@ -7,19 +7,19 @@ Config is read from the local ```config``` directory.  [Config is controlled by 
 ## Running
 Supply the generate.py app the name of the config file
 ```commandline
-python .\terravarmer.py --config-name sandbox
+python .\terragen.py --config-name sandbox
 ```
 
 ## Overriding values on command line
 Any config value can be overridden on the command line using dot notation, eg:
 ```commandline
-python .\terravarmer.py build.environment=prod vpc.vpc_name="HELLO_WORLD"
+python .\terragen.py build.environment=test
 ```
 
 ## Debugging
 Run generator with cfg and resolve flags to output interpolations
 ```commandline
-python .\terravarmer.py --cfg job --resolve
+python .\terragen.py --cfg job --resolve
 ```
 Alternatively you can print to screen, file using following
 ```python
@@ -28,4 +28,4 @@ print(OmegaConf.to_yaml(cfg, resolve=True))
 
 You can enable verbose debug logging by passing the following:
 
-python .\terravarmer.py hydra.verbose=true
+python .\terragen.py hydra.verbose=true
