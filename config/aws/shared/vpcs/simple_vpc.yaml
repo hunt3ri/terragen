@@ -1,5 +1,5 @@
 defaults:
-  - vpc_base
+  - /aws/base/vpcs@: vpc_base
 
 module_metadata:
   name: "simple_vpc"
@@ -8,4 +8,3 @@ module_metadata:
 config:
   name: "hunter-labs-vpc"
   enable_dns_hostnames : true
-

@@ -1,5 +1,5 @@
 defaults:
-  - key_pair_base
+  - /aws/base/key_pairs@: key_pair_base
 
 module_metadata:
   name: "hunter_labs_key"
