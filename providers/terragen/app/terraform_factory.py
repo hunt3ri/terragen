@@ -111,7 +111,6 @@ class TerraformFactory:
             log.info(f"Module {self.module_name} has no Outputs defined")
             return  # No outputs to generate
 
-        # TODO rework outputs to be more lookup friendly
         tf_outputs_template = self._env.get_template("outputs.jinja")
         tf_outputs_file_path = f"{self.hydra_dir}/outputs.tf"
         log.info(f"Generating outputs.tf")
@@ -128,6 +127,7 @@ class TerraformFactory:
         self.lookup_handler()
         self.generate_terraform_outputs(self.module_metadata.resource_type)
 
+        tags = self.module_config.tags
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.jinja")
         log.info(f"Generating resource {self.module_name}.tf")
@@ -135,6 +135,7 @@ class TerraformFactory:
         with open(tf_resource_file_path, 'w') as tf_resource_file:
             tf_resource_file.write(tf_resource_template.render(resource_type=self.module_metadata.resource_type,
                                                                module_config=self.module_config,
-                                                               module_name=self.module_name))
+                                                               module_name=self.module_name,
+                                                               tags=tags))
 
 
