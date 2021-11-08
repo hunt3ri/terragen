@@ -14,16 +14,3 @@ outputs:
   key_name:
     description: "The name of the key"
     lookup: "${...module_metadata.lookup}.outputs.key_name"
-
-# provider specific config can be added here
-providers:
-  # Set the provider that will create the infrastructure
-  default_provider: "${build.default_provider}"
-
-  # Atlas does not support creation of VPCs
-  atlas:
-
-  TerraGen:
-
-
-
