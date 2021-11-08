@@ -8,14 +8,6 @@ defaults:
   - aws/apps/sandbox/security_groups@app.security_groups.local_access: local_access
   - aws/apps/sandbox/ec2/@app.ec2.sandbox_instance: sandbox_instance
 
-
-# Provider overrides
-#aws:
-#  shared:
-#    vpc:
-#      providers:
-#        default_provider: "terraform"
-
 build:
   debug: True                      # Set to True to enable verbose debugging
   default_provider: "AWSProvider"  # Provider used to create all infra unless overridden
