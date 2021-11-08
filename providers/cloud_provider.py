@@ -30,20 +30,10 @@ class CloudProvider:
 
     @abstractmethod
     def create_infra(self, cfg: DictConfig):
-        """ Providers can implement a method to create infra that is shared with multiple apps or infrastructure """
+        """ Providers must implement a method for creating all infrastructure """
         raise NotImplementedError()
 
     @abstractmethod
     def destroy_infra(self, cfg: DictConfig):
-        """ Providers can implement a method to create infra that is shared with multiple apps or infrastructure """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def create_app_infra(self, service_name: str, infra_name: str, shared_infra: DictConfig):
-        """ Providers can implement a method to create infra for their application """
-        raise NotImplementedError()
-
-    @abstractmethod
-    def destroy_app_infra(self, cfg: DictConfig):
-        """ Providers can implement a method to destroy infra for their application """
+        """ Providers must implement a method for destroying all infrastructure  """
         raise NotImplementedError()
