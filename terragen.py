@@ -36,9 +36,9 @@ def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str)
         # If destroying we want to do it in reverse order from creation
         config_items = reversed(infra_config.items())
 
+    cloud_provider = CloudProvider.from_build_config(build_config.default_provider, build_config)
     for service, service_configs in config_items:
         for infra_name, infra_config in service_configs.items():
-            cloud_provider = CloudProvider.from_build_config(infra_config.providers.default_provider, build_config)
 
             if mode == "create":
                 cloud_provider.create_infra(infra_config)

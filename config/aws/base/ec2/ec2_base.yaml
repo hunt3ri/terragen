@@ -22,12 +22,3 @@ outputs:
   public_dns:
     description: "Public DNS address of instance"
     lookup: "${...module_metadata.lookup}.outputs.public_dns"
-
-providers:
-  # Set the provider that will create the infrastructure
-  default_provider: "${build.default_provider}"
-
-  # Atlas does not support creation of VPCs
-  atlas:
-
-  TerraGen:

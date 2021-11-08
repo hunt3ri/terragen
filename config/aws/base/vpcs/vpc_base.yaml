@@ -23,8 +23,3 @@ outputs:
   public_subnets:
     lookup: "${...module_metadata.lookup}.outputs.public_subnets"
     description: "Public subnet ids"
-
-# provider specific config can be added here
-providers:
-  # Set the provider that will create the infrastructure
-  default_provider: "${build.default_provider}"
