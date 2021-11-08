@@ -23,17 +23,19 @@ class CloudProvider:
         # Dynamically load the CloudProvider module by name
         cloud_provider = getattr(importlib.import_module(provider_config.module_location), provider_name)
 
-        return cloud_provider(provider_name=provider_name,
-                              environment=build_config.environment,
-                              provider_properties=provider_config.properties,
-                              debug_mode=build_config.debug)
+        return cloud_provider(
+            provider_name=provider_name,
+            environment=build_config.environment,
+            provider_properties=provider_config.properties,
+            debug_mode=build_config.debug,
+        )
 
     @abstractmethod
     def create_infra(self, cfg: DictConfig):
-        """ Providers must implement a method for creating all infrastructure """
+        """Providers must implement a method for creating all infrastructure"""
         raise NotImplementedError()
 
     @abstractmethod
     def destroy_infra(self, cfg: DictConfig):
-        """ Providers must implement a method for destroying all infrastructure  """
+        """Providers must implement a method for destroying all infrastructure"""
         raise NotImplementedError()

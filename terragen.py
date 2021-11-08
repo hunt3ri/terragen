@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 @hydra.main(config_path="./config", config_name="atlas")
 def terragen(cfg: DictConfig) -> None:
-    """ Parse config and create or destroy infrastructure """
+    """Parse config and create or destroy infrastructure"""
     log.info("Terragen starting up")
 
     build_config = cfg.build
