@@ -18,13 +18,11 @@ class TerraformRunner:
     @classmethod
     def from_config(cls, properties: TerragenProperties, hydra_dir: str):
 
-        return cls(properties=properties,
-                   hydra_dir=hydra_dir,
-                   working_dir=os.getcwd())
+        return cls(properties=properties, hydra_dir=hydra_dir, working_dir=os.getcwd())
 
     def create_infrastructure(self):
         if self.properties.debug_mode:
-            logging.info(f"Debug mode is On.  Skipping create infrastructure")
+            logging.info("Debug mode is On.  Skipping create infrastructure")
             return
 
         os.chdir(self.hydra_dir)
@@ -37,7 +35,7 @@ class TerraformRunner:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
             subprocess.run("terraform plan -out ./tfplan".split(" "), check=True)
             logging.info(f"Generating human readable tfplan.txt for {self.hydra_dir}")
-            subprocess.run(f"terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
+            subprocess.run("terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:
             # Create infra
             logging.info(f"Terraform creating infrastructure for module {self.hydra_dir}")
@@ -48,7 +46,7 @@ class TerraformRunner:
 
     def destroy_infrastructure(self):
         if self.properties.debug_mode:
-            logging.info(f"Debug mode is On. Skipping destroy infrastructure")
+            logging.info("Debug mode is On. Skipping destroy infrastructure")
             return
 
         os.chdir(self.hydra_dir)
@@ -61,7 +59,7 @@ class TerraformRunner:
             logging.info(f"Generate Terraform Plan for destroying infrastructure for module {self.hydra_dir}")
             subprocess.run("terraform plan -destroy -out ./tfplan".split(" "), check=True)
             logging.info(f"Generating human readable tfplan.txt for {self.hydra_dir}")
-            subprocess.run(f"terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
+            subprocess.run("terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:
             logging.info(f"Terraform destroying infrastructure for module {self.hydra_dir}")
             destroy_cmd = "terraform destroy -auto-approve"
