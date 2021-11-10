@@ -1,8 +1,7 @@
 antlr4-python3-runtime==4.8
-attrs==21.2.0
 hydra-core==1.1.1
-Jinja2==3.0.1
+Jinja2==3.0.3
 MarkupSafe==2.0.1
 omegaconf==2.1.1
-PyYAML==5.4.1
+PyYAML==6.0
 toml==0.10.2
