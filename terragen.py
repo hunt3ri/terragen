@@ -7,7 +7,7 @@ from providers.cloud_provider import CloudProvider
 log = logging.getLogger(__name__)
 
 
-@hydra.main(config_path="./config", config_name="atlas")
+@hydra.main(config_path="./config", config_name="modules")
 def terragen(cfg: DictConfig) -> None:
     """Parse config and create or destroy infrastructure"""
     log.info("Terragen starting up")
