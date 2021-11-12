@@ -37,10 +37,14 @@ def lookup_to_toml(key: str, lookup_list: ListConfig) -> Tuple[bool, str]:
 def split_fields_and_dicts(module_config: DictConfig):
     fields = {}
     dictionaries = {}
+    tags = module_config.tags
     for key, value in module_config.items():
         if isinstance(value, DictConfig):
-            dictionaries[key] = value
+            if key == "tags":
+                continue
+            else:
+                dictionaries[key] = value
         else:
             fields[key] = value
 
-    return fields, dictionaries
+    return fields, dictionaries, tags

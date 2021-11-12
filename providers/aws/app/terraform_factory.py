@@ -146,12 +146,13 @@ class TerraformFactory:
         self.lookup_handler()
         self.generate_terraform_outputs(self.module_metadata.resource_type)
 
+        # TODO handle tags as special case again
         #tags = self.module_config.tags
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.jinja")
         log.info(f"Generating resource {self.module_name}.tf")
 
-        module_fields, module_blocks = split_fields_and_dicts(self.module_config)
+        module_fields, module_blocks, tags = split_fields_and_dicts(self.module_config)
 
         with open(tf_resource_file_path, "w") as tf_resource_file:
             tf_resource_file.write(
@@ -159,7 +160,8 @@ class TerraformFactory:
                     resource_type=self.module_metadata.resource_type,
                     module_name=self.module_name,
                     module_fields=module_fields,
-                    module_blocks=module_blocks
+                    module_blocks=module_blocks,
+                    tags=tags
                 )
             )
 
