@@ -1,7 +1,7 @@
 from omegaconf import DictConfig
 import logging
 
-from providers.aws.app.terraform_factory import TerraformFactory
+from providers.was.app.terraform_factory import TerraformFactory
 from providers.aws.app.terraform_runner import TerraformRunner
 from providers.was.models.terragen_models import TerragenProperties
 from providers.cloud_provider import CloudProvider
@@ -28,7 +28,7 @@ class AWSProvider(CloudProvider):
             provider_properties=self.provider_properties,
         )
 
-        tf_factory = TerraformFactory.from_shared_config(shared_module=shared_infra, properties=properties)
+        tf_factory = TerraformFactory.from_config(module_config=shared_infra, properties=properties)
         tf_factory.generate_terraform_templates()
 
         tf_runner = TerraformRunner.from_config(properties=properties, hydra_dir=tf_factory.hydra_dir)
