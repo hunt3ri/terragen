@@ -1,6 +1,8 @@
 module_metadata:
   aws_service: "vpc"
   name: "simple_vpc"
+  statefile: "shared/vpc/simple_vpc"
+  module_dir: "modules/aws/vpc"
 
 config:
   vpc_name:             "hunter-labs-vpc"
