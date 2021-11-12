@@ -5,7 +5,7 @@ import os
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
-from providers.aws.app.utils import to_toml
+from providers.aws.app.utils import to_toml, split_fields_and_dicts
 from providers.aws.models.terragen_models import TerragenProperties, TerraformDataSource
 from providers.aws.app.lookup_handler import LookupHandler
 
@@ -15,13 +15,13 @@ log = logging.getLogger(__name__)
 @attr.s
 class TerraformFactory:
 
-    properties: TerragenProperties = attr.ib()
-    module_name: str = attr.ib()
-    hydra_dir: str = attr.ib()  # The Hydra output dir
-    module_config: DictConfig = attr.ib()
-    module_metadata: DictConfig = attr.ib()
-    outputs: DictConfig = attr.ib()
-    service_name: str = attr.ib()
+    properties: TerragenProperties = attr.ib(default=TerragenProperties())
+    module_config: DictConfig = attr.ib(factory=object)
+    module_metadata: DictConfig = attr.ib(factory=object)
+    outputs: DictConfig = attr.ib(factory=object)
+    module_name: str = attr.ib(default="DefaultModule")
+    hydra_dir: str = attr.ib(default="/default_dir")  # The Hydra output dir
+    service_name: str = attr.ib(default="DefaultService")
 
     # Init Jinja to load templates
     _env = Environment(
@@ -51,6 +51,11 @@ class TerraformFactory:
             outputs=shared_module.outputs,
             module_metadata=module_metadata,
         )
+
+    @classmethod
+    def from_test_class(cls):
+        return cls()
+
 
     def generate_terraform_templates(self):
         log.info(f"Generating Terraform templates for: {self.module_name}")
@@ -134,24 +139,39 @@ class TerraformFactory:
                 tf_outputs_template.render(module_type=module_type, module_name=self.module_name, outputs=self.outputs)
             )
 
-    def generate_terraform_resource(self):
+    def generate_terraform_resource(self) -> None:
         if "resource_type" not in self.module_metadata:
             return
 
         self.lookup_handler()
         self.generate_terraform_outputs(self.module_metadata.resource_type)
 
-        tags = self.module_config.tags
+        #tags = self.module_config.tags
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.jinja")
         log.info(f"Generating resource {self.module_name}.tf")
+
+        module_fields, module_blocks = split_fields_and_dicts(self.module_config)
 
         with open(tf_resource_file_path, "w") as tf_resource_file:
             tf_resource_file.write(
                 tf_resource_template.render(
                     resource_type=self.module_metadata.resource_type,
-                    module_config=self.module_config,
                     module_name=self.module_name,
-                    tags=tags,
+                    module_fields=module_fields,
+                    module_blocks=module_blocks
                 )
             )
+
+        # with open(tf_resource_file_path, "w") as tf_resource_file:
+        #     tf_resource_file.write(
+        #         tf_resource_template.render(
+        #             resource_type=self.module_metadata.resource_type,
+        #             module_config=self.module_config,
+        #             module_name=self.module_name,
+        #             tags=tags,
+        #         )
+        #     )
+
+    def dictconfig_handler(self, nested_block: DictConfig):
+        iain = nested_block

@@ -1,5 +1,5 @@
 import toml
-from omegaconf import ListConfig
+from omegaconf import ListConfig, DictConfig
 from typing import Tuple
 
 
@@ -32,3 +32,15 @@ def lookup_to_toml(key: str, lookup_list: ListConfig) -> Tuple[bool, str]:
         return True, f"{lookup_str}]"
     else:
         return False, ""
+
+
+def split_fields_and_dicts(module_config: DictConfig):
+    fields = {}
+    dictionaries = {}
+    for key, value in module_config.items():
+        if isinstance(value, DictConfig):
+            dictionaries[key] = value
+        else:
+            fields[key] = value
+
+    return fields, dictionaries

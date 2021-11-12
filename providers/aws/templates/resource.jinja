@@ -1,13 +1,13 @@
 resource "{{ resource_type }}" "{{ module_name }}" {
-{% for key, value in module_config.items() -%}
-  {% if key != 'tags' %}
-  {{ to_toml(key, value) }}
-  {%- endif %}
+{% for key, value in module_fields.items() %}
+    {{ to_toml(key, value) }}
 {%- endfor %}
 
-  tags = {
-    {%- for key, value in tags.items() %}
-    {{ to_toml(key, value) }}
+{% for block in module_blocks %}
+    {{ block }} {
+    {%- for key, value in module_blocks[block].items() %}
+        {{ to_toml(key, value) }}
     {%- endfor %}
-  }
+    }
+{% endfor %}
 }

@@ -1,0 +1,5 @@
+  {% block_name %}= {
+    {%- for key, value in block.items() %}
+    {{ to_toml(key, value) }}
+    {%- endfor %}
+  }

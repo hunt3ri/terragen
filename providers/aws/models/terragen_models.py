@@ -66,12 +66,12 @@ class TerraformS3Backend:
 
 @attr.s
 class TerragenProperties:
-    debug_mode: bool = attr.ib()
-    environment: str = attr.ib()
-    terraform_plan: bool = attr.ib()
-    provider = attr.ib()
-    backend = attr.ib()
-    provider_name: str = attr.ib()
+    debug_mode: bool = attr.ib(default=False)
+    environment: str = attr.ib(default="Test")
+    terraform_plan: bool = attr.ib(default=False)
+    provider = attr.ib(default=object())
+    backend = attr.ib(default=object())
+    provider_name: str = attr.ib(default="DefaultProvider")
 
     @classmethod
     def from_properties(cls, debug_mode: bool, environment: str, provider_name: str, provider_properties: DictConfig):
