@@ -52,11 +52,6 @@ class TerraformFactory:
             module_metadata=module_metadata,
         )
 
-    @classmethod
-    def from_test_class(cls):
-        return cls()
-
-
     def generate_terraform_templates(self):
         log.info(f"Generating Terraform templates for: {self.module_name}")
         log.info(f"Template files will be written to: {self.hydra_dir}")
@@ -146,13 +141,10 @@ class TerraformFactory:
         self.lookup_handler()
         self.generate_terraform_outputs(self.module_metadata.resource_type)
 
-        # TODO handle tags as special case again
-        #tags = self.module_config.tags
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.jinja")
-        log.info(f"Generating resource {self.module_name}.tf")
-
         module_fields, module_blocks, tags = split_fields_and_dicts(self.module_config)
+        log.info(f"Generating resource {self.module_name}.tf")
 
         with open(tf_resource_file_path, "w") as tf_resource_file:
             tf_resource_file.write(
@@ -164,16 +156,3 @@ class TerraformFactory:
                     tags=tags
                 )
             )
-
-        # with open(tf_resource_file_path, "w") as tf_resource_file:
-        #     tf_resource_file.write(
-        #         tf_resource_template.render(
-        #             resource_type=self.module_metadata.resource_type,
-        #             module_config=self.module_config,
-        #             module_name=self.module_name,
-        #             tags=tags,
-        #         )
-        #     )
-
-    def dictconfig_handler(self, nested_block: DictConfig):
-        iain = nested_block
