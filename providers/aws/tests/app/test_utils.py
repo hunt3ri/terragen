@@ -1,6 +1,6 @@
 import pytest
 
-from providers.aws.app.utils import to_toml, split_fields_and_dictionaries
+from providers.aws.app.utils import to_toml, split_fields_and_dicts
 
 from dataclasses import dataclass, field
 from omegaconf import OmegaConf
@@ -15,6 +15,11 @@ class RootBlockDevice:
 
 
 @dataclass
+class TerraformTags:
+    name: str = "TestInstance"
+
+
+@dataclass
 class MockEC2Config:
     """This mock represents an object that has already been parsed by the lookup handler"""
 
@@ -26,6 +31,7 @@ class MockEC2Config:
         default_factory=lambda: ["data.terraform_remote_state.local_access.outputs.security_group_id"]
     )
     root_block_device: RootBlockDevice = RootBlockDevice()
+    tags: TerraformTags = TerraformTags()
 
 
 class TestUtils:
@@ -48,4 +54,7 @@ class TestUtils:
         )
 
     def test_split_fields_and_dicts(self, mock_ec2_config):
-        split_fields_and_dictionaries(mock_ec2_config)
+        fields, dictionaries, tags = split_fields_and_dicts(mock_ec2_config)
+        assert tags.name == "TestInstance"
+        assert fields["instance_type"] == "t3a.small"
+        assert dictionaries["root_block_device"]["volume_type"] == "gp3"

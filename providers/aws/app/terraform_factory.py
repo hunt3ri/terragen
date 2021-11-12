@@ -15,13 +15,13 @@ log = logging.getLogger(__name__)
 @attr.s
 class TerraformFactory:
 
-    properties: TerragenProperties = attr.ib(default=TerragenProperties())
-    module_config: DictConfig = attr.ib(factory=object)
-    module_metadata: DictConfig = attr.ib(factory=object)
-    outputs: DictConfig = attr.ib(factory=object)
-    module_name: str = attr.ib(default="DefaultModule")
-    hydra_dir: str = attr.ib(default="/default_dir")  # The Hydra output dir
-    service_name: str = attr.ib(default="DefaultService")
+    properties: TerragenProperties = attr.ib()
+    module_name: str = attr.ib()
+    hydra_dir: str = attr.ib()  # The Hydra output dir
+    module_config: DictConfig = attr.ib()
+    module_metadata: DictConfig = attr.ib()
+    outputs: DictConfig = attr.ib()
+    service_name: str = attr.ib()
 
     # Init Jinja to load templates
     _env = Environment(
