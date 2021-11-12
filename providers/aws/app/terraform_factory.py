@@ -5,7 +5,7 @@ import os
 from jinja2 import Environment, PackageLoader, select_autoescape
 from omegaconf import DictConfig
 
-from providers.aws.app.utils import to_toml
+from providers.aws.app.utils import to_toml, split_fields_and_dicts
 from providers.aws.models.terragen_models import TerragenProperties, TerraformDataSource
 from providers.aws.app.lookup_handler import LookupHandler
 
@@ -134,24 +134,25 @@ class TerraformFactory:
                 tf_outputs_template.render(module_type=module_type, module_name=self.module_name, outputs=self.outputs)
             )
 
-    def generate_terraform_resource(self):
+    def generate_terraform_resource(self) -> None:
         if "resource_type" not in self.module_metadata:
             return
 
         self.lookup_handler()
         self.generate_terraform_outputs(self.module_metadata.resource_type)
 
-        tags = self.module_config.tags
         tf_resource_file_path = f"{self.hydra_dir}/{self.module_name}.tf"
         tf_resource_template = self._env.get_template("resource.jinja")
+        module_fields, module_blocks, tags = split_fields_and_dicts(self.module_config)
         log.info(f"Generating resource {self.module_name}.tf")
 
         with open(tf_resource_file_path, "w") as tf_resource_file:
             tf_resource_file.write(
                 tf_resource_template.render(
                     resource_type=self.module_metadata.resource_type,
-                    module_config=self.module_config,
                     module_name=self.module_name,
-                    tags=tags,
+                    module_fields=module_fields,
+                    module_blocks=module_blocks,
+                    tags=tags
                 )
             )

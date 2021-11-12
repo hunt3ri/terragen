@@ -1,10 +1,22 @@
 import pytest
 
-from providers.aws.app.utils import to_toml
+from providers.aws.app.utils import to_toml, split_fields_and_dicts
 
 from dataclasses import dataclass, field
 from omegaconf import OmegaConf
 from typing import List
+
+
+@dataclass
+class RootBlockDevice:
+    encrypted: bool = True
+    volume_size: int = 8
+    volume_type: str = "gp3"
+
+
+@dataclass
+class TerraformTags:
+    name: str = "TestInstance"
 
 
 @dataclass
@@ -18,6 +30,8 @@ class MockEC2Config:
     vpc_security_group_ids: List[str] = field(
         default_factory=lambda: ["data.terraform_remote_state.local_access.outputs.security_group_id"]
     )
+    root_block_device: RootBlockDevice = RootBlockDevice()
+    tags: TerraformTags = TerraformTags()
 
 
 class TestUtils:
@@ -38,3 +52,9 @@ class TestUtils:
             lookup_value
             == "vpc_security_group_ids = [ data.terraform_remote_state.local_access.outputs.security_group_id,]"
         )
+
+    def test_split_fields_and_dicts(self, mock_ec2_config):
+        fields, dictionaries, tags = split_fields_and_dicts(mock_ec2_config)
+        assert tags.name == "TestInstance"
+        assert fields["instance_type"] == "t3a.small"
+        assert dictionaries["root_block_device"]["volume_type"] == "gp3"
