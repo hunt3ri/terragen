@@ -22,6 +22,7 @@ class TerraformFactory:
     module_config: DictConfig = attr.ib()
     module_metadata: DictConfig = attr.ib()
     service_name: str = attr.ib()
+    tfvars_file: str = attr.ib()
 
     # Init Jinja to load templates
     _env = Environment(
@@ -40,6 +41,7 @@ class TerraformFactory:
         service_name = module_metadata.aws_service
         properties.backend.state_file = module_metadata.state_file
 
+
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_metadata.name}")
         hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
 
@@ -50,6 +52,7 @@ class TerraformFactory:
             properties=properties,
             hydra_dir=hydra_dir,
             module_metadata=module_metadata,
+            tfvars_file=f"{module_name}.tfvars"
         )
 
     def generate_terraform_templates(self):
@@ -78,9 +81,9 @@ class TerraformFactory:
             )
 
     def generate_tfvars_file(self):
-        tfvars_file_path = f"{self.hydra_dir}/{self.module_name}.tfvars"
+        tfvars_file_path = f"{self.hydra_dir}/{self.tfvars_file}"
         tfvars_template = self._env.get_template("tfvars.jinja")
-        log.info(f"Generating module {self.module_name}.tfvars")
+        log.info(f"Generating module {self.tfvars_file}")
 
         with open(tfvars_file_path, "w") as tfvars_file:
             tfvars_file.write(
