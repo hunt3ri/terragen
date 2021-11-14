@@ -25,7 +25,7 @@ class TerraformFactory:
 
     # Init Jinja to load templates
     _env = Environment(
-        loader=PackageLoader("providers.aws"),
+        loader=PackageLoader("providers.was"),
         autoescape=select_autoescape(),
     )
 
@@ -56,10 +56,11 @@ class TerraformFactory:
         log.info(f"Template files will be written to: {self.hydra_dir}")
 
         os.makedirs(self.hydra_dir, exist_ok=True)
+
+        # Copy all module files to hydra outputs
+        copy_tree(f"../../../{self.module_metadata.module_dir}", self.hydra_dir)
         self.generate_terraform_config_file()
-        self.copy_module_to_outputs()
-        # self.generate_terraform_module()
-        # self.generate_terraform_resource()
+        self.generate_tfvars_file()
 
     def generate_terraform_config_file(self):
         tf_config_template = self._env.get_template("terraform_config.jinja")
@@ -74,8 +75,12 @@ class TerraformFactory:
                 tf_config_template.render(backend=str(self.properties.backend), provider=str(self.properties.provider))
             )
 
-    def copy_module_to_outputs(self):
-        cwd = os.getcwd()
-        iain = os.listdir(f"../../../{self.module_metadata.module_dir}")
-        bob = iain
-        copy_tree(f"../../../{self.module_metadata.module_dir}", self.hydra_dir)
+    def generate_tfvars_file(self):
+        tfvars_file_path = f"{self.hydra_dir}/{self.module_name}.tfvars"
+        tfvars_template = self._env.get_template("tfvars.jinja")
+        log.info(f"Generating module {self.module_name}.tfvars")
+
+        with open(tfvars_file_path, "w") as tfvars_file:
+            tfvars_file.write(
+                tfvars_template.render(module_config=self.module_config)
+            )
