@@ -20,14 +20,7 @@ build:
       properties:
         terraform_mode: "plan"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
 
-        provider_config:
-          terraform_provider: "AWS"
-          region: "us-east-1"          # The region we will deploy infrastructure to
-          profile: "hunter_ops_prod"   # The AWS profile used to deploy the infrastructure
-
-        # Partial config for Terraform Backend see https://www.terraform.io/docs/language/settings/backends/configuration.html#partial-configuration
-        backend_config:
-          terraform_backend: "S3"
-          region: "us-east-1"
-          profile: "hunter_ops_prod"
-          bucket: "hunter-ops-tfstate"
+        # AWS Provider config
+        region: "us-east-1"          # The region we will deploy infrastructure to
+        profile: "hunter_ops_prod"   # The AWS profile used to deploy the infrastructure
+        bucket: "hunter-ops-tfstate"

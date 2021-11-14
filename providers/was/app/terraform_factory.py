@@ -38,6 +38,7 @@ class TerraformFactory:
         module_metadata = module_config.module_metadata
         module_name = module_metadata.name
         service_name = module_metadata.aws_service
+        properties.backend.state_file = module_metadata.state_file
 
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_metadata.name}")
         hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
@@ -60,19 +61,22 @@ class TerraformFactory:
         # Copy all module files to hydra outputs
         copy_tree(f"../../../{self.module_metadata.module_dir}", self.hydra_dir)
         self.generate_terraform_config_file()
-        self.generate_tfvars_file()
+        #self.generate_tfvars_file()
 
     def generate_terraform_config_file(self):
-        tf_config_template = self._env.get_template("terraform_config.jinja")
+        tf_config_template = self._env.get_template("config.jinja")
         tf_config_path = f"{self.hydra_dir}/terraform_config.tf"
         log.info("Generating terraform_config.tf")
 
         # TODO this assumes S3 backend
-        self.properties.backend.key = f"{self.module_metadata.statefile}/terraform.tfstate"
+        #self.properties.backend.key = f"{self.module_metadata.statefile}/terraform.tfstate"
 
         with open(tf_config_path, "w") as tf_config_file:
             tf_config_file.write(
-                tf_config_template.render(backend=str(self.properties.backend), provider=str(self.properties.provider))
+                tf_config_template.render(profile=self.properties.backend.profile,
+                                          region=self.properties.backend.region,
+                                          bucket=self.properties.backend.bucket,
+                                          state_file=self.properties.backend.state_file)
             )
 
     def generate_tfvars_file(self):

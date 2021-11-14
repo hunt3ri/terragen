@@ -1,7 +1,7 @@
 module_metadata:
   aws_service: "vpc"
   name: "simple_vpc"
-  statefile: "shared/vpc/simple_vpc"
+  state_file: "shared/vpc/simple_vpc/terraform.tfstate"
   module_dir: "modules/aws/vpc"
 
 config:
