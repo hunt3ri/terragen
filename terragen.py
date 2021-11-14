@@ -20,8 +20,10 @@ def terragen(cfg: DictConfig) -> None:
         process_infra(build_config, cfg.shared, build_config.shared_infra)
     else:
         # for all other scenarios we want to process shared infra ahead of app specific infra
-        process_infra(build_config, cfg.shared, build_config.shared_infra)
-        process_infra(build_config, cfg.app, build_config.app_infra)
+        if "shared" in cfg:
+            process_infra(build_config, cfg.shared, build_config.shared_infra)
+        if "app" in cfg:
+            process_infra(build_config, cfg.app, build_config.app_infra)
 
 
 def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str):
