@@ -18,7 +18,7 @@ build:
       module_location: "providers.was.aws_provider"
 
       properties:
-        terraform_mode: "plan"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
+        terraform_mode: "apply"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
 
         # AWS Provider config
         region: "us-east-1"          # The region we will deploy infrastructure to
