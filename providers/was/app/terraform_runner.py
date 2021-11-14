@@ -42,6 +42,7 @@ class TerraformRunner:
             # Create infra
             logging.info(f"Terraform creating infrastructure for module {self.hydra_dir}")
             create_cmd = f"terraform apply -var-file={self.tfvars_file} -auto-approve"
+            logging.debug(f"create_cmd: {create_cmd}")
             subprocess.run(create_cmd.split(" "), check=True)
 
         os.chdir(self.working_dir)  # Revert to original working dir, to ensure script hydra outputs to correct loc
