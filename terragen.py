@@ -16,8 +16,10 @@ def terragen(cfg: DictConfig) -> None:
 
     if build_config.shared_infra.lower() == "destroy" and build_config.app_infra.lower() == "destroy":
         # If we're destroying the entire stack destroy app specific infra ahead of shared infra
-        process_infra(build_config, cfg.app, build_config.app_infra)
-        process_infra(build_config, cfg.shared, build_config.shared_infra)
+        if "app" in cfg:
+            process_infra(build_config, cfg.app, build_config.app_infra)
+        if "shared" in cfg:
+            process_infra(build_config, cfg.shared, build_config.shared_infra)
     else:
         # for all other scenarios we want to process shared infra ahead of app specific infra
         if "shared" in cfg:
