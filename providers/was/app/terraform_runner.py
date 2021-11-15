@@ -35,7 +35,8 @@ class TerraformRunner:
 
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
-            subprocess.run(f"terraform plan -var-file={self.tfvars_file} -out ./tfplan".split(" "), check=True)
+            plan_cmd = f"terraform plan -var-file={self.tfvars_file} -out ./tfplan"
+            subprocess.run(plan_cmd.split(" "), check=True)
             logging.info(f"Generating human readable tfplan.txt for {self.hydra_dir}")
             subprocess.run("terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:
