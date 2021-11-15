@@ -1,4 +1,13 @@
 ###########
+# Common
+###########
+
+variable "environment" {
+  description = "Environment infra is running in"
+}
+
+
+###########
 # VPC
 ###########
 
