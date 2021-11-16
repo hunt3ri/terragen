@@ -2,6 +2,7 @@
 defaults:
   # Shared Infrastructure
   - was/shared/vpcs@shared.vpc.simple_vpc: simple_vpc
+  - was/shared/key_pairs@shared.key_pairs.hunter_labs_key: hunter_labs_key
 
 
 build:
