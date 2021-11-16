@@ -33,9 +33,11 @@ class TerraformRunner:
         logging.info(f"Initialising Terraform for module {self.hydra_dir}")
         subprocess.run("terraform init".split(" "), check=True)
 
+        # TODO plan not working
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
             plan_cmd = f"terraform plan -var-file={self.tfvars_file} -out ./tfplan"
+            logging.debug(f"Plan cmd: {plan_cmd}")
             subprocess.run(plan_cmd.split(" "), check=True)
             logging.info(f"Generating human readable tfplan.txt for {self.hydra_dir}")
             subprocess.run("terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
