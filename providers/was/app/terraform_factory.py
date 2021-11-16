@@ -65,6 +65,7 @@ class TerraformFactory:
         copy_tree(f"../../../{self.module_metadata.module_dir}", self.hydra_dir)
         self.generate_terraform_config_file()
         self.generate_tfvars_file()
+        # TODO process lookups in the datablock, concept is to replace the key with lookup value in yaml
 
     def generate_terraform_config_file(self):
         tf_config_template = self._env.get_template("config.jinja")

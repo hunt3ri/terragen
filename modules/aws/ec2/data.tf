@@ -4,7 +4,7 @@ data "terraform_remote_state" "vpc" {
 
   config = {
     bucket                  = var.bucket
-    key                     = "common/vpc/{% vpc_name %}/terraform.tfstate"
+    key                     = "{{ vpc_statefile }}"
     region                  = var.region
     profile                 = var.profile
   }
