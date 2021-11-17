@@ -1,19 +1,19 @@
 module_metadata:
   aws_service: "ec2"
-  name: "sandbox"
-  state_file: "shared/ec2/sandbox/terraform.tfstate"
+  name: "jumpbox"
+  state_file: "shared/ec2/jumpbox/terraform.tfstate"
   module_dir: "modules/aws/ec2"
 
 config:
   # SG Config
-  sg_name                     : "Sandbox SG"
+  sg_name                     : "Jumpbox SG"
   sg_description              : "SG for Sandbox Instance"
   ingress_cidr_blocks         : ["0.0.0.0/0"]
   ingress_rules               : ["all-all"]
 
   # EC2 Config
   instance_count              : 1
-  instance_name               : "sandbox"
+  instance_name               : "jumpbox"
   associate_public_ip_address : True
   aws_account                 : ${build.aws_accounts[${build.environment}]}
 
