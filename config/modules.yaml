@@ -6,7 +6,6 @@ defaults:
 
   # Apps
   - was/apps/sandbox@app.ec2.sandbox: sandbox
-  - was/apps/jumpbox@app.ec2.jumpbox: jumpbox
 
 
 build:
