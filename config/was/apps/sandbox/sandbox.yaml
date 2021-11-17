@@ -1,0 +1,23 @@
+module_metadata:
+  aws_service: "ec2"
+  name: "sandbox"
+  state_file: "shared/ec2/sandbox/terraform.tfstate"
+  module_dir: "modules/aws/ec2"
+
+config:
+  # SG Config
+  sg_name                     : "Sandbox SG"
+  sg_description              : "SG for Sandbox Instance"
+  ingress_cidr_blocks         : [ "109.152.79.190/32" ]
+  ingress_rules               : [ "ssh-tcp", "http-80-tcp", "https-443-tcp" ]
+
+  # EC2 Config
+  instance_count              : 1
+  instance_name               : "sandbox"
+  associate_public_ip_address : True
+  aws_account                 : ${build.aws_accounts[${build.environment}]}
+
+
+lookups:
+  key_pair_statefile  : ${shared.key_pairs.hunter_labs_key.module_metadata.state_file}
+  vpc_statefile       : ${shared.vpc.simple_vpc.module_metadata.state_file}

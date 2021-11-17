@@ -7,7 +7,7 @@ from providers.cloud_provider import CloudProvider
 log = logging.getLogger(__name__)
 
 
-@hydra.main(config_path="./config", config_name="atlas")
+@hydra.main(config_path="./config", config_name="modules")
 def terragen(cfg: DictConfig) -> None:
     """Parse config and create or destroy infrastructure"""
     log.info("Terragen starting up")
@@ -16,12 +16,16 @@ def terragen(cfg: DictConfig) -> None:
 
     if build_config.shared_infra.lower() == "destroy" and build_config.app_infra.lower() == "destroy":
         # If we're destroying the entire stack destroy app specific infra ahead of shared infra
-        process_infra(build_config, cfg.app, build_config.app_infra)
-        process_infra(build_config, cfg.shared, build_config.shared_infra)
+        if "app" in cfg:
+            process_infra(build_config, cfg.app, build_config.app_infra)
+        if "shared" in cfg:
+            process_infra(build_config, cfg.shared, build_config.shared_infra)
     else:
         # for all other scenarios we want to process shared infra ahead of app specific infra
-        process_infra(build_config, cfg.shared, build_config.shared_infra)
-        process_infra(build_config, cfg.app, build_config.app_infra)
+        if "shared" in cfg:
+            process_infra(build_config, cfg.shared, build_config.shared_infra)
+        if "app" in cfg:
+            process_infra(build_config, cfg.app, build_config.app_infra)
 
 
 def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str):

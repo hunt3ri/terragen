@@ -1,0 +1,32 @@
+# Order is important terravarmer will create infra in specified order specified in defaults object
+defaults:
+  # Shared Infrastructure
+  - was/shared/vpcs@shared.vpc.simple_vpc: simple_vpc
+  - was/shared/key_pairs@shared.key_pairs.hunter_labs_key: hunter_labs_key
+
+  # Apps
+  - was/apps/sandbox@app.ec2.sandbox: sandbox
+
+
+build:
+  debug: True                      # Set to True to enable verbose debugging
+  default_provider: "AWSProvider"  # Provider used to create all infra unless overridden
+  environment: "prod"              # Deployment environment must be one of dev|test|ppe|prod
+  shared_infra: "create"           # Process shared infra, Must be one of create|destroy|pass
+  app_infra: "create"              # Process application infra, must be one of create|destroy|pass
+  aws_accounts:
+    prod: 222866594907
+
+  # Register providers here, required provider_name, and provider_location further provider specific
+  # config can be added as needed
+  registered_providers:
+    AWSProvider:
+      module_location: "providers.was.aws_provider"
+
+      properties:
+        terraform_mode: "apply"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
+
+        # AWS Provider config
+        region: "us-east-1"          # The region we will deploy infrastructure to
+        profile: "hunter_ops_prod"   # The AWS profile used to deploy the infrastructure
+        bucket: "hunter-ops-tfstate"
