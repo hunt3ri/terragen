@@ -37,7 +37,7 @@ variable "instance_type" {
 
 variable "associate_public_ip_address" {
   description = "If true, the EC2 instance will have associated public IP address"
-  default = False
+  default = false
 }
 
 variable "aws_account" {
