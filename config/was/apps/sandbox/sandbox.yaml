@@ -8,8 +8,8 @@ config:
   # SG Config
   sg_name                     : "Sandbox SG"
   sg_description              : "SG for Sandbox Instance"
-  ingress_cidr_blocks         : ["0.0.0.0/0"]
-  ingress_rules               : ["all-all"]
+  ingress_cidr_blocks         : [ "109.152.79.190/32" ]
+  ingress_rules               : [ "ssh-tcp", "http-80-tcp", "https-443-tcp" ]
 
   # EC2 Config
   instance_count              : 1
