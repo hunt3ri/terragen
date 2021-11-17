@@ -22,7 +22,7 @@ resource "aws_instance" "sandbox" {
 
   subnet_id                   = data.terraform_remote_state.vpc.outputs.public_subnet_ids[count.index]
   associate_public_ip_address = var.associate_public_ip_address
-  vpc_security_group_ids      = [module.sandbox_sg.this_security_group_id]
+  vpc_security_group_ids      = [module.sandbox_sg.security_group_id]
 
   key_name                    = data.terraform_remote_state.key_pair.outputs.key_name
 
