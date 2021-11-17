@@ -12,7 +12,7 @@ build:
   debug: True                      # Set to True to enable verbose debugging
   default_provider: "AWSProvider"  # Provider used to create all infra unless overridden
   environment: "prod"              # Deployment environment must be one of dev|test|ppe|prod
-  shared_infra: "pass"           # Process shared infra, Must be one of create|destroy|pass
+  shared_infra: "create"           # Process shared infra, Must be one of create|destroy|pass
   app_infra: "create"              # Process application infra, must be one of create|destroy|pass
 
   # Register providers here, required provider_name, and provider_location further provider specific

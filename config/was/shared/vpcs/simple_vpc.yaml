@@ -11,3 +11,5 @@ config:
   public_subnets:       ["10.0.100.0/24", "10.0.200.0/24"]
   enable_dns_hostnames: true
   environment:          ${build.environment}
+
+lookups:

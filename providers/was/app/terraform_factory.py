@@ -9,7 +9,6 @@ from pathlib import Path
 
 from providers.was.app.utils import to_toml
 from providers.was.models.terragen_models import TerragenProperties
-from providers.aws.app.lookup_handler import LookupHandler
 
 log = logging.getLogger(__name__)
 
@@ -26,14 +25,14 @@ class TerraformFactory:
     tfvars_file: str = attr.ib()
     lookups: DictConfig = attr.ib()
 
-    # Init Jinja to load templates
-    _env = Environment(
+    # Init Jinja to load templates from local package
+    jinja_package_env = Environment(
         loader=PackageLoader("providers.was"),
-        autoescape=select_autoescape(),
+        autoescape=select_autoescape()
     )
 
     # Register Jinja helper functions
-    _env.globals["to_toml"] = to_toml
+    jinja_package_env.globals["to_toml"] = to_toml
 
     @classmethod
     def from_config(cls, module_config: DictConfig, properties: TerragenProperties):
@@ -45,16 +44,15 @@ class TerraformFactory:
 
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_metadata.name}")
 
-        # Load using Path object but save to class as string
-        hydra_dir = f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
+        # Create path for outputting tf modules within hydra output dir
+        hydra_dir = Path(f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}")
 
-        # TODO handle empty lookups
         return cls(
             module_name=module_name,
             module_config=module_config.config,
             service_name=service_name,
             properties=properties,
-            hydra_dir=hydra_dir,
+            hydra_dir=str(hydra_dir),
             module_metadata=module_metadata,
             tfvars_file=f"{module_name}.tfvars",
             lookups=module_config.lookups
@@ -73,7 +71,7 @@ class TerraformFactory:
         self.generate_data_block()
 
     def generate_terraform_config_file(self):
-        tf_config_template = self._env.get_template("config.jinja")
+        tf_config_template = self.jinja_package_env.get_template("config.jinja")
         tf_config_path = f"{self.hydra_dir}/terraform_config.tf"
         log.info("Generating terraform_config.tf")
 
@@ -88,7 +86,7 @@ class TerraformFactory:
 
     def generate_tfvars_file(self):
         tfvars_file_path = f"{self.hydra_dir}/{self.tfvars_file}"
-        tfvars_template = self._env.get_template("tfvars.jinja")
+        tfvars_template = self.jinja_package_env.get_template("tfvars.jinja")
         log.info(f"Generating module {self.tfvars_file}")
 
         with open(tfvars_file_path, "w") as tfvars_file:
@@ -97,17 +95,23 @@ class TerraformFactory:
             )
 
     def generate_data_block(self):
-        template_path = Path(self.hydra_dir)
+        if self.lookups is None:
+            log.info(f"No lookups to process for module {self.module_name}")
+            return
+
+        log.info(f"Generating datablock for {self.module_name}")
+
         # For data blocks we need to load template from module directory in Hydra output dir rather than local package
-        file_env = Environment(
-            loader=FileSystemLoader([str(template_path)]),
+        jinja_fs_env = Environment(
+            loader=FileSystemLoader([self.hydra_dir]),
             autoescape=select_autoescape(),
         )
 
-        data_template = file_env.get_template("data.tf")
+        data_block_file = f"{self.hydra_dir}/data.tf"
+        data_template = jinja_fs_env.get_template("data.tf")
 
-        with open(template_path / "data.tf", "w") as tfvars_file:
-            tfvars_file.write(
+        with open(data_block_file, "w") as data_file:
+            data_file.write(
                 data_template.render(lookups=self.lookups,
                                      profile=self.properties.backend.profile,
                                      region=self.properties.backend.region,
