@@ -3,9 +3,9 @@ data "terraform_remote_state" "vpc" {
   backend = "s3"
 
   config = {
-    bucket                  = var.bucket
-    key                     = "{{ vpc_statefile }}"
-    region                  = var.region
-    profile                 = var.profile
+    bucket                  = "{{ bucket }}"
+    key                     = "{{ lookups['vpc_statefile'] }}"
+    region                  = "{{ region }}"
+    profile                 = "{{ profile }}"
   }
 }
