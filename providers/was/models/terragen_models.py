@@ -1,28 +1,7 @@
 import attr
-import textwrap
 from omegaconf import DictConfig
 
 
-# @attr.s
-# class TerraformAWSProvider:
-#     region: str = attr.ib()
-#     profile: str = attr.ib()
-#
-#     @classmethod
-#     def from_hydra_config(cls, provider_config: DictConfig):
-#         return cls(region=provider_config.region, profile=provider_config.profile)
-#
-#     def __str__(self):
-#         return textwrap.dedent(
-#             f"""
-#             provider "aws" {{
-#                 region  = "{self.region}"
-#                 profile = "{self.profile}"
-#             }}
-#             """
-#         )
-#
-#
 @attr.s
 class TerraformBackend:
     bucket: str = attr.ib()
@@ -33,20 +12,6 @@ class TerraformBackend:
     @classmethod
     def from_hydra_config(cls, bucket: str, region: str, profile: str):
         return cls(bucket=bucket, region=region, profile=profile)
-#
-#     def __str__(self):
-#         """Remove all whitespace before adding a 2 space indent, to render nicely in config file"""
-#         backend = textwrap.dedent(
-#             f"""
-#             backend "s3" {{
-#                 profile = "{self.profile}"
-#                 region  = "{self.region}"
-#                 bucket  = "{self.bucket}"
-#                 key     = "{self.key}"
-#             }}
-#             """
-#         )
-#         return textwrap.indent(backend, "  ")
 
 
 @attr.s
