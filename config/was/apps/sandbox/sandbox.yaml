@@ -11,5 +11,13 @@ config:
   ingress_cidr_blocks         : ["0.0.0.0/0"]
   ingress_rules               : ["all-all"]
 
+  # EC2 Config
+  instance_count              : 1
+  instance_name               : "sandbox"
+  associate_public_ip_address : True
+  aws_account                 : ${build.aws_accounts[${build.environment}]}
+
+
 lookups:
-  vpc_statefile: ${shared.vpc.simple_vpc.module_metadata.state_file}
+  key_pair_statefile  : ${shared.key_pairs.hunter_labs_key.module_metadata.state_file}
+  vpc_statefile       : ${shared.vpc.simple_vpc.module_metadata.state_file}

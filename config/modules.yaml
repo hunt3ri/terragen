@@ -14,6 +14,8 @@ build:
   environment: "prod"              # Deployment environment must be one of dev|test|ppe|prod
   shared_infra: "create"           # Process shared infra, Must be one of create|destroy|pass
   app_infra: "create"              # Process application infra, must be one of create|destroy|pass
+  aws_accounts:
+    prod: 222866594907
 
   # Register providers here, required provider_name, and provider_location further provider specific
   # config can be added as needed
