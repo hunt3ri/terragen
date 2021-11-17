@@ -27,7 +27,7 @@ resource "aws_instance" "sandbox" {
   key_name                    = data.terraform_remote_state.key_pair.outputs.key_name
 
   tags = {
-    Name = "${var.instance_name}-${count.index + 1}"
+    Name = "${var.instance_name}${count.index + 1}"
     Environment = var.environment
   }
 }
@@ -36,7 +36,7 @@ resource "aws_route53_record" "sandbox_dns_record"{
   # Create a DNS record for the sandbox server so we can refer to it by name rather than IP address
   count   = var.instance_count
   zone_id = data.aws_route53_zone.hunter_labs_zone.id
-  name    = "sandbox-${var.environment}.${data.aws_route53_zone.hunter_labs_zone.name}"
+  name    = "sandbox${count.index}-${var.environment}.${data.aws_route53_zone.hunter_labs_zone.name}"
   type    = "A"
   ttl     = "60"
   records = [aws_instance.sandbox[count.index].public_ip]
