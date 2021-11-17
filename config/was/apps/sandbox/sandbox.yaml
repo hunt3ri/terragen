@@ -12,7 +12,7 @@ config:
   ingress_rules               : ["all-all"]
 
   # EC2 Config
-  instance_count              : 1
+  instance_count              : 2
   instance_name               : "sandbox"
   associate_public_ip_address : True
   aws_account                 : ${build.aws_accounts[${build.environment}]}
