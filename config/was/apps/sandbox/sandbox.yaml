@@ -1,8 +1,9 @@
+defaults:
+  - /was/base/ec2@: ec2_base
+
 module_metadata:
-  aws_service: "ec2"
   name: "sandbox"
   state_file: "shared/ec2/sandbox/terraform.tfstate"
-  module_dir: "modules/aws/ec2"
 
 config:
   # SG Config
@@ -15,8 +16,6 @@ config:
   instance_count              : 1
   instance_name               : "sandbox"
   associate_public_ip_address : True
-  aws_account                 : ${build.aws_accounts[${build.environment}]}
-
 
 lookups:
   key_pair_statefile  : ${shared.key_pairs.hunter_labs_key.module_metadata.state_file}
