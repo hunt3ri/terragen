@@ -26,10 +26,7 @@ class TerraformFactory:
     lookups: DictConfig = attr.ib()
 
     # Init Jinja to load templates from local package
-    jinja_package_env = Environment(
-        loader=PackageLoader("providers.aws"),
-        autoescape=select_autoescape()
-    )
+    jinja_package_env = Environment(loader=PackageLoader("providers.aws"), autoescape=select_autoescape())
 
     # Register Jinja helper functions
     jinja_package_env.globals["to_toml"] = to_toml
@@ -45,7 +42,9 @@ class TerraformFactory:
         log.info(f"Instantiating TerraformFactory for: {service_name}/{module_metadata.name}")
 
         # Create path for outputting tf modules within hydra output dir
-        hydra_dir = Path(f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}")
+        hydra_dir = Path(
+            f"{os.getcwd()}/{properties.provider_name}/{properties.environment}/{service_name}/{module_name}"
+        )
 
         return cls(
             module_name=module_name,
@@ -55,7 +54,7 @@ class TerraformFactory:
             hydra_dir=str(hydra_dir),
             module_metadata=module_metadata,
             tfvars_file=f"{module_name}.tfvars",
-            lookups=module_config.lookups
+            lookups=module_config.lookups,
         )
 
     def generate_terraform_templates(self):
@@ -78,10 +77,12 @@ class TerraformFactory:
         # TODO assumes S3 backend
         with open(tf_config_path, "w") as tf_config_file:
             tf_config_file.write(
-                tf_config_template.render(profile=self.properties.backend.profile,
-                                          region=self.properties.backend.region,
-                                          bucket=self.properties.backend.bucket,
-                                          state_file=self.properties.backend.state_file)
+                tf_config_template.render(
+                    profile=self.properties.backend.profile,
+                    region=self.properties.backend.region,
+                    bucket=self.properties.backend.bucket,
+                    state_file=self.properties.backend.state_file,
+                )
             )
 
     def generate_tfvars_file(self):
@@ -90,9 +91,7 @@ class TerraformFactory:
         log.info(f"Generating module {self.tfvars_file}")
 
         with open(tfvars_file_path, "w") as tfvars_file:
-            tfvars_file.write(
-                tfvars_template.render(module_config=self.module_config)
-            )
+            tfvars_file.write(tfvars_template.render(module_config=self.module_config))
 
     def generate_data_block(self):
         if self.lookups is None:
@@ -112,9 +111,10 @@ class TerraformFactory:
 
         with open(data_block_file, "w") as data_file:
             data_file.write(
-                data_template.render(lookups=self.lookups,
-                                     profile=self.properties.backend.profile,
-                                     region=self.properties.backend.region,
-                                     bucket=self.properties.backend.bucket,
-                                     )
+                data_template.render(
+                    lookups=self.lookups,
+                    profile=self.properties.backend.profile,
+                    region=self.properties.backend.region,
+                    bucket=self.properties.backend.bucket,
+                )
             )

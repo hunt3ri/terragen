@@ -30,8 +30,8 @@ class AWSProvider(CloudProvider):
         tf_factory = TerraformFactory.from_config(module_config=shared_infra, properties=properties)
         tf_factory.generate_terraform_templates()
 
-        tf_runner = TerraformRunner.from_config(properties=properties,
-                                                hydra_dir=tf_factory.hydra_dir,
-                                                tfvars_file=tf_factory.tfvars_file)
+        tf_runner = TerraformRunner.from_config(
+            properties=properties, hydra_dir=tf_factory.hydra_dir, tfvars_file=tf_factory.tfvars_file
+        )
 
         return tf_runner

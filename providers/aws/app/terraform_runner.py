@@ -19,8 +19,7 @@ class TerraformRunner:
     @classmethod
     def from_config(cls, properties: TerragenProperties, hydra_dir: str, tfvars_file: str):
 
-        return cls(properties=properties, hydra_dir=hydra_dir,
-                   working_dir=os.getcwd(), tfvars_file=tfvars_file)
+        return cls(properties=properties, hydra_dir=hydra_dir, working_dir=os.getcwd(), tfvars_file=tfvars_file)
 
     def create_infrastructure(self):
         if self.properties.debug_mode:
@@ -33,7 +32,6 @@ class TerraformRunner:
         logging.info(f"Initialising Terraform for module {self.hydra_dir}")
         subprocess.run("terraform init".split(" "), check=True)
 
-        # TODO plan not working
         if self.properties.terraform_plan:
             logging.info(f"Generate Terraform Plan for creating infrastructure for module {self.hydra_dir}")
             plan_cmd = f"terraform plan -var-file={self.tfvars_file} -out ./tfplan"
