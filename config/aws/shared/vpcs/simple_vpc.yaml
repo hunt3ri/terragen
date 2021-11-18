@@ -2,9 +2,9 @@ defaults:
   - /aws/base/vpcs@: vpc_base
 
 module_metadata:
-  name: "simple_vpc"
-  lookup: "shared.vpc.simple_vpc"
+  name        : "simple_vpc"
+  state_file  : "shared/vpc/simple_vpc/terraform.tfstate"
 
 config:
-  name: "hunter-labs-vpc"
-  enable_dns_hostnames : true
+  vpc_name:             "hunter-labs-vpc"
+  enable_dns_hostnames: true

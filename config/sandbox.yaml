@@ -4,9 +4,9 @@ defaults:
   - aws/shared/vpcs@shared.vpc.simple_vpc: simple_vpc
   - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: hunter_labs_key
 
-  # Application specific Infrastructure
-  - aws/apps/sandbox/security_groups@app.security_groups.local_access: local_access
-  - aws/apps/sandbox/ec2/@app.ec2.sandbox_instance: sandbox_instance
+  # Apps
+  - aws/apps/sandbox@app.ec2.sandbox: sandbox
+
 
 build:
   debug: True                      # Set to True to enable verbose debugging
@@ -14,6 +14,8 @@ build:
   environment: "prod"              # Deployment environment must be one of dev|test|ppe|prod
   shared_infra: "create"           # Process shared infra, Must be one of create|destroy|pass
   app_infra: "create"              # Process application infra, must be one of create|destroy|pass
+  aws_accounts:
+    prod: 222866594907
 
   # Register providers here, required provider_name, and provider_location further provider specific
   # config can be added as needed
@@ -22,16 +24,9 @@ build:
       module_location: "providers.aws.aws_provider"
 
       properties:
-        terraform_mode: "plan"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
+        terraform_mode: "apply"  # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
 
-        provider_config:
-          terraform_provider: "AWS"
-          region: "us-east-1"          # The region we will deploy infrastructure to
-          profile: "hunter_ops_prod"   # The AWS profile used to deploy the infrastructure
-
-        # Partial config for Terraform Backend see https://www.terraform.io/docs/language/settings/backends/configuration.html#partial-configuration
-        backend_config:
-          terraform_backend: "S3"
-          region: "us-east-1"
-          profile: "hunter_ops_prod"
-          bucket: "hunter-ops-tfstate"
+        # AWS Provider config
+        region: "us-east-1"          # The region we will deploy infrastructure to
+        profile: "hunter_ops_prod"   # The AWS profile used to deploy the infrastructure
+        bucket: "hunter-ops-tfstate"

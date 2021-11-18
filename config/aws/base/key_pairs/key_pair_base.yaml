@@ -1,16 +1,12 @@
 module_metadata:
-  aws_service: "key_pairs"
-  name: "key_pair"
-  lookup: "shared.key_pairs"
-  resource_type: "aws_key_pair"
+  aws_service : "key_pairs"
+  module_dir  : "modules/aws/key_pairs"
+  name        : ???
+  state_file  : ???
 
 config:
-  key_name: ???
-  public_key: ???
-  tags:
-    Owner: "Hunter-Labs"
+  key_name    : ???
+  public_key  : ???
+  owner       : "Hunter-Labs"
 
-outputs:
-  key_name:
-    description: "The name of the key"
-    lookup: "${...module_metadata.lookup}.outputs.key_name"
+lookups:
