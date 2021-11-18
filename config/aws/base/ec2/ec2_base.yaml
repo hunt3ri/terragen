@@ -1,29 +1,24 @@
 module_metadata:
-  aws_service: "ec2"
-  name: "ec2"
-  lookup: "app.ec2"
-  resource_type: "aws_instance"
+  aws_service : "ec2"
+  module_dir  : "modules/aws/ec2"
+  name        : ???
+  state_file  : ???
+
 
 config:
-  ami:                         "ami-06310010cdfb6a743"
-  instance_type:               "t3a.small"
+  # SG Config
+  sg_name                     : ???
+  sg_description              : ???
+  ingress_cidr_blocks         : ???
+  ingress_rules               : ???
 
-  subnet_id:                   ???
-  associate_public_ip_address: false
-  vpc_security_group_ids:      ???
+  # EC2 Config
+  instance_count              : 1
+  instance_name               : ???
+  associate_public_ip_address : False
+  aws_account                 : ${build.aws_accounts[${build.environment}]}
 
-  key_name:                    ???
 
-  root_block_device:
-    encrypted:                 true
-    volume_type:               "gp3"
-    volume_size:               8
-
-  tags:
-    Name:  ???
-    Owner: "Hunter-Labs"
-
-outputs:
-  public_dns:
-    description: "Public DNS address of instance"
-    lookup: "${...module_metadata.lookup}.outputs.public_dns"
+lookups:
+  key_pair_statefile  : ???
+  vpc_statefile       : ???

@@ -1,5 +1,5 @@
 defaults:
-  - /was/base/ec2@: ec2_base
+  - /aws/base/ec2@: ec2_base
 
 module_metadata:
   name: "sandbox"
