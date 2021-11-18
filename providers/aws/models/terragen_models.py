@@ -24,9 +24,9 @@ class TerragenProperties:
 
     @classmethod
     def from_properties(cls, debug_mode: bool, environment: str, provider_name: str, provider_properties: DictConfig):
-        backend = TerraformBackend.from_hydra_config(region=provider_properties.region,
-                                                     profile=provider_properties.profile,
-                                                     bucket=provider_properties.bucket)
+        backend = TerraformBackend.from_hydra_config(
+            region=provider_properties.region, profile=provider_properties.profile, bucket=provider_properties.bucket
+        )
 
         if provider_properties.terraform_mode.lower() == "plan":
             terraform_plan = True
@@ -42,5 +42,5 @@ class TerragenProperties:
             environment=environment,
             provider_name=provider_name,
             terraform_plan=terraform_plan,
-            backend=backend
+            backend=backend,
         )

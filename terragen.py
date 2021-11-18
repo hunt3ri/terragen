@@ -32,7 +32,7 @@ def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str)
     log.info(f"TerraGen processing infrastructure with mode: {mode}")
 
     if mode == "pass":
-        log.info(f"Infrastructure mode is pass, so skipping updating infrastructure")
+        log.info("Infrastructure mode is pass, so skipping updating infrastructure")
         return
 
     config_items = infra_config.items()
