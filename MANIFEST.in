@@ -1,6 +1,6 @@
 include README.md LICENSE
 
 # Exclude local dev environment config
-exclude outputs/
-exclude modules/
-exclude config/
+exclude outputs
+exclude modules
+exclude config

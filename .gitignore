@@ -5,8 +5,8 @@
 outputs
 
 # Local
-.env
-tfvars
+dist
 venv
 __pycache__
 .pytest_cache
+terragen.egg-info
