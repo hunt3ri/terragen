@@ -19,7 +19,7 @@ VERSION = '0.1.0'
 
 # What packages are required for this module to be executed?
 REQUIRED = [
-    'hydra-core', 'Jinja2',  'toml',
+    'hydra-core==1.1.1', 'Jinja2',  'toml',
 ]
 
 here = os.path.abspath(os.path.dirname(__file__))
