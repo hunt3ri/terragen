@@ -31,9 +31,3 @@ You can enable verbose debug logging by passing the following:
 python .\terragen.py hydra.verbose=true
 ```
 
-## Dev Commands
-Linting:
-```flake8```
-
-Formatting:
-```black .```
