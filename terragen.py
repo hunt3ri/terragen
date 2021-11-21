@@ -1,7 +1,8 @@
 import hydra
 import logging
 
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
+from omegaconf.errors import MissingMandatoryValue
 from providers.cloud_provider import CloudProvider
 
 log = logging.getLogger(__name__)
@@ -12,8 +13,10 @@ def terragen(cfg: DictConfig) -> None:
     """Parse config and create or destroy infrastructure"""
     log.info("Terragen starting up")
 
-    build_config = cfg.build
+    if not is_valid_config(cfg):
+        return  # Invalid config so immediately stop processing
 
+    build_config = cfg.build
     if build_config.shared_infra.lower() == "destroy" and build_config.app_infra.lower() == "destroy":
         # If we're destroying the entire stack destroy app specific infra ahead of shared infra
         if "app" in cfg:
@@ -26,6 +29,19 @@ def terragen(cfg: DictConfig) -> None:
             process_infra(build_config, cfg.shared, build_config.shared_infra)
         if "app" in cfg:
             process_infra(build_config, cfg.app, build_config.app_infra)
+
+
+def is_valid_config(cfg: DictConfig):
+    """ Validate the supplied config, will ensure all mandatory values have been supplied """
+    try:
+        log.info("Validating Config")
+        OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
+    except MissingMandatoryValue as e:
+        log.error(f'Config Error: {e}')
+        return False
+
+    log.info("Config is Valid")
+    return True
 
 
 def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str):
