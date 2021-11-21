@@ -32,12 +32,12 @@ def terragen(cfg: DictConfig) -> None:
 
 
 def is_valid_config(cfg: DictConfig):
-    """ Validate the supplied config, will ensure all mandatory values have been supplied """
+    """Validate the supplied config, will ensure all mandatory values have been supplied"""
     try:
         log.info("Validating Config")
         OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True)
     except MissingMandatoryValue as e:
-        log.error(f'Config Error: {e}')
+        log.error(f"Config Error: {e}")
         return False
 
     log.info("Config is Valid")
