@@ -3,6 +3,9 @@ Terragen is a framework for generating and automatically applying Terraform modu
 
 Config is read from the local ```config``` directory.  [Config is controlled by the hydra framework, check the docs for examples](https://hydra.cc/docs/intro/)
 
+## Key Features
+TODO
+
 ## Installing
 Terragen can be installed via pip:
 
@@ -10,8 +13,11 @@ Terragen can be installed via pip:
 pip install terragen
 ```
 
-## Configuration
-Terragen expects two directories of configuration to be created, sample directory structure shown below:
+## Documentation
+TODO
+
+## Quick Start
+Terragen expects two directories of configuration to be created. modules containing all terraform modules you want to configure. config containing the configuration for each module you want to deploy.  A sample directory structure shown below:
 ```commandline
 --config
 ----__init__.py
