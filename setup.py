@@ -92,7 +92,7 @@ setup(
     author_email=EMAIL,
     python_requires=REQUIRES_PYTHON,
     url=URL,
-    packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"], where="."),
+    packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"], where="providers"),
     entry_points={
         'console_scripts': ['terragen=terragen:terragen'],
     },
