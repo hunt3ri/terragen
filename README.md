@@ -3,26 +3,48 @@ Terragen is a framework for generating and automatically applying Terraform modu
 
 Config is read from the local ```config``` directory.  [Config is controlled by the hydra framework, check the docs for examples](https://hydra.cc/docs/intro/)
 
+## Installing
+Terragen can be installed via pip:
+
+```commandline
+pip install terragen
+```
+
+## Configuration
+Terragen expects two directories of configuration to be created, sample directory structure shown below:
+```commandline
+--config
+----__init__.py
+----config.yaml
+--modules
+----aws
+--------ec2
+------------main.tf
+```
 
 ## Running
-Supply Terragen the name of the config file
+Terragen looks for a default config.yaml file in config directory, if that is present you can just run terragen
 ```commandline
-python .\terragen.py --config-name sandbox
+terragen
+```
+You can also create specfic config files for certain applications, eg
+```commandline
+terragen --config-name sandbox
 ```
 
 ## Overriding values on command line
 Any config value can be overridden on the command line using dot notation, eg:
 ```commandline
-python .\terragen.py build.environment=test
+terragen build.environment=test
 ```
 
 ## Debugging
 Run Terragen with cfg and resolve flags to output interpolations
 ```commandline
-python .\terragen.py --cfg job --resolve
+terragen --cfg job --resolve
 ```
 
 You can enable verbose debug logging by passing the following:
 ```commandline
-python .\terragen.py hydra.verbose=true
+terragen hydra.verbose=true
 ```
