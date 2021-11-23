@@ -9,7 +9,7 @@ log = logging.getLogger(__name__)
 
 
 @hydra.main(config_path="config", config_name="config")
-def terragen(cfg: DictConfig) -> None:
+def entrypoint(cfg: DictConfig) -> None:
     """Parse config and create or destroy infrastructure"""
     log.info("Terragen starting up")
 
@@ -67,4 +67,4 @@ def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str)
 
 
 if __name__ == "__main__":
-    terragen()
+    entrypoint()
