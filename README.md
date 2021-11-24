@@ -29,28 +29,28 @@ Terragen expects two directories of configuration to be created. modules contain
 ```
 
 ## Running
-Terragen looks for a default config.yaml file in config directory, if that is present you can just run terragen
+Terragen looks for a default config.yaml file in config directory.  You must specify location of config directory using `--config-dir` or `-cd`, for example:
 ```commandline
-terragen
+terragen --config-dir ./config
 ```
 You can also create specfic config files for certain applications, eg
 ```commandline
-terragen --config-name sandbox
+terragen -cd ./config --config-name sandbox
 ```
 
 ## Overriding values on command line
 Any config value can be overridden on the command line using dot notation, eg:
 ```commandline
-terragen build.environment=test
+terragen --config-dir ./config build.environment=test
 ```
 
 ## Debugging
 Run Terragen with cfg and resolve flags to output interpolations
 ```commandline
-terragen --cfg job --resolve
+terragen -cd ./config --cfg job --resolve
 ```
 
 You can enable verbose debug logging by passing the following:
 ```commandline
-terragen hydra.verbose=true
+terragen -cd ./config hydra.verbose=true
 ```
