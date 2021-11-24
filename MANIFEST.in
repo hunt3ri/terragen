@@ -1,5 +1,7 @@
 include README.md LICENSE
 
+recursive-include terragen *.jinja
+
 # Exclude local dev environment config
 exclude outputs
 exclude modules
