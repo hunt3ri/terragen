@@ -1,10 +1,10 @@
 from omegaconf import DictConfig
 import logging
 
-from providers.aws.app.terraform_factory import TerraformFactory
-from providers.aws.app.terraform_runner import TerraformRunner
-from providers.aws.models.terragen_models import TerragenProperties
-from providers.cloud_provider import CloudProvider
+from terragen.providers.aws.app.terraform_factory import TerraformFactory
+from terragen.providers.aws.app.terraform_runner import TerraformRunner
+from terragen.providers.aws.models.terragen_models import TerragenProperties
+from terragen.providers.cloud_provider import CloudProvider
 
 
 log = logging.getLogger(__name__)

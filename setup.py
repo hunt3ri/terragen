@@ -15,7 +15,7 @@ URL = "https://github.com/hunt3ri/terragen"
 EMAIL = "iain.hunter@outlook.com"
 AUTHOR = "Iain Hunter"
 REQUIRES_PYTHON = ">=3.8.0"
-VERSION = "0.0.9"
+VERSION = "0.0.10"
 
 # What packages are required for this module to be executed?
 REQUIRED = [
@@ -94,7 +94,7 @@ setup(
     url=URL,
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     entry_points={
-        'console_scripts': ['terragen=providers.cli:entrypoint'],
+        'console_scripts': ['terragen=terragen.cli:entrypoint'],
     },
     install_requires=REQUIRED,
     include_package_data=True,

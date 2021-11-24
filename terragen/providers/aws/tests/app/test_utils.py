@@ -1,6 +1,6 @@
 import pytest
 
-from providers.aws.app.utils import to_toml
+from terragen.providers.aws.app.utils import to_toml
 
 from dataclasses import dataclass
 from omegaconf import OmegaConf

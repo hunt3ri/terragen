@@ -3,7 +3,7 @@ import logging
 
 from omegaconf import DictConfig, OmegaConf
 from omegaconf.errors import MissingMandatoryValue
-from providers.cloud_provider import CloudProvider
+from terragen.providers.cloud_provider import CloudProvider
 
 log = logging.getLogger(__name__)
 
