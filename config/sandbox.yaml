@@ -2,10 +2,10 @@
 defaults:
   # Shared Infrastructure
   - aws/shared/vpcs@shared.vpc.simple_vpc: simple_vpc
-  #- aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: hunter_labs_key
+  - aws/shared/key_pairs@shared.key_pairs.hunter_labs_key: hunter_labs_key
 
   # Apps
-  #- aws/apps/sandbox@app.ec2.sandbox: sandbox
+  - aws/apps/sandbox@app.ec2.sandbox: sandbox
 
 
 build:
