@@ -1,7 +1,6 @@
 import pytest
-import os
 
-from terragen.providers.aws.app.utils import to_toml, locate_module
+from terragen.providers.aws.app.utils import to_toml
 
 from dataclasses import dataclass
 from omegaconf import OmegaConf
@@ -32,6 +31,3 @@ class TestUtils:
     def test_to_toml_handles_lookups(self, mock_ec2_config):
         lookup_value = to_toml("subnet_id", mock_ec2_config.subnet_id)
         assert lookup_value == "subnet_id = data.terraform_remote_state.simple_vpc.outputs.public_subnets[0]"
-
-    def test_locate_modules(self):
-        locate_module()

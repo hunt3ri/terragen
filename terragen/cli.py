@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 
 def entrypoint() -> None:
-    """Entrypoint for terragen cli """
+    """Entrypoint for terragen cli"""
     try:
         build_infra()
     except InterpolationKeyError as error:

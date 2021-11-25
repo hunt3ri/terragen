@@ -94,7 +94,7 @@ setup(
     url=URL,
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     entry_points={
-        'console_scripts': ['terragen=terragen.cli:entrypoint'],
+        "console_scripts": ["terragen=terragen.cli:entrypoint"],
     },
     install_requires=REQUIRED,
     include_package_data=True,
