@@ -3,7 +3,7 @@ import logging
 import os
 import subprocess
 
-from providers.aws.models.terragen_models import TerragenProperties
+from terragen.providers.aws.models.terragen_models import TerragenProperties
 
 log = logging.getLogger(__name__)
 

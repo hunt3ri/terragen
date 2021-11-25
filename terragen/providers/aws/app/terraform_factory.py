@@ -7,8 +7,8 @@ from jinja2 import Environment, PackageLoader, select_autoescape, FileSystemLoad
 from omegaconf import DictConfig
 from pathlib import Path
 
-from providers.aws.app.utils import to_toml
-from providers.aws.models.terragen_models import TerragenProperties
+from terragen.providers.aws.app.utils import to_toml
+from terragen.providers.aws.models.terragen_models import TerragenProperties
 
 log = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ class TerraformFactory:
     lookups: DictConfig = attr.ib()
 
     # Init Jinja to load templates from local package
-    jinja_package_env = Environment(loader=PackageLoader("providers.aws"), autoescape=select_autoescape())
+    jinja_package_env = Environment(loader=PackageLoader("terragen.providers.aws"), autoescape=select_autoescape())
 
     # Register Jinja helper functions
     jinja_package_env.globals["to_toml"] = to_toml
@@ -64,6 +64,7 @@ class TerraformFactory:
         os.makedirs(self.hydra_dir, exist_ok=True)
 
         # Copy all module files to hydra outputs
+        log.debug(f"Current Working Dir: {os.getcwd()}")
         copy_tree(f"../../../{self.module_metadata.module_dir}", self.hydra_dir)
         self.generate_terraform_config_file()
         self.generate_tfvars_file()

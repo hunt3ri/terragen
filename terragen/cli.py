@@ -1,20 +1,28 @@
 import hydra
 import logging
+import sys
 
 from omegaconf import DictConfig, OmegaConf
-from omegaconf.errors import MissingMandatoryValue
-from providers.cloud_provider import CloudProvider
+from omegaconf.errors import MissingMandatoryValue, InterpolationKeyError
+from terragen.providers.cloud_provider import CloudProvider
 
 log = logging.getLogger(__name__)
 
 
-@hydra.main(config_path="./config", config_name="config")
-def terragen(cfg: DictConfig) -> None:
-    """Parse config and create or destroy infrastructure"""
-    log.info("Terragen starting up")
+def entrypoint() -> None:
+    """Entrypoint for terragen cli"""
+    try:
+        build_infra()
+    except InterpolationKeyError as error:
+        log.error(f"Config Error: {error}")
+        sys.exit(1)
 
+
+@hydra.main(config_path="../config", config_name="config")
+def build_infra(cfg: DictConfig):
+    log.info("Terragen starting up")
     if not is_valid_config(cfg):
-        return  # Invalid config so immediately stop processing
+        sys.exit(1)  # Invalid config so immediately stop processing
 
     build_config = cfg.build
     if build_config.shared_infra.lower() == "destroy" and build_config.app_infra.lower() == "destroy":
@@ -67,4 +75,8 @@ def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str)
 
 
 if __name__ == "__main__":
-    terragen()
+    try:
+        entrypoint()
+    except InterpolationKeyError as e:
+        log.error(f"Config Error: {e}")
+        exit(1)
