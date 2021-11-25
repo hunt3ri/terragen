@@ -7,7 +7,7 @@ from jinja2 import Environment, PackageLoader, select_autoescape, FileSystemLoad
 from omegaconf import DictConfig
 from pathlib import Path
 
-from terragen.providers.aws.app.utils import to_toml
+from terragen.providers.aws.app.utils import to_toml, locate_module
 from terragen.providers.aws.models.terragen_models import TerragenProperties
 
 log = logging.getLogger(__name__)
@@ -64,7 +64,8 @@ class TerraformFactory:
         os.makedirs(self.hydra_dir, exist_ok=True)
 
         # Copy all module files to hydra outputs
-        copy_tree(f"../../../{self.module_metadata.module_dir}", self.hydra_dir)
+        parent_dirs = locate_module()
+        copy_tree(f"{parent_dirs}/{self.module_metadata.module_dir}", self.hydra_dir)
         self.generate_terraform_config_file()
         self.generate_tfvars_file()
         self.generate_data_block()
