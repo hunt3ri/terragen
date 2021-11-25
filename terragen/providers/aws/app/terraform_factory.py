@@ -67,8 +67,8 @@ class TerraformFactory:
         os.makedirs(self.hydra_dir, exist_ok=True)
 
         # Copy all module files to hydra outputs
-        #parent_dirs = locate_module()
-        distutils.dir_util.copy_tree(f"../../../{self.module_metadata.module_dir}", self.hydra_dir)
+        parent_dirs = locate_module()
+        distutils.dir_util.copy_tree(f"{parent_dirs}/{self.module_metadata.module_dir}", self.hydra_dir)
         self.generate_terraform_config_file()
         self.generate_tfvars_file()
         self.generate_data_block()

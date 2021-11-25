@@ -1,6 +1,9 @@
 import toml
 import os
 from pathlib import Path
+import logging
+
+log = logging.getLogger(__name__)
 
 
 def to_toml(key: str, value):
@@ -14,6 +17,7 @@ def to_toml(key: str, value):
 def locate_module() -> str:
     """ Locate where the modules directory is from current working dir """
     full_path = os.getcwd()
+    log.debug(f"Full Path: {full_path}")
     levels = 1
     parent_dirs = "../.."
 
