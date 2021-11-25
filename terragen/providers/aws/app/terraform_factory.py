@@ -1,8 +1,11 @@
 import attr
 import logging
 import os
+import distutils
+from distutils import dir_util
 
-from distutils.dir_util import copy_tree
+
+#from distutils.dir_util import copy_tree
 from jinja2 import Environment, PackageLoader, select_autoescape, FileSystemLoader
 from omegaconf import DictConfig
 from pathlib import Path
@@ -64,8 +67,8 @@ class TerraformFactory:
         os.makedirs(self.hydra_dir, exist_ok=True)
 
         # Copy all module files to hydra outputs
-        parent_dirs = locate_module()
-        copy_tree(f"{parent_dirs}/{self.module_metadata.module_dir}", self.hydra_dir)
+        #parent_dirs = locate_module()
+        distutils.dir_util.copy_tree(f"../../../{self.module_metadata.module_dir}", self.hydra_dir)
         self.generate_terraform_config_file()
         self.generate_tfvars_file()
         self.generate_data_block()
