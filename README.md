@@ -4,7 +4,13 @@ Terragen is a framework for generating and automatically applying Terraform modu
 Config is read from the local ```config``` directory.  [Config is controlled by the hydra framework, check the docs for examples](https://hydra.cc/docs/intro/)
 
 ## Key Features
-TODO
+ * Simplify the creation and destruction of infra across multiple accounts and regions, using one command
+ * Fine grained CLI control, all config elements can be overridden on the CLI
+ * View generated Terraform files before they are applied.  Each run creates a timestamped output directory
+ * Control common and app specific infra separately.  Infra that is shared, eg VPCs, Databases can be controlled separately but still referenced by app specific infra
+ * Create base config files you can "sub-class" for specific implementations, allows you to enforce config patterns across your estate
+ * Boiler plate Terraform files, like config, tfvars automatically generated
+ * Variable interpolation.  You can lookup values from other config files.
 
 ## Installing
 Terragen can be installed via pip:
