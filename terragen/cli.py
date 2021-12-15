@@ -25,18 +25,22 @@ def build_infra(cfg: DictConfig):
         sys.exit(1)  # Invalid config so immediately stop processing
 
     build_config = cfg.build
+
+    # TODO get environment_config for selected environment
+    env_config = cfg.environment
+
     if build_config.shared_infra.lower() == "destroy" and build_config.app_infra.lower() == "destroy":
         # If we're destroying the entire stack destroy app specific infra ahead of shared infra
         if "app" in cfg:
-            process_infra(build_config, cfg.app, build_config.app_infra)
+            process_infra(build_config, cfg.app, build_config.app_infra, env_config)
         if "shared" in cfg:
-            process_infra(build_config, cfg.shared, build_config.shared_infra)
+            process_infra(build_config, cfg.shared, build_config.shared_infra, env_config)
     else:
         # for all other scenarios we want to process shared infra ahead of app specific infra
         if "shared" in cfg:
-            process_infra(build_config, cfg.shared, build_config.shared_infra)
+            process_infra(build_config, cfg.shared, build_config.shared_infra, env_config)
         if "app" in cfg:
-            process_infra(build_config, cfg.app, build_config.app_infra)
+            process_infra(build_config, cfg.app, build_config.app_infra, env_config)
 
 
 def is_valid_config(cfg: DictConfig):
@@ -52,7 +56,7 @@ def is_valid_config(cfg: DictConfig):
     return True
 
 
-def process_infra(build_config: DictConfig, cloud_config: DictConfig, mode: str):
+def process_infra(build_config: DictConfig, cloud_config: DictConfig, mode: str, env_config: DictConfig):
     log.info(f"TerraGen processing infrastructure with mode: {mode}")
 
     if mode == "pass":
@@ -69,9 +73,9 @@ def process_infra(build_config: DictConfig, cloud_config: DictConfig, mode: str)
         for module_name, module_config in module_configs.items():
 
             if mode == "create":
-                cloud_provider.create_infra(module_config)
+                cloud_provider.create_infra(module_config, env_config)
             elif mode == "destroy":
-                cloud_provider.destroy_infra(module_config)
+                cloud_provider.destroy_infra(module_config, env_config)
 
 
 if __name__ == "__main__":

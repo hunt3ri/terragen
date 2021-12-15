@@ -11,15 +11,15 @@ log = logging.getLogger(__name__)
 
 
 class AWSProvider(CloudProvider):
-    def create_infra(self, cloud_config: DictConfig):
-        tf_runner = self.get_terraform_runner(cloud_config)
+    def create_infra(self, cloud_config: DictConfig, environment_config: DictConfig):
+        tf_runner = self.get_terraform_runner(cloud_config, environment_config)
         tf_runner.create_infrastructure()
 
-    def destroy_infra(self, cloud_config: DictConfig):
-        tf_runner = self.get_terraform_runner(cloud_config)
+    def destroy_infra(self, cloud_config: DictConfig, environment_config: DictConfig):
+        tf_runner = self.get_terraform_runner(cloud_config, environment_config)
         tf_runner.destroy_infrastructure()
 
-    def get_terraform_runner(self, cloud_config: DictConfig) -> TerraformRunner:
+    def get_terraform_runner(self, cloud_config: DictConfig, environment_config: DictConfig) -> TerraformRunner:
         properties = TerragenProperties.from_properties(
             debug_mode=self.debug_mode,
             environment=self.environment,
