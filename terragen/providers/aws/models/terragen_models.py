@@ -23,7 +23,7 @@ class TerragenProperties:
     backend: TerraformBackend = attr.ib()
 
     @classmethod
-    def from_properties(cls, debug_mode: bool, environment: str, provider_name: str, provider_properties: DictConfig):
+    def from_properties(cls, debug_mode: bool, environment: str, provider_name: str):
         backend = TerraformBackend.from_hydra_config(
             region=provider_properties.region, profile=provider_properties.profile, bucket=provider_properties.bucket
         )

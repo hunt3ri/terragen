@@ -18,7 +18,7 @@ def entrypoint() -> None:
         sys.exit(1)
 
 
-@hydra.main(config_path="../config", config_name="config")
+@hydra.main(config_path="../config", config_name="sandbox_v2")
 def build_infra(cfg: DictConfig):
     log.info("Terragen starting up")
     if not is_valid_config(cfg):
@@ -52,26 +52,26 @@ def is_valid_config(cfg: DictConfig):
     return True
 
 
-def process_infra(build_config: DictConfig, infra_config: DictConfig, mode: str):
+def process_infra(build_config: DictConfig, cloud_config: DictConfig, mode: str):
     log.info(f"TerraGen processing infrastructure with mode: {mode}")
 
     if mode == "pass":
         log.info("Infrastructure mode is pass, so skipping updating infrastructure")
         return
 
-    config_items = infra_config.items()
+    terraform_modules = cloud_config.items()
     if mode == "destroy":
         # If destroying we want to do it in reverse order from creation
-        config_items = reversed(infra_config.items())
+        terraform_modules = reversed(cloud_config.items())
 
     cloud_provider = CloudProvider.from_build_config(build_config.default_provider, build_config)
-    for service, service_configs in config_items:
-        for infra_name, infra_config in service_configs.items():
+    for service, module_configs in terraform_modules:
+        for module_name, module_config in module_configs.items():
 
             if mode == "create":
-                cloud_provider.create_infra(infra_config)
+                cloud_provider.create_infra(module_config)
             elif mode == "destroy":
-                cloud_provider.destroy_infra(infra_config)
+                cloud_provider.destroy_infra(module_config)
 
 
 if __name__ == "__main__":

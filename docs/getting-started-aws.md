@@ -7,7 +7,9 @@ To install Terragen, run the following from the command line:
 pip install terragen
 ```
 
-## Creating a AWS cloud environment
+## Terragen Workspace
+Next we can now define our Terragen workspace.  This is the location where Terragen will run, read your config and generate your Terraform Modules
+
 Terragen expects to run from within a directory which has both a `config` directory containing all the Terragen config and a `modules` directory containing your Terraform modules, like this:
 
 ```commandline
@@ -23,12 +25,34 @@ git clone https://github.com/hunt3ri/terragen-example-configs.git
 
 Your Terragen workspace is now ready to go
 
-## Configuring your AWS environment
-### Credentials
-Terragen simply wraps the Terraform CLI
+## AWS Authentication and Terraform Statefile
+To enable Terragen to run Terraform and for Terraform to apply your modules you are going to have to define an AWS shared credentials file and a S3 Bucket to store your Terraform statefile.  Once defined we can supply Terragen with your credentials name, and bucket name and let Terraform do the rest.  Details below
+
+### S3 Bucket
+Terragen expects your AWS Statefile to be stored in S3.  [Follow this link for best practice on defining your bucket.](https://www.terraform.io/docs/language/settings/backends/s3.html)  We'll see shortly how to supply this to Terragen
+
+### AWS Credentials
+
+To enable Terragen to run the Terraform CLI, Terragen expects you to define an AWS shared credentials file (see links below).  Again we'll see shortly how to supply the detail to Terragen 
+
+* [AWS Configuration and credential file settings](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
+* [Terraform Shared Credentials File](https://registry.terraform.io/providers/hashicorp/aws/latest/docs#shared-credentials-file)
+
+### Security
+Terragen NEVER accesses any of your credentials
+
+
 
 ## Running Terragen
-### First Run
+We are now ready to define our Terragen config.yaml and create our first cloud infrastructure.
+### config.yaml
+You can store your config in any named YAML file, but for now we're going to use config.yaml.
+#### defaults
+#### build
+#### environment 
+Environment Details goes here
+
+
 #### Resolve Our Config
 For our first run lets first check that Terragen can resolve the config we created above.  We need to tell Terragen where the config directory is located using the `--config-dir` switch or `-cd` for short, as follows:
 ```commandline
