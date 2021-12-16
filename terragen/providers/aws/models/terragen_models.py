@@ -1,5 +1,6 @@
 import attr
 from omegaconf import DictConfig
+from omegaconf.errors import ConfigAttributeError
 
 
 @attr.s
@@ -43,4 +44,27 @@ class TerragenProperties:
             provider_name=provider_name,
             terraform_plan=terraform_plan,
             backend=backend,
+        )
+
+
+@attr.s
+class AWSEnvironment:
+    """ This class models Environment specific config """
+    bucket: str = attr.ib()
+    region: str = attr.ib()
+    profile: str = attr.ib()
+
+    @classmethod
+    def from_environment_config(cls, env_config: DictConfig):
+        try:
+            bucket = env_config.bucket
+            region = env_config.region
+            profile = env_config.profile
+        except ConfigAttributeError as e:
+            raise ValueError(f"Missing mandatory value in Environment config: {e.msg}")
+        
+        return cls(
+            bucket=bucket,
+            region=region,
+            profile=profile
         )

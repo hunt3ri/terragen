@@ -25,9 +25,7 @@ def build_infra(cfg: DictConfig):
         sys.exit(1)  # Invalid config so immediately stop processing
 
     build_config = cfg.build
-
-    # TODO get environment_config for selected environment
-    env_config = cfg.environment
+    env_config = cfg.environment[build_config.environment]  # Load environment config for selected environment
 
     if build_config.shared_infra.lower() == "destroy" and build_config.app_infra.lower() == "destroy":
         # If we're destroying the entire stack destroy app specific infra ahead of shared infra
