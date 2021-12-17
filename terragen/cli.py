@@ -24,21 +24,20 @@ def build_infra(cfg: DictConfig):
     if not is_valid_config(cfg):
         sys.exit(1)  # Invalid config so immediately stop processing
 
-    build_properties = BuildConfig.from_build_config(cfg.build)
-    env_config = cfg.environment[build_properties.environment]  # Load environment config for selected environment
+    build_config = BuildConfig.from_build_config_yaml(cfg.build)
 
-    if build_properties.shared_infra == "destroy" and build_properties.app_infra == "destroy":
+    if build_config.infra_shared == "destroy" and build_config.infra_app == "destroy":
         # If we're destroying the entire stack destroy app specific infra ahead of shared infra
         if "app" in cfg:
-            process_infra(build_properties, cfg.app, build_properties.infra_app, env_config)
+            process_infra(build_config, cfg.app, build_config.infra_app, cfg.environment)
         if "shared" in cfg:
-            process_infra(build_properties, cfg.shared, build_properties.shared_infra, env_config)
+            process_infra(build_config, cfg.shared, build_config.shared_infra, cfg.environment)
     else:
         # for all other scenarios we want to process shared infra ahead of app specific infra
         if "shared" in cfg:
-            process_infra(build_properties, cfg.shared, build_properties.shared_infra, env_config)
+            process_infra(build_config, cfg.shared, build_config.infra_shared, cfg.environment)
         if "app" in cfg:
-            process_infra(build_properties, cfg.app, build_properties.app_infra, env_config)
+            process_infra(build_config, cfg.app, build_config.infra_app, cfg.environment)
 
 
 def is_valid_config(cfg: DictConfig):
@@ -54,7 +53,7 @@ def is_valid_config(cfg: DictConfig):
     return True
 
 
-def process_infra(build_properties: BuildConfig, cloud_config: DictConfig, mode: str, env_config: DictConfig):
+def process_infra(build_config: BuildConfig, cloud_config: DictConfig, mode: str, env_config: DictConfig):
     log.info(f"TerraGen processing infrastructure with mode: {mode}")
 
     if mode == "pass":
@@ -66,10 +65,9 @@ def process_infra(build_properties: BuildConfig, cloud_config: DictConfig, mode:
         # If destroying we want to do it in reverse order from creation
         terraform_modules = reversed(cloud_config.items())
 
-    cloud_provider = CloudProvider.from_build_config(build_properties, env_config)
+    cloud_provider = CloudProvider.from_config(build_config, env_config)
     for service, module_configs in terraform_modules:
         for module_name, module_config in module_configs.items():
-
             if mode == "create":
                 cloud_provider.create_infra(module_config, env_config)
             elif mode == "destroy":

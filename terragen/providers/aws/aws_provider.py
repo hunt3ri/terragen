@@ -12,6 +12,7 @@ log = logging.getLogger(__name__)
 
 class AWSProvider(CloudProvider):
     def create_infra(self, cloud_config: DictConfig, environment_config: DictConfig):
+        # TODO start here, maybe validation on AWSEnvironment
         aws_environment = AWSEnvironment.from_environment_config(environment_config)
         tf_runner = self.get_terraform_runner(cloud_config, aws_environment)
         tf_runner.create_infrastructure()

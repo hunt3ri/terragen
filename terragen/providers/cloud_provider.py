@@ -59,7 +59,7 @@ class BuildConfig:
 @attr.s
 class CloudProvider:
 
-    build_properties: BuildConfig = attr.ib()
+    build_config: BuildConfig = attr.ib()
     environment_config: DictConfig = attr.ib()  # Dynamic Environment specific config for each provider to handle
 
     @staticmethod
@@ -68,11 +68,14 @@ class CloudProvider:
         provider_location = available_providers[build_config.cloud_provider]
 
         # Dynamically load the CloudProvider module by name
-        cloud_provider = getattr(importlib.import_module(provider_location), provider_name)
+        cloud_provider = getattr(importlib.import_module(provider_location), build_config.cloud_provider)
+
+        # Load environment config for selected environment
+        env_config = environment_config[build_config.environment]
 
         return cloud_provider(
             build_config=build_config,
-            environment_config=environment_config
+            environment_config=env_config
         )
 
     @abstractmethod
