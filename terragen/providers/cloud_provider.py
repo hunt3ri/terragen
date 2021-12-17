@@ -13,7 +13,8 @@ available_providers = {
 
 
 @attr.s
-class BuildProperties:
+class BuildConfig:
+    """ Models the build config from main config.yaml """
     cloud_provider: str = attr.ib()
     environment: str = attr.ib()
     infra_shared: str = attr.ib()
@@ -34,54 +35,44 @@ class BuildProperties:
     @infra_shared.validator
     @infra_app.validator
     def is_valid_infra_mode(self, attribute, value):
-        if value not in ["crate", "destroy", "pass"]:
+        if value not in ["create", "destroy", "pass"]:
             raise ValueError("build.infra_app and build.infra_shared  must be one of create|destroy|pass")
 
-    @cloud_provider.validator
+    @terraform_mode.validator
     def is_valid_terraform_mode(self, attribute, value):
         if value not in ["plan", "apply"]:
             raise ValueError("build.terraform_mode must be one of plan|apply")
 
     @classmethod
-    def from_build_config(cls, build_config: DictConfig):
+    def from_build_config_yaml(cls, build_config: DictConfig):
 
         return cls(
             cloud_provider=build_config.cloud_provider,
-            environment=build_config.environment,
-            infra_shared=build_config.infra_shared,
-            infra_app=build_config.infra_app,
-            terraform_mode=build_config.terraform_mode,
+            environment=build_config.environment.lower(),
+            infra_shared=build_config.infra_shared.lower(),
+            infra_app=build_config.infra_app.lower(),
+            terraform_mode=build_config.terraform_mode.lower(),
             debug_mode=build_config.debug
         )
-
 
 
 @attr.s
 class CloudProvider:
 
-    debug_mode: bool = attr.ib()
-    environment: str = attr.ib()
-    provider_name: str = attr.ib()
-    terraform_mode: str = attr.ib()
-    #provider_properties: DictConfig = attr.ib()
+    build_properties: BuildConfig = attr.ib()
+    environment_config: DictConfig = attr.ib()  # Dynamic Environment specific config for each provider to handle
 
     @staticmethod
-    def from_build_config(provider_name: str, build_config: DictConfig):
-        log.info(f"Instantiating Cloud Provider: {provider_name}")
-        provider_location = available_providers[provider_name]
+    def from_config(build_config: BuildConfig, environment_config: DictConfig):
+        log.info(f"Instantiating Cloud Provider: {build_config.cloud_provider}")
+        provider_location = available_providers[build_config.cloud_provider]
 
         # Dynamically load the CloudProvider module by name
         cloud_provider = getattr(importlib.import_module(provider_location), provider_name)
 
-        teraform_mode = build_config.terraform_mode.lower()
-        if teraform_mode not in ["plan", "apply"]:
-            raise ValueError("build.terraform_mode, must be one of plan or apply")
-
         return cloud_provider(
-            provider_name=provider_name,
-            environment=build_config.environment,
-            debug_mode=build_config.debug,
-            terrform_mode=teraform_mode
+            build_config=build_config,
+            environment_config=environment_config
         )
 
     @abstractmethod

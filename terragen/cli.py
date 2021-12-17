@@ -4,7 +4,7 @@ import sys
 
 from omegaconf import DictConfig, OmegaConf
 from omegaconf.errors import MissingMandatoryValue, InterpolationKeyError
-from terragen.providers.cloud_provider import CloudProvider
+from terragen.providers.cloud_provider import CloudProvider, BuildConfig
 
 log = logging.getLogger(__name__)
 
@@ -24,21 +24,21 @@ def build_infra(cfg: DictConfig):
     if not is_valid_config(cfg):
         sys.exit(1)  # Invalid config so immediately stop processing
 
-    build_config = cfg.build
-    env_config = cfg.environment[build_config.environment]  # Load environment config for selected environment
+    build_properties = BuildConfig.from_build_config(cfg.build)
+    env_config = cfg.environment[build_properties.environment]  # Load environment config for selected environment
 
-    if build_config.shared_infra.lower() == "destroy" and build_config.app_infra.lower() == "destroy":
+    if build_properties.shared_infra == "destroy" and build_properties.app_infra == "destroy":
         # If we're destroying the entire stack destroy app specific infra ahead of shared infra
         if "app" in cfg:
-            process_infra(build_config, cfg.app, build_config.app_infra, env_config)
+            process_infra(build_properties, cfg.app, build_properties.infra_app, env_config)
         if "shared" in cfg:
-            process_infra(build_config, cfg.shared, build_config.shared_infra, env_config)
+            process_infra(build_properties, cfg.shared, build_properties.shared_infra, env_config)
     else:
         # for all other scenarios we want to process shared infra ahead of app specific infra
         if "shared" in cfg:
-            process_infra(build_config, cfg.shared, build_config.shared_infra, env_config)
+            process_infra(build_properties, cfg.shared, build_properties.shared_infra, env_config)
         if "app" in cfg:
-            process_infra(build_config, cfg.app, build_config.app_infra, env_config)
+            process_infra(build_properties, cfg.app, build_properties.app_infra, env_config)
 
 
 def is_valid_config(cfg: DictConfig):
@@ -54,7 +54,7 @@ def is_valid_config(cfg: DictConfig):
     return True
 
 
-def process_infra(build_config: DictConfig, cloud_config: DictConfig, mode: str, env_config: DictConfig):
+def process_infra(build_properties: BuildConfig, cloud_config: DictConfig, mode: str, env_config: DictConfig):
     log.info(f"TerraGen processing infrastructure with mode: {mode}")
 
     if mode == "pass":
@@ -66,7 +66,7 @@ def process_infra(build_config: DictConfig, cloud_config: DictConfig, mode: str,
         # If destroying we want to do it in reverse order from creation
         terraform_modules = reversed(cloud_config.items())
 
-    cloud_provider = CloudProvider.from_build_config(build_config.default_provider, build_config)
+    cloud_provider = CloudProvider.from_build_config(build_properties, env_config)
     for service, module_configs in terraform_modules:
         for module_name, module_config in module_configs.items():
 
