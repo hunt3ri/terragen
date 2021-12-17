@@ -22,13 +22,14 @@ class AWSProvider(CloudProvider):
         tf_runner.destroy_infrastructure()
 
     def get_terraform_runner(self, cloud_config: DictConfig, aws_environment: AWSEnvironment) -> TerraformRunner:
-        
-        # TODO use aws_environment props to init
+
+        # TODO model Build properties
         properties = TerragenProperties.from_properties(
             debug_mode=self.debug_mode,
             environment=self.environment,
             provider_name=self.provider_name,
-            provider_properties=self.provider_properties,
+            terraform_mode=self.terraform_mode,
+            aws_environment=aws_environment
         )
 
         tf_factory = TerraformFactory.from_config(module_config=cloud_config, properties=properties)

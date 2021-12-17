@@ -9,12 +9,12 @@ defaults:
 
 
 build:
+  cloud_provider: "AWSProvider"  # Provider used to create all infra unless overridden
+  environment: "prod"            # Deployment environment must be one of dev|test|ppe|prod
+  infra_shared: "create"         # Process shared infra, Must be one of create|destroy|pass
+  infra_app: "create"            # Process application infra, must be one of create|destroy|pass
+  terraform_mode: "apply"         # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
   debug: True                      # Set to True to enable verbose debugging
-  default_provider: "AWSProvider"  # Provider used to create all infra unless overridden
-  environment: "prod"              # Deployment environment must be one of dev|test|ppe|prod
-  shared_infra: "create"           # Process shared infra, Must be one of create|destroy|pass
-  app_infra: "create"              # Process application infra, must be one of create|destroy|pass
-  terraform_mode: "apply"          # Must be one of plan|apply - Plan produces terraform plan only, apply will create or destroy infra
 
 
 environment:
