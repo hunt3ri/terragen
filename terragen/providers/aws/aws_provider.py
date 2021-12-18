@@ -3,7 +3,7 @@ import logging
 
 from terragen.providers.aws.app.terraform_factory import TerraformFactory
 from terragen.providers.aws.app.terraform_launcher import TerraformLauncher
-from terragen.providers.aws.models.terragen_models import AWSEnvironment
+from terragen.providers.aws.models.aws_models import AWSEnvironment
 from terragen.providers.cloud_provider import CloudProvider
 
 
@@ -33,7 +33,7 @@ class AWSProvider(CloudProvider):
                                                   aws_environment=self.aws_environment)
         tf_factory.generate_terraform_templates()
         tf_launcher = TerraformLauncher.from_config(
-            build_config=self.build_config, hydra_dir=tf_factory.hydra_dir, tfvars_file=tf_factory.tfvars_file
+            build_config=self.build_config, aws_module=tf_factory.aws_module
         )
 
         return tf_launcher
