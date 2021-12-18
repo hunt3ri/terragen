@@ -69,9 +69,9 @@ def process_infra(build_config: BuildConfig, cloud_config: DictConfig, mode: str
     for service, module_configs in terraform_modules:
         for module_name, module_config in module_configs.items():
             if mode == "create":
-                cloud_provider.create_infra(module_config, env_config)
+                cloud_provider.create_infra(module_config)
             elif mode == "destroy":
-                cloud_provider.destroy_infra(module_config, env_config)
+                cloud_provider.destroy_infra(module_config)
 
 
 if __name__ == "__main__":

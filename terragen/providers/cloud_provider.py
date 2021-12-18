@@ -79,11 +79,11 @@ class CloudProvider:
         )
 
     @abstractmethod
-    def create_infra(self, module_config: DictConfig, environment_config: DictConfig):
+    def create_infra(self, module_config: DictConfig):
         """Providers must implement a method for creating all infrastructure"""
         raise NotImplementedError()
 
     @abstractmethod
-    def destroy_infra(self, module_config: DictConfig, environment_config: DictConfig):
+    def destroy_infra(self, module_config: DictConfig):
         """Providers must implement a method for destroying all infrastructure"""
         raise NotImplementedError()
