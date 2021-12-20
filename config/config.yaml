@@ -15,7 +15,7 @@ environment:
     aws_account: 222866594907
     region: "us-east-1"
     profile: "hunter_ops_prod"
-    bucket: "hunter_ops_tfstate"
+    bucket: "hunter-ops-tfstate"
 
 
 # Build section controls how the modules we defined are built
