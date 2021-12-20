@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 
 # A list of implemented providers.  Could be made configurable if required
 available_providers = {
-    "AWSProvider": "providers.aws.aws_provider"
+    "AWSProvider": "terragen.providers.aws.aws_provider"
 }
 
 

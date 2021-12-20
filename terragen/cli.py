@@ -18,7 +18,7 @@ def entrypoint() -> None:
         sys.exit(1)
 
 
-@hydra.main(config_path="../config", config_name="sandbox_v2")
+@hydra.main(config_path="../config", config_name="config")
 def build_infra(cfg: DictConfig):
     log.info("Terragen starting up")
     if not is_valid_config(cfg):

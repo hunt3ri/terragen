@@ -43,10 +43,7 @@ Terragen NEVER accesses any of your credentials
 
 
 ## Configuring Terragen
-We are now ready to define our Terragen config.yaml and to define our first cloud infrastructure.
-
-### Hydra
-Terragen's configuration is managed by the Hydra project.  You can get a deeper understanding of configuring Terragen by looking at the [Hydra Project documentation here.](https://hydra.cc/docs/intro/)
+We are now ready to look at the Terragen config.yaml and to define our first cloud infrastructure.
 
 ### config.yaml
 You can store your config in any named YAML file, but for now we're going to use the default config.yaml.  config.yaml is split into 3 key sections:
@@ -57,7 +54,18 @@ You can store your config in any named YAML file, but for now we're going to use
 * `shared` - Within this namespace we define pieces of infrastructure that may be shared by multiple apps, for example VPCs, Databases, KeyPairs etc
 * `apps` - App specific infrastructure - only relates to the application you are deploying
 
-By splitting the namespace in half like this we can manage shared and app specific infra seperately at build time.  For example, only tearing down our app, but leaving shared infra like the database alone.
+By splitting the namespace in half like this we can manage shared and app specific infra separately at build time.  For example, only tearing down our app, but leaving shared infra like the database alone.
+
+In our example app you can see the VPC is shared, but the EC2 instance is specific to the app. eg we may want multiple apps to share this VPC.
+
+```yaml
+defaults:
+  # Shared Infrastructure
+  - aws/shared/vpcs@shared.vpc.simple_vpc: simple_vpc
+
+  # Apps
+  - aws/apps/sandbox@app.ec2.sandbox: sandbox
+```
 
 #### 2. environment 
 `environment` is where you can put environment specific configuration.  Eg in DEV you may only want a t3.small instance, but your PROD environment you want to run a t3.large instance.  These configurations can be defined here.  Environment supports the following sections:
@@ -101,18 +109,18 @@ terraform_mode: "apply"        # Must be one of plan|apply - Plan produces terra
 debug: True                    # Set to True to enable verbose debugging
 ```
 
-This switches can be changed on the CLI making it easy to control the infra build in CI systems like Jenkins, CircleCI etc
+This switches can be changed on the CLI making it easy to control the infra build in CI systems like Jenkins, CircleCI etc.  Which we'll see in the next section
 
-## Running Terragen
-If we've completed our config correctly we should be able to run Terragen for our sample build
+## Creating Infrastructure
+If we've completed our config correctly we should be able to run Terragen for our sample build to create our sample infrastructure
 
 ### Resolve Our Config
-For our first run lets first check that Terragen can resolve the config we created above.  We need to tell Terragen where the config directory is located using the `--config-dir` switch or `-cd` for short, as follows:
+For our first run lets first check that Terragen can resolve the config we created above.  We need to tell Terragen where the config directory is located using the `--config-dir` switch or `-cd` for short.  We can also optionally supply the `--config-name` switch of `-cn` for short
 ```commandline
-terragen --config-dir ./config --cfg job --resolve
+terragen --config-dir .\config --config-name config --cfg job --resolve
 ```
 
-If successful the entire YAML of our configuration and base classes will be echod to the screen
+If successful the entire YAML of our configuration and base classes will be echod to the screen.  You can review this to see if it's what you expect.
 
 ### Running in Debug Mode
 Next we are going to run with Debug set to True, this will generate all our Terraform modules with our configuration output as .tfvars file in the `outputs` directory, as follows:
@@ -133,18 +141,22 @@ Everytime you run Terragen it creates a date/time stamped directory called outpu
 |----------------AWSProvider
 |--------------------dev
 |------------------------ec2
-|------------------------key_pairs
 |------------------------vpc
 ```
 
 ### Applying our Infrastructure
 If we're happy with the generated Terraform modules we can apply it, obviously with debug set to False, as follows:
 
-TODO - Use base Ubuntu Image in example
-
 ```commandline
-terragen -cd ./config build.debug=False
+terragen -cd ./config build.debug=True
 ```
 
-### Seperately creating Shared and App specific Infra
-Terragen allows you to create and configure shared pieces of infrastructure like VPCs, KeyPairs, Security Groups and Project/Application infrastructure like ASGs, EC2 instances all from one workspace.  Click the links to get clarifications on what we mean by shared and project specific infrastructure.  
+If everything is configured correctly you will have a new VPC called terragen-vpc and a EC2 instance called sandbox
+
+## Destroying Infrastructure
+If we've completed our config correctly we should be able to run Terragen for our sample build to create our sample infrastructure
+
+## Next Steps
+If your comfortable with this getting started you should now be able to use Terragen to define your own infrastructure using your own Terraform Modules.
+
+Review the Terragen-Config section to get a deep dive into Configuration 

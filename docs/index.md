@@ -18,3 +18,13 @@ Terragen is a framework for generating and automatically applying Terraform modu
 You can find getting started guides for each cloud provider here:
 
 * [AWS](./getting-started-aws.md)
+
+## Next Steps
+Once comfortable with the Getting-Started guide, get a deep dive into Terragen Configuration here:
+
+* [Cloud Configuration with Terragen](./terragen-config.md)
+
+## Issues and Questions
+Please raise any issues or questions you have on the project Github page:
+
+* [Terragen Github](https://github.com/hunt3ri/terragen)
