@@ -6,17 +6,17 @@ from omegaconf import OmegaConf
 
 @dataclass
 class MockBuildConfig:
-    """Models a valid build config as would be set in main config.yaml """
+    """Models a valid build config as would be set in main config.yaml"""
+
     cloud_provider: str = "AWSProvider"
     environment: str = "prod"
     infra_shared: str = "create"
-    infra_app:  str = "create"
+    infra_app: str = "create"
     terraform_mode: str = "apply"
     debug: bool = False
 
 
 class TestUtils:
-
     @pytest.fixture()
     def mock_build_config(self) -> MockBuildConfig:
         return OmegaConf.structured(MockBuildConfig)
