@@ -156,7 +156,18 @@ If everything is configured correctly you will have a new VPC called terragen-vp
 ## Destroying Infrastructure
 If we've completed our config correctly we should be able to run Terragen for our sample build to create our sample infrastructure
 
+To demonstrate how we can destroy only app level infrastructure rather than tearing everything down together, we will teardown app first then shared infra next.  In your own environment you might want to leave shared infra running.
+
+```commandline
+terragen -cd ./config infra_app=destroy
+```
+
+Once app infra is destroyed we can now destroy shared infra:
+```commandline
+terragen -cd ./config infra_shared=destroy
+```
+
 ## Next Steps
 If your comfortable with this getting started you should now be able to use Terragen to define your own infrastructure using your own Terraform Modules.
 
-Review the Terragen-Config section to get a deep dive into Configuration 
+Review the [Terragen-Config](./terragen-config.md) section to get a deep dive into Configuration 

@@ -22,7 +22,7 @@ You can find getting started guides for each cloud provider here:
 ## Next Steps
 Once comfortable with the Getting-Started guide, get a deep dive into Terragen Configuration here:
 
-* [Cloud Configuration with Terragen](./terragen-config.md)
+* [Terragen Configuration](./terragen-config.md)
 
 ## Issues and Questions
 Please raise any issues or questions you have on the project Github page:
