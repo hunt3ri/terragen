@@ -19,20 +19,11 @@ Terragen can be installed via pip:
 pip install terragen
 ```
 
-## Documentation
-TODO
+## ReadTheDocs
+[You can find docs on configuring and running Terragen on ReadTheDocs](https://terragen.readthedocs.io/en/latest/)
 
-## Quick Start
-Terragen expects two directories of configuration to be created. modules containing all terraform modules you want to configure. config containing the configuration for each module you want to deploy.  A sample directory structure shown below:
-```commandline
---config
-----__init__.py
-----config.yaml
---modules
-----aws
---------ec2
-------------main.tf
-```
+## Demo commands 
+We demonstrate the power and flexibility of Terragen here
 
 ## Running
 Terragen looks for a default config.yaml file in config directory.  You must specify location of config directory using `--config-dir` or `-cd`, for example:
