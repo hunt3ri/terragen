@@ -62,8 +62,12 @@ class TerraformLauncher:
         subprocess.run("terraform init".split(" "), check=True)
 
         if self.build_config.terraform_mode == "plan":
-            logging.info(f"Generate Terraform Plan for destroying infrastructure for module {self.aws_module.hydra_dir}")
-            subprocess.run(f"terraform plan -destroy -var-file={self.aws_module.tfvars_file} -out ./tfplan".split(" "), check=True)
+            logging.info(
+                f"Generate Terraform Plan for destroying infrastructure for module {self.aws_module.hydra_dir}"
+            )
+            subprocess.run(
+                f"terraform plan -destroy -var-file={self.aws_module.tfvars_file} -out ./tfplan".split(" "), check=True
+            )
             logging.info(f"Generating human readable tfplan.txt for {self.aws_module.hydra_dir}")
             subprocess.run("terraform show tfplan -no-color > ./tfplan.txt", check=True, shell=True)
         else:

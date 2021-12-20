@@ -7,14 +7,13 @@ import logging
 log = logging.getLogger(__name__)
 
 # A list of implemented providers.  Could be made configurable if required
-available_providers = {
-    "AWSProvider": "terragen.providers.aws.aws_provider"
-}
+available_providers = {"AWSProvider": "terragen.providers.aws.aws_provider"}
 
 
 @attr.s
 class BuildConfig:
-    """ Models the build config from main config.yaml """
+    """Models the build config from main config.yaml"""
+
     cloud_provider: str = attr.ib()
     environment: str = attr.ib()
     infra_shared: str = attr.ib()
@@ -52,7 +51,7 @@ class BuildConfig:
             infra_shared=build_config.infra_shared.lower(),
             infra_app=build_config.infra_app.lower(),
             terraform_mode=build_config.terraform_mode.lower(),
-            debug_mode=build_config.debug
+            debug_mode=build_config.debug,
         )
 
 
@@ -73,10 +72,7 @@ class CloudProvider:
         # Load environment config for selected environment
         env_config = environment_config[build_config.environment]
 
-        return cloud_provider(
-            build_config=build_config,
-            environment_config=env_config
-        )
+        return cloud_provider(build_config=build_config, environment_config=env_config)
 
     @abstractmethod
     def create_infra(self, module_config: DictConfig):

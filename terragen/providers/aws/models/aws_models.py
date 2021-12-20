@@ -9,7 +9,8 @@ from terragen.providers.cloud_provider import BuildConfig
 
 @attr.s
 class AWSEnvironment:
-    """ This class models Environment specific config """
+    """This class models Environment specific config"""
+
     bucket: str = attr.ib()
     region: str = attr.ib()
     profile: str = attr.ib()
@@ -24,12 +25,7 @@ class AWSEnvironment:
         except ConfigAttributeError as e:
             raise ValueError(f"Missing mandatory value in Environment config: {e.msg}")
 
-        return cls(
-            bucket=bucket,
-            region=region,
-            profile=profile,
-            state_file=module_metadata.state_file
-        )
+        return cls(bucket=bucket, region=region, profile=profile, state_file=module_metadata.state_file)
 
 
 @attr.s
