@@ -117,7 +117,7 @@ If we've completed our config correctly we should be able to run Terragen for ou
 ### Resolve Our Config
 For our first run lets first check that Terragen can resolve the config we created above.  We need to tell Terragen where the config directory is located using the `--config-dir` switch or `-cd` for short.  We can also optionally supply the `--config-name` switch of `-cn` for short
 ```commandline
-terragen --config-dir .\config --config-name config --cfg job --resolve
+terragen --config-dir ./config --config-name config --cfg job --resolve
 ```
 
 If successful the entire YAML of our configuration and base classes will be echod to the screen.  You can review this to see if it's what you expect.
@@ -154,15 +154,15 @@ terragen -cd ./config build.debug=False
 If everything is configured correctly you will have a new VPC called terragen-vpc and a EC2 instance called sandbox
 
 ## Destroying Infrastructure
-If we've completed our config correctly we should be able to run Terragen for our sample build to create our sample infrastructure
+Terragen can also destroy your infra once you're finished with it.  To demonstrate how we can destroy only app level infrastructure rather than tearing everything down together, we will teardown app first then shared infra next.
 
-To demonstrate how we can destroy only app level infrastructure rather than tearing everything down together, we will teardown app first then shared infra next.  In your own environment you might want to leave shared infra running.
+We can do this by telling Terragen to pass `build.infra_shared` as we don't want to modify it, but to destroy `build.infra_app`
 
 ```commandline
 terragen -cd ./config build.infra_app=destroy build.infra_shared=pass build.debug=False
 ```
 
-Once app infra is destroyed we can now destroy shared infra:
+Once app infra is destroyed we can now destroy shared infra by running the following command
 ```commandline
 terragen -cd ./config build.infra_app=pass build.infra_shared=destroy build.debug=False
 ```
