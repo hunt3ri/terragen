@@ -16,7 +16,7 @@ config:
   instance_count              : 1
   instance_name               : ???
   associate_public_ip_address : False
-  aws_account                 : ${build.aws_accounts[${build.environment}]}
+  aws_account                 : ${environment[${build.environment}].aws_account}
 
 
 lookups:

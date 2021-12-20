@@ -1,3 +1,7 @@
 site_name: Terragen
 site_url: https://readthedocs.org/projects/terragen/
+nav:
+    - Home: index.md
+    - Getting Started AWS: getting-started-aws.md
+    - Terragen Configuration: terragen-config.md
 theme: readthedocs

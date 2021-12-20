@@ -11,25 +11,20 @@ Terragen is a framework for generating and automatically applying Terraform modu
  * Boiler plate Terraform files, like config, tfvars automatically generated
  * Variable interpolation.  Lookup values from other config files.
 
+### Pre-requisites
+* Terraform - You must have Terraform installed locally to allow Terragen to run the Terraform CLI.  [See Installing Terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
+
 ## Getting Started
+You can find getting started guides for each cloud provider here:
 
-### Installing
-Terragen is installed via pip, as follows:
+* [AWS](./getting-started-aws.md)
 
-```commandline
-pip install terragen
-```
+## Next Steps
+Once comfortable with the Getting-Started guide, get a deep dive into Terragen Configuration here:
 
-### Creating your first infrastructure
+* [Terragen Configuration](./terragen-config.md)
 
-Terragen expects two directories to be present to successfully run.  Directory layout should look like this:
+## Issues and Questions
+Please raise any issues or questions you have on the project Github page:
 
-```commandline
-|-config
-|----config.yaml
-|-modules
-```
-* config - Containing the Terragen configuration
-* modules - Containing the Terraform modules you want Terragen to apply
-
-Examples of which can be found in our [github repo](https://github.com/hunt3ri/terragen)
+* [Terragen Github](https://github.com/hunt3ri/terragen)
