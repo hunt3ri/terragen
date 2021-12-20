@@ -148,7 +148,7 @@ Everytime you run Terragen it creates a date/time stamped directory called outpu
 If we're happy with the generated Terraform modules we can apply it, obviously with debug set to False, as follows:
 
 ```commandline
-terragen -cd ./config build.debug=True
+terragen -cd ./config build.debug=False
 ```
 
 If everything is configured correctly you will have a new VPC called terragen-vpc and a EC2 instance called sandbox
@@ -159,12 +159,12 @@ If we've completed our config correctly we should be able to run Terragen for ou
 To demonstrate how we can destroy only app level infrastructure rather than tearing everything down together, we will teardown app first then shared infra next.  In your own environment you might want to leave shared infra running.
 
 ```commandline
-terragen -cd ./config infra_app=destroy
+terragen -cd ./config build.infra_app=destroy build.infra_shared=pass build.debug=False
 ```
 
 Once app infra is destroyed we can now destroy shared infra:
 ```commandline
-terragen -cd ./config infra_shared=destroy
+terragen -cd ./config build.infra_app=pass build.infra_shared=destroy build.debug=False
 ```
 
 ## Next Steps
