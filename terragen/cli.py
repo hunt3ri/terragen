@@ -31,7 +31,7 @@ def build_infra(cfg: DictConfig):
         if "app" in cfg:
             process_infra(build_config, cfg.app, build_config.infra_app, cfg.environment)
         if "shared" in cfg:
-            process_infra(build_config, cfg.shared, build_config.shared_infra, cfg.environment)
+            process_infra(build_config, cfg.shared, build_config.infra_shared, cfg.environment)
     else:
         # for all other scenarios we want to process shared infra ahead of app specific infra
         if "shared" in cfg:
