@@ -1,8 +1,6 @@
 # terragen
 Terragen is a framework for generating and automatically applying Terraform modules to simplify the management of sophisticated Cloud Architectures
 
-Config is read from the local ```config``` directory.  [Config is controlled by the hydra framework, check the docs for examples](https://hydra.cc/docs/intro/)
-
 ## Key Features
  * Simplify the creation and destruction of infra across multiple accounts and regions, using one command
  * Fine grained CLI control, all config elements can be overridden on the CLI
@@ -20,33 +18,34 @@ pip install terragen
 ```
 
 ## ReadTheDocs
-[You can find docs on configuring and running Terragen on ReadTheDocs](https://terragen.readthedocs.io/en/latest/)
+[Full details on configuring and running Terragen on ReadTheDocs](https://terragen.readthedocs.io/en/latest/)
 
-## Demo commands 
-We demonstrate the power and flexibility of Terragen here
+## Terragen Workspace
+Terragen expects to be run in its own workspace containing its configuration and the Terraform modules you want to configure and apply.
 
-## Running
-Terragen looks for a default config.yaml file in config directory.  You must specify location of config directory using `--config-dir` or `-cd`, for example:
+* [Demo Workspace is available here](https://github.com/hunt3ri/terragen-example-configs)
+
+## Demo Commands
+Once configured as defined in docs, Terragen is very powerful.  Below we demonstrate some commands
+
+### Applying a Named Config
+Terragen lets you define multiple apps and configs, just apply them by name
 ```commandline
-terragen --config-dir ./config
-```
-You can also create specfic config files for certain applications, eg
-```commandline
-terragen -cd ./config --config-name sandbox
+terragen --config-dir ./config --config-name sandbox
 ```
 
-## Overriding values on command line
-Any config value can be overridden on the command line using dot notation, eg:
+### Specifying the environment we want to deploy to
+Terragen lets you create the same infrastructure across multiple accounts by supplying the environment you want to deploy to
 ```commandline
 terragen --config-dir ./config build.environment=test
 ```
 
 ## Debugging
-Run Terragen with cfg and resolve flags to output interpolations
+Validate and resolve your config before you run it.
 ```commandline
 terragen -cd ./config --cfg job --resolve
 ```
-
+### Verbose debugging
 You can enable verbose debug logging by passing the following:
 ```commandline
 terragen -cd ./config hydra.verbose=true

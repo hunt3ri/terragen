@@ -4,4 +4,5 @@ nav:
     - Home: index.md
     - Getting Started AWS: getting-started-aws.md
     - Terragen Configuration: terragen-config.md
+    - Help: help.md
 theme: readthedocs
