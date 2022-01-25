@@ -5,6 +5,8 @@
 outputs
 
 # Local
+config
+modules
 dist
 venv
 __pycache__
