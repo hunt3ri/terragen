@@ -6,7 +6,7 @@ Terragen is a framework for generating and automatically applying Terraform modu
  * Fine grained CLI control, all config elements can be overridden on the CLI
  * View generated Terraform files before they are applied.  Each run creates a timestamped output directory
  * Control common and app specific infra separately.  Infra that is shared, eg VPCs, Databases can be controlled separately but still referenced by app specific infra
- * Create base config files you can "sub-class" for specific implementations, allows you to enforce config patterns across your estate
+ * Create default config files you can "sub-class" for specific implementations, allows you to enforce config patterns across your estate
  * Boiler plate Terraform files, like config, tfvars automatically generated
  * Variable interpolation.  You can lookup values from other config files.
 
@@ -23,7 +23,7 @@ pip install terragen
 ## Terragen Workspace
 Terragen expects to be run in its own workspace containing its configuration and the Terraform modules you want to configure and apply.
 
-* [Demo Workspace is available here](https://github.com/hunt3ri/terragen-example-configs)
+* [Example Workspace is available here](https://github.com/hunt3ri/terragen-example-configs)
 
 ## Demo Commands
 Once configured as defined in docs, Terragen is very powerful.  Below we demonstrate some commands
