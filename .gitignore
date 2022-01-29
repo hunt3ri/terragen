@@ -5,6 +5,7 @@
 outputs
 
 # Local
+.env
 config
 modules
 dist
