@@ -1,7 +1,11 @@
+import logging
 import os
 import toml
 
 from omegaconf import DictConfig
+
+
+log = logging.getLogger(__name__)
 
 
 def to_toml(key: str, value):
@@ -32,6 +36,8 @@ def get_env_var(value: str):
     env_var_value = os.getenv(env_var_key, "NOT_SET")
 
     if env_var_value == "NOT_SET":
-        raise ValueError(f"ERROR: Environment Variable {env_var_key} not set ")
+        error_message = f"ERROR: Environment Variable {env_var_key} not set "
+        log.error(error_message)
+        raise ValueError(error_message)
 
     return env_var_value
