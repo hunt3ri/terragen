@@ -238,6 +238,31 @@ build:
 
 This means the value will dynamically change when we build prd, test, dev environments.
 
+### Environment Variables and Secrets
+It is good security practice to not store secrets in your config.  Terragen supports reading values from environment variables.  You can set a secret as an environment variable using the `env.` notation, eg:
+
+```yaml
+my_secret: "env.MY_SECRET"
+```
+
+### HCL Maps
+Terragen will translate sub-objects in the main `config` object into a [HCL Map](https://www.terraform.io/language/values/variables#map).  For example:
+
+```yaml
+config:
+   tags: 
+     name: "testMap"
+     environment: "Test"
+```
+
+Will generate a map as follows:
+```hcl
+tags = {
+    name = "testMap"
+    environment = "Test"
+ }
+```
+
 ### Further reading on config
 You can find more info on Lookups, Mandatory values and more in both the [Hydra documentation](https://hydra.cc/docs/intro/) and [OmegaConf project](https://omegaconf.readthedocs.io/) (which Hydra leverages)
 
