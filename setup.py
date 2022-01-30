@@ -22,6 +22,7 @@ REQUIRED = [
     "attrs",
     "hydra-core",
     "Jinja2",
+    "python-dotenv",
     "toml",
 ]
 
