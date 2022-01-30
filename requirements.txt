@@ -4,5 +4,6 @@ hydra-core==1.1.1
 Jinja2==3.0.3
 MarkupSafe==2.0.1
 omegaconf==2.1.1
+python-dotenv==0.19.2
 PyYAML==6.0
 toml==0.10.2

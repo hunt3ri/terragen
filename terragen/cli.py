@@ -2,6 +2,7 @@ import hydra
 import logging
 import sys
 
+from dotenv import load_dotenv
 from omegaconf import DictConfig, OmegaConf
 from omegaconf.errors import MissingMandatoryValue, InterpolationKeyError
 from terragen.providers.cloud_provider import CloudProvider, BuildConfig
@@ -75,6 +76,7 @@ def process_infra(build_config: BuildConfig, cloud_config: DictConfig, mode: str
 
 
 if __name__ == "__main__":
+    load_dotenv()  # Load .env file, for development only
     try:
         entrypoint()
     except InterpolationKeyError as e:
