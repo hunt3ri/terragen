@@ -8,6 +8,7 @@ outputs
 .env
 config
 modules
+apps
 dist
 venv
 __pycache__
