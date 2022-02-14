@@ -25,6 +25,7 @@ class MockEC2Config:
     associate_public_ip_address: bool = True
     tags: TerraformTags = TerraformTags()
     env_vars: EnvironmentVars = EnvironmentVars()
+    iam_policy: str = '<<EOT\n{\n Version": "2012-10-17",\nEoT'
 
 
 class TestUtils:
@@ -46,3 +47,8 @@ class TestUtils:
     def test_get_env_var_raise_error_if_env_var_not_set(self):
         with pytest.raises(ValueError):
             get_env_var("env.MY_TEST")
+
+    def test_iam_policy_parsed_correctly(self, mock_ec2_config):
+        # IAM Policies need to start with <<EOT to be parsed correctly
+        lookup_value = to_toml("iam_policy", mock_ec2_config.iam_policy)
+        assert lookup_value == 'iam_policy = <<EOT\n{\n Version": "2012-10-17",\nEoT'
